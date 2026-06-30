@@ -1,0 +1,79 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * CDD Pays-Bas — Brand identity variables.
+ * Change these hex values to match the existing website exactly.
+ * (A deep navy + gold palette is used by default — professional & easy to swap.)
+ */
+:root {
+  --brand: #2563eb;        /* primary blue (logo sunburst) */
+  --brand-dark: #1d4ed8;   /* darker blue (footer / hovers) */
+  --brand-light: #3b82f6;  /* lighter blue */
+  --brand-50: #eff6ff;     /* very light blue tint for backgrounds */
+  --accent: #5b9bd5;       /* light blue accent ("PAYS-BAS") */
+  --accent-dark: #4a90e2;
+
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --font-display: "Georgia", "Times New Roman", serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  color: #1a2330;
+  background: #ffffff;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+@layer components {
+  .container-cdd {
+    @apply mx-auto w-full max-w-[1200px] px-4 sm:px-6 lg:px-8;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-md px-5 py-2.5 text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-offset-2;
+  }
+  .btn-primary {
+    @apply btn bg-brand text-white hover:bg-brand-dark focus:ring-brand;
+  }
+  .btn-accent {
+    @apply btn bg-accent text-brand-dark hover:bg-accent-dark focus:ring-accent;
+  }
+  .btn-outline {
+    @apply btn border border-brand text-brand hover:bg-brand hover:text-white focus:ring-brand;
+  }
+  .btn-ghost {
+    @apply btn text-brand hover:bg-brand-50;
+  }
+
+  .card {
+    @apply rounded-xl border border-gray-100 bg-white shadow-sm transition hover:shadow-md;
+  }
+
+  .section {
+    @apply py-16 sm:py-20;
+  }
+
+  .heading {
+    @apply font-display text-3xl font-bold text-brand sm:text-4xl;
+  }
+  .eyebrow {
+    @apply text-sm font-semibold uppercase tracking-wider text-accent;
+  }
+
+  .input {
+    @apply w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:border-brand focus:ring-1 focus:ring-brand;
+  }
+  .label {
+    @apply mb-1 block text-sm font-medium text-gray-700;
+  }
+}
