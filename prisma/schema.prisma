@@ -1,0 +1,257 @@
+// CDD Pays-Bas — Prisma schema
+// Provider: PostgreSQL (works with Supabase). All website content is stored here
+// so it can be managed entirely from the Admin Dashboard without editing code.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Authentication & roles ──────────────────────────────────────────────────
+
+enum Role {
+  SUPER_ADMIN
+  ADMIN
+  EDITOR
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      Role     @default(EDITOR)
+  image     String?
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ─── SEO (reusable per page / entity) ────────────────────────────────────────
+
+model Seo {
+  id          String  @id @default(cuid())
+  // key identifies which page/entity this SEO record belongs to (e.g. "home", "about")
+  key         String  @unique
+  metaTitle   String?
+  metaDesc    String?
+  ogImage     String?
+  slug        String?
+  updatedAt   DateTime @updatedAt
+}
+
+// ─── Editable pages (Home, About, ImpactNow, etc.) ───────────────────────────
+// Flexible JSON blob lets the dashboard manage hero text, sections, stats, etc.
+
+model Page {
+  id        String   @id @default(cuid())
+  key       String   @unique // "home" | "about" | "impactnow" | "membership" | "contact"
+  title     String
+  // content holds structured data (hero, sections, stats, body...) as JSON
+  content   Json
+  published Boolean  @default(true)
+  metaTitle String?
+  metaDesc  String?
+  ogImage   String?
+  updatedAt DateTime @updatedAt
+}
+
+// ─── Leadership (President + Board members) ──────────────────────────────────
+
+model Leader {
+  id        String   @id @default(cuid())
+  name      String
+  position  String
+  isPresident Boolean @default(false)
+  photo     String?
+  bio       String?  @db.Text
+  linkedin  String?
+  email     String?
+  order     Int      @default(0)
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ─── Advisors (most important section) ───────────────────────────────────────
+
+model Advisor {
+  id        String   @id @default(cuid())
+  name      String
+  position  String
+  category  String   @default("Senior Advisor") // expertise / category for filtering
+  photo     String?
+  shortBio  String?  @db.Text
+  longBio   String?  @db.Text
+  linkedin  String?
+  email     String?
+  order     Int      @default(0)
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([category])
+  @@index([active])
+}
+
+// ─── Events ──────────────────────────────────────────────────────────────────
+
+model Event {
+  id           String   @id @default(cuid())
+  title        String
+  slug         String   @unique
+  banner       String?
+  date         DateTime
+  time         String?
+  location     String?
+  description  String?  @db.Text
+  registration String?  // registration link
+  gallery      String[] // image URLs (after-event gallery)
+  published    Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+// ─── Projects ────────────────────────────────────────────────────────────────
+
+model Project {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  image       String?
+  summary     String?  @db.Text
+  content     String?  @db.Text
+  status      String   @default("ongoing") // ongoing | completed | upcoming
+  published   Boolean  @default(true)
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// ─── Blog / News ─────────────────────────────────────────────────────────────
+
+model Category {
+  id    String @id @default(cuid())
+  name  String @unique
+  slug  String @unique
+  posts Post[]
+}
+
+model Tag {
+  id    String @id @default(cuid())
+  name  String @unique
+  slug  String @unique
+  posts Post[] @relation("PostTags")
+}
+
+enum PostType {
+  BLOG
+  NEWS
+}
+
+model Post {
+  id          String    @id @default(cuid())
+  title       String
+  slug        String    @unique
+  excerpt     String?   @db.Text
+  content     String?   @db.Text
+  featured    String?   // featured image
+  type        PostType  @default(BLOG)
+  published   Boolean   @default(false) // draft by default
+  publishedAt DateTime?
+  authorName  String?
+  // SEO
+  metaTitle   String?
+  metaDesc    String?
+  ogImage     String?
+  category    Category? @relation(fields: [categoryId], references: [id])
+  categoryId  String?
+  tags        Tag[]     @relation("PostTags")
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([type])
+  @@index([published])
+}
+
+// ─── Partnerships ────────────────────────────────────────────────────────────
+
+model Partner {
+  id          String   @id @default(cuid())
+  name        String
+  logo        String?
+  description String?  @db.Text
+  url         String?
+  order       Int      @default(0)
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// ─── Networking Packages ─────────────────────────────────────────────────────
+
+model Package {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  description String?  @db.Text
+  price       String?  // optional, kept as string for flexibility (e.g. "€ 1.500 / an")
+  features    String[] // bullet list of features
+  ctaLabel    String?  @default("Nous contacter")
+  ctaUrl      String?  @default("/contact")
+  featured    Boolean  @default(false)
+  order       Int      @default(0)
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// ─── Media library ───────────────────────────────────────────────────────────
+
+model Media {
+  id        String   @id @default(cuid())
+  url       String
+  filename  String
+  type      String   // image | pdf | document | logo | other
+  mimeType  String?
+  size      Int?
+  alt       String?
+  createdAt DateTime @default(now())
+}
+
+// ─── Site-wide settings (logo, contact, social, colors) ──────────────────────
+
+model SiteSettings {
+  id          String   @id @default("singleton")
+  siteName    String   @default("CDD Pays-Bas")
+  logo        String?
+  tagline     String?
+  email       String?
+  phone       String?
+  address     String?
+  linkedin    String?
+  facebook    String?
+  instagram   String?
+  twitter     String?
+  // brand colors (optional override of the CSS theme)
+  brandColor  String?
+  accentColor String?
+  updatedAt   DateTime @updatedAt
+}
+
+// ─── Contact / membership submissions ────────────────────────────────────────
+
+model Submission {
+  id        String   @id @default(cuid())
+  type      String   @default("contact") // contact | membership
+  name      String
+  email     String
+  company   String?
+  message   String?  @db.Text
+  handled   Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
