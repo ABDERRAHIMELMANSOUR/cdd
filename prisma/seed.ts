@@ -275,6 +275,32 @@ async function main() {
     });
   }
 
+  // ── Community portal: a demo supporter ───────────────────────────────────────
+  // Only in development, and only when MEMBER_DEMO_PASSWORD is set. A seeded
+  // account with a known password is a back door if it ever reaches production,
+  // so it needs both conditions rather than a comment asking nicely.
+  const demoPassword = process.env.MEMBER_DEMO_PASSWORD;
+  if (process.env.NODE_ENV !== "production" && demoPassword) {
+    const email = "donateur@example.test";
+    const existing = await prisma.user.findUnique({ where: { email } });
+    if (!existing) {
+      await prisma.user.create({
+        data: {
+          email,
+          name: "Donateur Démo",
+          password: await bcrypt.hash(demoPassword, 10),
+          role: "MEMBER",
+          status: "ACTIVE",
+          position: "Directeur général",
+          company: "Exemple B.V.",
+          commission: "industry-trade-logistics",
+          bio: "Compte de démonstration pour le portail. À supprimer avant la mise en ligne.",
+        },
+      });
+      console.log(`   demo supporter: ${email}`);
+    }
+  }
+
   console.log("✅ Seed complete.");
 }
 

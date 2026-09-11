@@ -17,6 +17,18 @@ enum Role {
   SUPER_ADMIN
   ADMIN
   EDITOR
+  // Supporters of the stichting. They reach the community portal at /portal and
+  // never the CMS at /admin. Added last so every existing row keeps its role.
+  MEMBER
+}
+
+/// Where a supporter sits in the approval flow. A registration arrives PENDING
+/// and stays invisible in the directory until the board approves it — the
+/// portal is a private network, so appearing in it is a decision, not a default.
+enum MemberStatus {
+  PENDING
+  ACTIVE
+  SUSPENDED
 }
 
 model User {
@@ -29,6 +41,98 @@ model User {
   active    Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  // ── Community portal profile ───────────────────────────────────────────────
+  // Every field is optional, so existing CMS users stay valid with no backfill.
+  // The avatar reuses `image` above rather than adding avatarUrl: NextAuth
+  // already carries `image` into the session, and two fields for one face is
+  // exactly how they drift apart.
+  status      MemberStatus @default(PENDING)
+  position    String?
+  company     String?
+  bio         String?      @db.Text
+  linkedinUrl String?
+  website     String?
+  phone       String?
+  /// Commission the supporter associates with, keyed to the public site's
+  /// commission slugs. A plain string rather than a relation: the commissions
+  /// live in the website's code, not in this database, and a foreign key to a
+  /// table that does not own them would be a lie.
+  commission  String?
+  /// Drives "last active" in the directory. Written on portal page loads.
+  lastSeenAt  DateTime?
+
+  // Prefixed Feed* because the CMS already owns a `Post` model for the public
+  // site's articles. Two unrelated things called Post in one schema is how a
+  // query ends up joining a blog article to a supporter's like.
+  feedPosts    FeedPost[]
+  feedComments FeedComment[]
+  feedLikes    FeedLike[]
+  sentMessages     Message[] @relation("MessagesSent")
+  receivedMessages Message[] @relation("MessagesReceived")
+
+  @@index([role, status])
+}
+
+// ─── Community portal ────────────────────────────────────────────────────────
+
+model FeedPost {
+  id        String   @id @default(cuid())
+  authorId  String
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  content   String   @db.Text
+  mediaUrl  String?
+  /// Set by an admin moderating the feed. A hidden post stays in the table so
+  /// the action is auditable rather than silently destructive.
+  hidden    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  comments  FeedComment[]
+  likes     FeedLike[]
+
+  @@index([createdAt])
+  @@index([authorId])
+}
+
+model FeedComment {
+  id        String   @id @default(cuid())
+  postId    String
+  post      FeedPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  authorId  String
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  content   String   @db.Text
+  hidden    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([postId, createdAt])
+}
+
+model FeedLike {
+  id        String   @id @default(cuid())
+  postId    String
+  post      FeedPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  authorId  String
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  /// One like per person per post, enforced by the database rather than by
+  /// remembering to check in every code path that could create one.
+  @@unique([postId, authorId])
+}
+
+model Message {
+  id         String   @id @default(cuid())
+  senderId   String
+  sender     User     @relation("MessagesSent", fields: [senderId], references: [id], onDelete: Cascade)
+  receiverId String
+  receiver   User     @relation("MessagesReceived", fields: [receiverId], references: [id], onDelete: Cascade)
+  content    String   @db.Text
+  read       Boolean  @default(false)
+  createdAt  DateTime @default(now())
+
+  @@index([senderId, receiverId, createdAt])
+  @@index([receiverId, read])
 }
 
 // ─── SEO (reusable per page / entity) ────────────────────────────────────────
