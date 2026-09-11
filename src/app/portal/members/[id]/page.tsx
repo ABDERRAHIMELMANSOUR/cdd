@@ -45,9 +45,13 @@ export default async function MemberProfilePage({ params }: { params: { id: stri
               </p>
             )}
           </div>
-          {isSelf && (
+          {isSelf ? (
             <Link href="/portal/profile" className="btn-primary shrink-0 text-center">
               Modifier
+            </Link>
+          ) : (
+            <Link href={`/portal/messages/${member.id}`} className="btn-primary shrink-0 text-center">
+              Envoyer un message
             </Link>
           )}
         </div>

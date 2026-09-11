@@ -7,12 +7,36 @@ import { useState } from "react";
 import Sunburst from "@/components/Sunburst";
 
 const LINKS = [
-  { href: "/portal", label: "Fil d'actualité" },
+  { href: "/portal", label: "Accueil" },
+  { href: "/portal/feed", label: "Fil d'actualité" },
+  { href: "/portal/messages", label: "Messages" },
   { href: "/portal/directory", label: "Annuaire" },
   { href: "/portal/profile", label: "Mon profil" },
 ];
 
-export default function PortalNav({ name, isStaff }: { name: string; isStaff: boolean }) {
+/** Unread count, shown beside Messages only. A badge on a link that cannot
+ *  have unread items is noise, so this returns null for every other link. */
+function Unread({ href, count }: { href: string; count: number }) {
+  if (href !== "/portal/messages" || count < 1) return null;
+  return (
+    <span
+      className="ml-1.5 inline-grid h-5 min-w-5 place-items-center rounded-full bg-brand px-1.5 text-[11px] font-semibold text-white"
+      aria-label={`${count} message${count > 1 ? "s" : ""} non lu${count > 1 ? "s" : ""}`}
+    >
+      {count > 9 ? "9+" : count}
+    </span>
+  );
+}
+
+export default function PortalNav({
+  name,
+  isStaff,
+  unread = 0,
+}: {
+  name: string;
+  isStaff: boolean;
+  unread?: number;
+}) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
 
@@ -42,6 +66,7 @@ export default function PortalNav({ name, isStaff }: { name: string; isStaff: bo
               }`}
             >
               {l.label}
+              <Unread href={l.href} count={unread} />
             </Link>
           ))}
         </nav>
@@ -83,6 +108,7 @@ export default function PortalNav({ name, isStaff }: { name: string; isStaff: bo
               }`}
             >
               {l.label}
+              <Unread href={l.href} count={unread} />
             </Link>
           ))}
         </nav>

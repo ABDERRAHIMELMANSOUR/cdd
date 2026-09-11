@@ -53,3 +53,39 @@ export function initials(name: string): string {
     .map((p) => p[0]?.toUpperCase() ?? "")
     .join("");
 }
+
+/**
+ * "il y a 3 h" for feed and message timestamps.
+ *
+ * Rendered on the server so every viewer sees the same string regardless of
+ * their clock, and so the markup does not change between the server render and
+ * hydration — a relative time computed in the browser is the classic source of
+ * a React hydration mismatch. The tradeoff is that it goes stale on a page
+ * left open; these pages are dynamic and refetch on navigation, so it does not
+ * stay wrong for long.
+ */
+export function timeAgo(date: Date, now: Date = new Date()): string {
+  const seconds = Math.max(0, Math.round((now.getTime() - date.getTime()) / 1000));
+  if (seconds < 60) return "à l'instant";
+
+  const minutes = Math.round(seconds / 60);
+  if (minutes < 60) return `il y a ${minutes} min`;
+
+  const hours = Math.round(minutes / 60);
+  if (hours < 24) return `il y a ${hours} h`;
+
+  const days = Math.round(hours / 24);
+  if (days < 7) return `il y a ${days} j`;
+
+  return new Intl.DateTimeFormat("fr-FR", { day: "numeric", month: "short" }).format(date);
+}
+
+/** The columns a feed or message author exposes — a narrow slice of the
+ *  profile allow-list, because a post does not need a phone number. */
+export const AUTHOR_SELECT = {
+  id: true,
+  name: true,
+  image: true,
+  position: true,
+  company: true,
+} satisfies Prisma.UserSelect;

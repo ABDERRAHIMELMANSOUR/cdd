@@ -31,22 +31,17 @@ export default async function PortalHome() {
         </p>
       </header>
 
-      {/*
-        The feed, messaging and moderation are the next passes. This says so
-        rather than showing an empty box that looks broken — a placeholder that
-        explains itself is honest; one that pretends to be a feature is not.
-      */}
-      <section className="card border-dashed p-6 text-center">
-        <h2 className="font-display text-lg font-semibold text-gray-900">
-          Le fil d&apos;actualité arrive
-        </h2>
-        <p className="mx-auto mt-2 max-w-lg text-sm text-gray-600">
-          Publications, réactions et messagerie directe sont en cours de développement.
-          L&apos;annuaire et les profils sont déjà disponibles.
-        </p>
-        <Link href="/portal/directory" className="btn-primary mt-5 inline-block">
-          Parcourir l&apos;annuaire
-        </Link>
+      <section className="grid gap-4 sm:grid-cols-3">
+        {[
+          { href: "/portal/feed", title: "Fil d'actualité", body: "Publiez et réagissez aux actualités du réseau." },
+          { href: "/portal/messages", title: "Messages", body: "Échangez en privé avec les autres donateurs." },
+          { href: "/portal/directory", title: "Annuaire", body: "Retrouvez les donateurs par nom ou commission." },
+        ].map((c) => (
+          <Link key={c.href} href={c.href} className="card p-5 transition-shadow hover:shadow-md">
+            <h2 className="font-display text-base font-semibold text-gray-900">{c.title}</h2>
+            <p className="mt-1 text-sm text-gray-600">{c.body}</p>
+          </Link>
+        ))}
       </section>
 
       <section>
