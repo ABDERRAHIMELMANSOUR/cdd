@@ -16,10 +16,21 @@ const roleLabels: Record<string, string> = {
 
 export default async function UsersAdmin() {
   await requireRole(["SUPER_ADMIN", "ADMIN"]);
-  const users = await safe(() => prisma.user.findMany({ orderBy: { createdAt: "asc" } }), []);
+  // Staff only. Supporters live in /admin/members: they have a lifecycle
+  // (pending → active → suspended) this screen knows nothing about, and once
+  // the portal has real sign-ups an unfiltered list buries the handful of
+  // staff logins this page exists to manage.
+  const users = await safe(
+    () =>
+      prisma.user.findMany({
+        where: { role: { in: ["SUPER_ADMIN", "ADMIN", "EDITOR"] } },
+        orderBy: { createdAt: "asc" },
+      }),
+    []
+  );
   return (
     <>
-      <AdminHeader title="Utilisateurs" subtitle="Gérez les accès à l'administration." action={{ href: "/admin/users/new", label: "Utilisateur" }} />
+      <AdminHeader title="Utilisateurs" subtitle="Comptes du personnel ayant accès à l'administration." action={{ href: "/admin/users/new", label: "Utilisateur" }} />
       <Panel>
         {users.length === 0 ? (
           <EmptyRow message="Aucun utilisateur." />

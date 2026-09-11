@@ -62,21 +62,21 @@ model User {
   /// Drives "last active" in the directory. Written on portal page loads.
   lastSeenAt  DateTime?
 
-  // Prefixed Feed* because the CMS already owns a `Post` model for the public
-  // site's articles. Two unrelated things called Post in one schema is how a
-  // query ends up joining a blog article to a supporter's like.
-  feedPosts    FeedPost[]
-  feedComments FeedComment[]
-  feedLikes    FeedLike[]
-  sentMessages     Message[] @relation("MessagesSent")
-  receivedMessages Message[] @relation("MessagesReceived")
+  // Namespaced Community* because the CMS already owns a `Post` model for the
+  // public site's articles. Two unrelated things called Post in one schema is
+  // how a query ends up joining a blog article to a supporter's like.
+  communityPosts    CommunityPost[]
+  communityComments CommunityComment[]
+  communityLikes    CommunityLike[]
+  sentMessages      Message[]          @relation("MessagesSent")
+  receivedMessages  Message[]          @relation("MessagesReceived")
 
   @@index([role, status])
 }
 
 // ─── Community portal ────────────────────────────────────────────────────────
 
-model FeedPost {
+model CommunityPost {
   id        String   @id @default(cuid())
   authorId  String
   author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
@@ -88,33 +88,33 @@ model FeedPost {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  comments  FeedComment[]
-  likes     FeedLike[]
+  comments CommunityComment[]
+  likes    CommunityLike[]
 
   @@index([createdAt])
   @@index([authorId])
 }
 
-model FeedComment {
-  id        String   @id @default(cuid())
+model CommunityComment {
+  id        String        @id @default(cuid())
   postId    String
-  post      FeedPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  post      CommunityPost @relation(fields: [postId], references: [id], onDelete: Cascade)
   authorId  String
-  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  content   String   @db.Text
-  hidden    Boolean  @default(false)
-  createdAt DateTime @default(now())
+  author    User          @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  content   String        @db.Text
+  hidden    Boolean       @default(false)
+  createdAt DateTime      @default(now())
 
   @@index([postId, createdAt])
 }
 
-model FeedLike {
-  id        String   @id @default(cuid())
+model CommunityLike {
+  id        String        @id @default(cuid())
   postId    String
-  post      FeedPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  post      CommunityPost @relation(fields: [postId], references: [id], onDelete: Cascade)
   authorId  String
-  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  createdAt DateTime @default(now())
+  author    User          @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  createdAt DateTime      @default(now())
 
   /// One like per person per post, enforced by the database rather than by
   /// remembering to check in every code path that could create one.
@@ -138,14 +138,14 @@ model Message {
 // ─── SEO (reusable per page / entity) ────────────────────────────────────────
 
 model Seo {
-  id          String  @id @default(cuid())
+  id        String   @id @default(cuid())
   // key identifies which page/entity this SEO record belongs to (e.g. "home", "about")
-  key         String  @unique
-  metaTitle   String?
-  metaDesc    String?
-  ogImage     String?
-  slug        String?
-  updatedAt   DateTime @updatedAt
+  key       String   @unique
+  metaTitle String?
+  metaDesc  String?
+  ogImage   String?
+  slug      String?
+  updatedAt DateTime @updatedAt
 }
 
 // ─── Editable pages (Home, About, ImpactNow, etc.) ───────────────────────────
@@ -167,18 +167,18 @@ model Page {
 // ─── Leadership (President + Board members) ──────────────────────────────────
 
 model Leader {
-  id        String   @id @default(cuid())
-  name      String
-  position  String
-  isPresident Boolean @default(false)
-  photo     String?
-  bio       String?  @db.Text
-  linkedin  String?
-  email     String?
-  order     Int      @default(0)
-  active    Boolean  @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          String   @id @default(cuid())
+  name        String
+  position    String
+  isPresident Boolean  @default(false)
+  photo       String?
+  bio         String?  @db.Text
+  linkedin    String?
+  email       String?
+  order       Int      @default(0)
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 // ─── Advisors (most important section) ───────────────────────────────────────
@@ -213,7 +213,7 @@ model Event {
   time         String?
   location     String?
   description  String?  @db.Text
-  registration String?  // registration link
+  registration String? // registration link
   gallery      String[] // image URLs (after-event gallery)
   published    Boolean  @default(true)
   createdAt    DateTime @default(now())
@@ -223,17 +223,17 @@ model Event {
 // ─── Projects ────────────────────────────────────────────────────────────────
 
 model Project {
-  id          String   @id @default(cuid())
-  title       String
-  slug        String   @unique
-  image       String?
-  summary     String?  @db.Text
-  content     String?  @db.Text
-  status      String   @default("ongoing") // ongoing | completed | upcoming
-  published   Boolean  @default(true)
-  order       Int      @default(0)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        String   @id @default(cuid())
+  title     String
+  slug      String   @unique
+  image     String?
+  summary   String?  @db.Text
+  content   String?  @db.Text
+  status    String   @default("ongoing") // ongoing | completed | upcoming
+  published Boolean  @default(true)
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 // ─── Blog / News ─────────────────────────────────────────────────────────────
@@ -263,7 +263,7 @@ model Post {
   slug        String    @unique
   excerpt     String?   @db.Text
   content     String?   @db.Text
-  featured    String?   // featured image
+  featured    String? // featured image
   type        PostType  @default(BLOG)
   published   Boolean   @default(false) // draft by default
   publishedAt DateTime?
@@ -303,7 +303,7 @@ model Package {
   title       String
   slug        String   @unique
   description String?  @db.Text
-  price       String?  // optional, kept as string for flexibility (e.g. "€ 1.500 / an")
+  price       String? // optional, kept as string for flexibility (e.g. "€ 1.500 / an")
   features    String[] // bullet list of features
   ctaLabel    String?  @default("Nous contacter")
   ctaUrl      String?  @default("/contact")
@@ -320,7 +320,7 @@ model Media {
   id        String   @id @default(cuid())
   url       String
   filename  String
-  type      String   // image | pdf | document | logo | other
+  type      String // image | pdf | document | logo | other
   mimeType  String?
   size      Int?
   alt       String?

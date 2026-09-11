@@ -39,6 +39,12 @@ const groups: { title: string; links: { href: string; label: string; icon: strin
     ],
   },
   {
+    title: "Communauté",
+    links: [
+      { href: "/admin/members", label: "Donateurs", icon: "◍" },
+    ],
+  },
+  {
     title: "Système",
     links: [
       { href: "/admin/users", label: "Utilisateurs", icon: "⚇" },
