@@ -8,7 +8,25 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+
+  // ── TWO URLS, ON PURPOSE (Supabase + serverless) ───────────────────────────
+  // DATABASE_URL is what the running app uses. On Vercel every request can be
+  // a fresh lambda, and each one opening its own PostgreSQL connection
+  // exhausts the server's limit long before traffic justifies it — so this
+  // points at Supabase's TRANSACTION pooler (port 6543) with `pgbouncer=true`,
+  // which tells Prisma to stop using prepared statements. Without that flag
+  // the transaction pooler fails at runtime with "prepared statement already
+  // exists", intermittently, under concurrency — the worst way to find out.
+  //
+  // DIRECT_URL is used only by `prisma db push` and `prisma migrate`. Schema
+  // changes need a real session, which a transaction pooler cannot give them,
+  // so this points at the SESSION pooler (port 5432).
+  //
+  // Both go through the pooler host rather than db.<ref>.supabase.co: that
+  // direct host now resolves to IPv6 only, and Vercel's build and lambda
+  // network reaches it unreliably. The pooler answers on IPv4.
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 // ─── Authentication & roles ──────────────────────────────────────────────────

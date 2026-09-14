@@ -85,11 +85,30 @@ Compatible **Vercel** + **Supabase** (ou tout PostgreSQL).
 À définir dans *Project → Settings → Environment Variables*, pour les trois
 environnements (Production, Preview, Development) :
 
-| Variable | Exemple | Rôle |
+| Variable | Rôle | Ce qui casse si elle est absente ou erronée |
 |---|---|---|
-| `DATABASE_URL` | `postgresql://postgres:MOTDEPASSE@db.xxxx.supabase.co:5432/postgres?schema=public` | Connexion PostgreSQL. Sur Supabase, prenez la *Connection string* du **session pooler** : le pooler en mode transaction ne supporte pas les requêtes préparées de Prisma. |
-| `NEXTAUTH_SECRET` | sortie de `openssl rand -base64 32` | Signe les jetons de session. **Ne doit jamais être partagé avec un autre projet** : qui le connaît peut fabriquer une session d'administrateur. |
-| `NEXTAUTH_URL` | `https://portail.cddpaysbas.nl` | URL publique **exacte** du portail, avec `https://` et sans barre oblique finale. Une valeur erronée fait échouer la connexion par une redirection vers un domaine inexistant. |
+| `DATABASE_URL` | Connexion de l'application — pooler **transaction**, port **6543**, avec `?pgbouncer=true&connection_limit=1` | Sans `pgbouncer=true` : erreurs `prepared statement "s0" already exists`, intermittentes et uniquement en production |
+| `DIRECT_URL` | Connexion des migrations — pooler **session**, port **5432** | **`prisma generate` refuse de démarrer**, donc `npm run build` échoue : cette variable est requise, pas optionnelle |
+| `NEXTAUTH_SECRET` | Signe les jetons de session (`openssl rand -base64 32`) | Qui la connaît peut fabriquer une session d'administrateur — ne jamais la partager entre projets |
+| `NEXTAUTH_URL` | URL publique exacte, `https://`, sans barre oblique finale | La connexion échoue par une redirection vers un domaine inexistant |
+
+Les deux URL se copient depuis *Supabase → Project Settings → Database →
+Connection string → Connection pooling*, en changeant le mode dans le menu
+déroulant. Deux pièges :
+
+- **L'identifiant est `postgres.<project-ref>`**, pas `postgres`. C'est ainsi
+  que le pooler sait à quel projet se connecter ; un `postgres` seul échoue
+  l'authentification avec un mot de passe pourtant correct.
+- **L'hôte contient la région** (`aws-0-<region>.pooler.supabase.com`). Prenez
+  celui qu'affiche le tableau de bord : une région devinée donne un nom qui ne
+  résout pas.
+
+Un mot de passe contenant `@ : / ? # &` doit être encodé (`@` → `%40`, etc.),
+sinon l'URL se lit comme un autre hôte et l'erreur accuse l'hôte plutôt que le
+mot de passe.
+
+> On passe par le pooler et non par `db.<ref>.supabase.co` : cet hôte direct ne
+> résout plus qu'en IPv6, que le réseau de Vercel atteint mal.
 
 Variables facultatives : `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `ADMIN_NAME` (compte
 super-admin initial créé par `npm run seed`).
@@ -100,11 +119,13 @@ super-admin initial créé par `npm run seed`).
 
 ### 2. Appliquer le schéma à la base
 
-Depuis une machine ayant accès à la base, avec le `DATABASE_URL` de production :
+Depuis une machine ayant accès à la base (un poste de travail ; l'environnement
+d'exécution de Claude bloque `supabase.co` au niveau du proxy) :
 
 ```bash
-npx prisma db push     # crée/mets à jour les tables sans fichier de migration
-npm run seed           # (première fois) crée le compte super-admin
+cp .env.example .env        # puis renseignez PASSWORD et REGION dans les deux URL
+npx prisma db push          # crée/met à jour les tables
+npm run seed                # (première fois) crée le compte super-admin
 ```
 
 `db push` convient tant que la base n'a pas d'historique de migrations à
@@ -119,6 +140,9 @@ Les modèles du portail (`CommunityPost`, `CommunityComment`, `CommunityLike`,
 créés par cette étape. **Tant qu'elle n'a pas été exécutée, `/portal` et
 `/admin/members` s'affichent vides** : les pages tolèrent l'absence de tables
 plutôt que de planter, ce qui ressemble beaucoup à « aucun donateur inscrit ».
+
+Après le seed, connectez-vous une fois sur `/admin/login` et changez le mot de
+passe : `ADMIN_PASSWORD` a transité par un fichier et par l'historique du shell.
 
 ### 3. Relier le site public
 
@@ -136,7 +160,7 @@ nécessaire pour qu'un changement prenne effet.
 
 ### 4. Avant la mise en production
 
-- [ ] `DATABASE_URL`, `NEXTAUTH_SECRET`, `NEXTAUTH_URL` définis sur Vercel
+- [ ] `DATABASE_URL`, `DIRECT_URL`, `NEXTAUTH_SECRET`, `NEXTAUTH_URL` définis sur Vercel
 - [ ] `npx prisma db push` exécuté sur la base de production
 - [ ] `npm run seed` exécuté une fois, puis mot de passe admin changé
 - [ ] `VITE_PORTAL_URL` défini sur le projet du site public, et celui-ci redéployé
