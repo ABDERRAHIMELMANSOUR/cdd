@@ -90,7 +90,7 @@ environnements (Production, Preview, Development) :
 | `DATABASE_URL` | Connexion de l'application — pooler **transaction**, port **6543**, avec `?pgbouncer=true&connection_limit=1` | Sans `pgbouncer=true` : erreurs `prepared statement "s0" already exists`, intermittentes et uniquement en production |
 | `DIRECT_URL` | Connexion des migrations — pooler **session**, port **5432** | **`prisma generate` refuse de démarrer**, donc `npm run build` échoue : cette variable est requise, pas optionnelle |
 | `NEXTAUTH_SECRET` | Signe les jetons de session (`openssl rand -base64 32`) | Qui la connaît peut fabriquer une session d'administrateur — ne jamais la partager entre projets |
-| `NEXTAUTH_URL` | URL publique exacte, `https://`, sans barre oblique finale | La connexion échoue par une redirection vers un domaine inexistant |
+| `NEXTAUTH_URL` | `https://www.cddpaysbas.nl` — le domaine **public**, pas l'URL `.vercel.app` du projet portail | La connexion échoue par une redirection vers un domaine inexistant. Le portail étant servi via les rewrites du site public, cookies et callbacks doivent être émis pour le domaine que le navigateur voit |
 
 Les deux URL se copient depuis *Supabase → Project Settings → Database →
 Connection string → Connection pooling*, en changeant le mode dans le menu
@@ -144,26 +144,36 @@ plutôt que de planter, ce qui ressemble beaucoup à « aucun donateur inscrit �
 Après le seed, connectez-vous une fois sur `/admin/login` et changez le mot de
 passe : `ADMIN_PASSWORD` a transité par un fichier et par l'historique du shell.
 
-### 3. Relier le site public
+### 3. Relier le site public — un seul domaine
 
-Le site public (dépôt `CDDAYOUB`) pointe vers ce portail via sa propre variable
-`VITE_PORTAL_URL`, à définir sur **son** projet Vercel :
+Il n'y a **pas** de sous-domaine `portail.`. Le portail est servi sous le
+domaine public via les *rewrites* du projet `CDDAYOUB` (`vercel.json`) : le
+site public reçoit la requête et la relaie au déploiement du portail, sans que
+le navigateur quitte `www.cddpaysbas.nl`.
 
-```
-VITE_PORTAL_URL=https://portail.cddpaysbas.nl
-```
+Les préfixes relayés sont `/login`, `/portal`, `/admin`, `/api` et `/_next`.
+Aucun n'entre en conflit avec une route du site public, qui n'en sert aucune.
 
-Tant qu'elle est absente, le bouton « Supporter Login » reste inactif et
-annonce que la plateforme est en préparation, au lieu de mener à une page 404.
-C'est une variable de build Vite : un redéploiement du site public est
-nécessaire pour qu'un changement prenne effet.
+**`/_next` et `/portal` ne sont pas optionnels.** Sans `/_next`, la page de
+connexion s'affiche sans styles ni JavaScript ; sans `/portal`, la connexion
+réussit puis mène à une page que le site public ne sert pas.
+
+La destination de ces rewrites est l'URL du déploiement du portail
+(`https://<projet>.vercel.app`). C'est la seule valeur à renseigner dans
+`CDDAYOUB/vercel.json`, où elle figure sous la forme
+`REPLACE-WITH-PORTAL-DEPLOYMENT`.
+
+`VITE_PORTAL_URL` n'est plus nécessaire : `https://www.cddpaysbas.nl` est la
+valeur par défaut compilée dans le bundle. La variable ne sert qu'à pointer une
+préproduction ailleurs. C'est une variable de build Vite : un redéploiement du
+site public est nécessaire pour qu'un changement prenne effet.
 
 ### 4. Avant la mise en production
 
 - [ ] `DATABASE_URL`, `DIRECT_URL`, `NEXTAUTH_SECRET`, `NEXTAUTH_URL` définis sur Vercel
 - [ ] `npx prisma db push` exécuté sur la base de production
 - [ ] `npm run seed` exécuté une fois, puis mot de passe admin changé
-- [ ] `VITE_PORTAL_URL` défini sur le projet du site public, et celui-ci redéployé
+- [ ] Destination des rewrites renseignée dans `CDDAYOUB/vercel.json`, et le site public redéployé
 - [ ] Déclaration de confidentialité (AVG/RGPD) mise à jour : le portail
       stocke désormais employeur, téléphone, biographie et **messages privés
       entre donateurs**
