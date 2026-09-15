@@ -8,7 +8,7 @@ export default async function NewMember() {
   return (
     <>
       <AdminHeader
-        title="Nouveau donateur"
+        title="Nouveau supporter"
         subtitle="Créez un accès à la plateforme communautaire et transmettez le mot de passe provisoire à l'intéressé."
       />
       <Panel className="p-6">

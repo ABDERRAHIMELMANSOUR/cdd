@@ -96,7 +96,7 @@ export default async function FeedPage({
       <header>
         <h1 className="font-display text-2xl font-bold text-gray-900">Fil d&apos;actualité</h1>
         <p className="mt-1 text-sm text-gray-600">
-          Les publications des donateurs de CDD Pays-Bas.
+          Les publications des supporters de CDD Pays-Bas.
         </p>
       </header>
 

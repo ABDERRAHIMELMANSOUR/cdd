@@ -54,7 +54,7 @@ export default async function DirectoryPage({
       <header className="mb-6">
         <h1 className="font-display text-2xl font-bold text-gray-900 sm:text-3xl">Annuaire</h1>
         <p className="mt-1 text-gray-600">
-          {members.length} donateur{members.length === 1 ? "" : "s"} du réseau CDD Pays-Bas.
+          {members.length} supporter{members.length === 1 ? "" : "s"} du réseau CDD Pays-Bas.
         </p>
       </header>
 
@@ -86,7 +86,7 @@ export default async function DirectoryPage({
 
       {members.length === 0 ? (
         <p className="card p-8 text-center text-gray-600">
-          Aucun donateur ne correspond à cette recherche.
+          Aucun supporter ne correspond à cette recherche.
         </p>
       ) : (
         <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">

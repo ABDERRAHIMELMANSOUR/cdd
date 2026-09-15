@@ -17,7 +17,7 @@ export default async function Inbox() {
       <header className="flex flex-wrap items-baseline justify-between gap-2">
         <div>
           <h1 className="font-display text-2xl font-bold text-gray-900">Messages</h1>
-          <p className="mt-1 text-sm text-gray-600">Vos échanges privés avec les donateurs.</p>
+          <p className="mt-1 text-sm text-gray-600">Vos échanges privés avec les supporters.</p>
         </div>
         <Link href="/portal/directory" className="text-sm text-brand hover:underline">
           Écrire à quelqu&apos;un

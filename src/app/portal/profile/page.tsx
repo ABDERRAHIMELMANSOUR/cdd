@@ -28,7 +28,7 @@ export default async function ProfilePage() {
       <header className="mb-6">
         <h1 className="font-display text-2xl font-bold text-gray-900 sm:text-3xl">Mon profil</h1>
         <p className="mt-1 text-gray-600">
-          Ces informations sont visibles par les autres donateurs du réseau.
+          Ces informations sont visibles par les autres supporters du réseau.
         </p>
       </header>
       <ProfileForm profile={profile} />

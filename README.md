@@ -113,7 +113,7 @@ mot de passe.
 Variables facultatives : `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `ADMIN_NAME` (compte
 super-admin initial créé par `npm run seed`).
 
-> `MEMBER_DEMO_PASSWORD` crée un donateur de démonstration. Le seed l'ignore
+> `MEMBER_DEMO_PASSWORD` crée un supporter de démonstration. Le seed l'ignore
 > lorsque `NODE_ENV=production`, mais ne la définissez pas en production : une
 > variable inutile est une variable qu'on finit par utiliser.
 
@@ -139,7 +139,7 @@ Les modèles du portail (`CommunityPost`, `CommunityComment`, `CommunityLike`,
 `bio`, `linkedinUrl`, `website`, `phone`, `commission`, `lastSeenAt`) sont
 créés par cette étape. **Tant qu'elle n'a pas été exécutée, `/portal` et
 `/admin/members` s'affichent vides** : les pages tolèrent l'absence de tables
-plutôt que de planter, ce qui ressemble beaucoup à « aucun donateur inscrit ».
+plutôt que de planter, ce qui ressemble beaucoup à « aucun supporter inscrit ».
 
 Après le seed, connectez-vous une fois sur `/admin/login` et changez le mot de
 passe : `ADMIN_PASSWORD` a transité par un fichier et par l'historique du shell.
@@ -176,7 +176,7 @@ site public est nécessaire pour qu'un changement prenne effet.
 - [ ] Destination des rewrites renseignée dans `CDDAYOUB/vercel.json`, et le site public redéployé
 - [ ] Déclaration de confidentialité (AVG/RGPD) mise à jour : le portail
       stocke désormais employeur, téléphone, biographie et **messages privés
-      entre donateurs**
+      entre supporters**
 
 > Pour l'upload de médias en production sur un hébergement sans système de
 > fichiers persistant (ex. Vercel), branchez un stockage objet (Supabase

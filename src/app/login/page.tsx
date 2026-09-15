@@ -55,7 +55,7 @@ function LoginForm() {
     <div className="w-full max-w-sm">
       <div className="mb-6 flex flex-col items-center text-center">
         <Sunburst className="h-14 w-14" />
-        <h1 className="mt-3 font-display text-2xl font-bold text-brand">Espace donateurs</h1>
+        <h1 className="mt-3 font-display text-2xl font-bold text-brand">Espace supporters</h1>
         <p className="text-sm text-gray-500">CDD Pays-Bas — réseau privé</p>
       </div>
 
@@ -89,7 +89,7 @@ function LoginForm() {
 
       <p className="mt-5 text-center text-sm text-gray-500">
         Pas encore d&apos;accès ? Les identifiants sont délivrés par le secrétariat après
-        validation de votre donateurschap.
+        validation de votre supporterschap.
       </p>
     </div>
   );

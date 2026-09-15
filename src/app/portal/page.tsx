@@ -5,7 +5,7 @@ import { MEMBER_PUBLIC_SELECT } from "@/lib/portal";
 import Avatar from "@/components/portal/Avatar";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "Espace donateurs", robots: { index: false } };
+export const metadata = { title: "Espace supporters", robots: { index: false } };
 
 export default async function PortalHome() {
   const user = await requireMember();
@@ -27,15 +27,15 @@ export default async function PortalHome() {
           Bonjour {user.name?.split(" ")[0] ?? ""}
         </h1>
         <p className="mt-1 text-gray-600">
-          Le réseau privé des donateurs de CDD Pays-Bas.
+          Le réseau privé des supporters de CDD Pays-Bas.
         </p>
       </header>
 
       <section className="grid gap-4 sm:grid-cols-3">
         {[
           { href: "/portal/feed", title: "Fil d'actualité", body: "Publiez et réagissez aux actualités du réseau." },
-          { href: "/portal/messages", title: "Messages", body: "Échangez en privé avec les autres donateurs." },
-          { href: "/portal/directory", title: "Annuaire", body: "Retrouvez les donateurs par nom ou commission." },
+          { href: "/portal/messages", title: "Messages", body: "Échangez en privé avec les autres supporters." },
+          { href: "/portal/directory", title: "Annuaire", body: "Retrouvez les supporters par nom ou commission." },
         ].map((c) => (
           <Link key={c.href} href={c.href} className="card p-5 transition-shadow hover:shadow-md">
             <h2 className="font-display text-base font-semibold text-gray-900">{c.title}</h2>
@@ -47,7 +47,7 @@ export default async function PortalHome() {
       <section>
         <div className="mb-4 flex items-baseline justify-between">
           <h2 className="font-display text-lg font-semibold text-gray-900">
-            Derniers donateurs ({memberCount})
+            Derniers supporters ({memberCount})
           </h2>
           <Link href="/portal/directory" className="text-sm text-brand hover:underline">
             Tout voir
@@ -56,7 +56,7 @@ export default async function PortalHome() {
 
         {recent.length === 0 ? (
           <p className="card p-6 text-sm text-gray-600">
-            Aucun donateur actif pour le moment.
+            Aucun supporter actif pour le moment.
           </p>
         ) : (
           <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">

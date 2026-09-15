@@ -41,7 +41,7 @@ const groups: { title: string; links: { href: string; label: string; icon: strin
   {
     title: "Communauté",
     links: [
-      { href: "/admin/members", label: "Donateurs", icon: "◍" },
+      { href: "/admin/members", label: "Supporters", icon: "◍" },
       { href: "/admin/moderation", label: "Modération", icon: "⚐" },
     ],
   },

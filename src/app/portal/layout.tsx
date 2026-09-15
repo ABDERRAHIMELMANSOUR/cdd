@@ -9,7 +9,7 @@ import { safe } from "@/lib/content";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Espace donateurs",
+  title: "Espace supporters",
   // The portal is private; keeping it out of search results is the least that
   // should be true of it.
   robots: { index: false, follow: false },

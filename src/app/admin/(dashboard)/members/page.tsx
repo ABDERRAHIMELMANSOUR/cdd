@@ -108,13 +108,13 @@ export default async function MembersAdmin({
   return (
     <>
       <AdminHeader
-        title="Donateurs"
+        title="Supporters"
         subtitle={
           pending > 0
             ? `${pending} inscription${pending > 1 ? "s" : ""} en attente d'approbation.`
             : "Comptes et accès de la plateforme communautaire."
         }
-        action={{ href: "/admin/members/new", label: "Donateur" }}
+        action={{ href: "/admin/members/new", label: "Supporter" }}
       />
 
       <div className="mb-4 flex flex-wrap items-center gap-3">
@@ -146,7 +146,7 @@ export default async function MembersAdmin({
             name="q"
             defaultValue={q}
             placeholder="Nom, email, organisation…"
-            aria-label="Rechercher un donateur"
+            aria-label="Rechercher un supporter"
             className="input !mt-0 w-56"
           />
           <button type="submit" className="rounded-md bg-gray-100 px-3 text-sm hover:bg-gray-200">
@@ -157,7 +157,7 @@ export default async function MembersAdmin({
 
       <Panel>
         {members.length === 0 ? (
-          <EmptyRow message={q || status ? "Aucun donateur ne correspond." : "Aucun donateur inscrit."} />
+          <EmptyRow message={q || status ? "Aucun supporter ne correspond." : "Aucun supporter inscrit."} />
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-sm">

@@ -281,13 +281,13 @@ async function main() {
   // so it needs both conditions rather than a comment asking nicely.
   const demoPassword = process.env.MEMBER_DEMO_PASSWORD;
   if (process.env.NODE_ENV !== "production" && demoPassword) {
-    const email = "donateur@example.test";
+    const email = "supporter@example.test";
     const existing = await prisma.user.findUnique({ where: { email } });
     if (!existing) {
       await prisma.user.create({
         data: {
           email,
-          name: "Donateur Démo",
+          name: "Supporter Démo",
           password: await bcrypt.hash(demoPassword, 10),
           role: "MEMBER",
           status: "ACTIVE",

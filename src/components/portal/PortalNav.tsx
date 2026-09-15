@@ -51,7 +51,7 @@ export default function PortalNav({
         <Link href="/portal" className="flex items-center gap-2" aria-label="Portail CDD Pays-Bas">
           <Sunburst className="h-8 w-8" />
           <span className="hidden font-display text-sm font-bold text-brand sm:block">
-            Espace donateurs
+            Espace supporters
           </span>
         </Link>
 

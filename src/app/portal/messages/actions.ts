@@ -45,7 +45,7 @@ export async function sendMessage(_prev: MessageState, formData: FormData): Prom
   if (parsed.data.to === me.id) return { error: "Vous ne pouvez pas vous écrire à vous-même." };
 
   const recipient = await recipientOrNull(parsed.data.to);
-  if (!recipient) return { error: "Ce donateur ne peut pas recevoir de messages." };
+  if (!recipient) return { error: "Ce supporter ne peut pas recevoir de messages." };
 
   await prisma.message.create({
     data: { senderId: me.id, receiverId: recipient.id, content: parsed.data.content },

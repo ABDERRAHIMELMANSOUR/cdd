@@ -66,7 +66,7 @@ export default function MemberForm({
         required={isNew}
         help={
           isNew
-            ? "Au moins 10 caractères. À transmettre au donateur, qui pourra le changer depuis son profil."
+            ? "Au moins 10 caractères. À transmettre au supporter, qui pourra le changer depuis son profil."
             : "Laissez vide pour conserver le mot de passe actuel."
         }
       />

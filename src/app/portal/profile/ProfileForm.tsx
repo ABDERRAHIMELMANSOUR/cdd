@@ -115,7 +115,7 @@ export default function ProfileForm({ profile }: { profile: Profile }) {
         <label className="label" htmlFor="phone">Téléphone</label>
         <input id="phone" name="phone" defaultValue={profile.phone ?? ""} className="input" />
         <p className="mt-1 text-xs text-gray-500">
-          Visible uniquement par les donateurs connectés.
+          Visible uniquement par les supporters connectés.
         </p>
       </div>
 
