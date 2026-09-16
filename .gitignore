@@ -34,3 +34,7 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
+
+# python caches (skill scripts)
+__pycache__/
+*.pyc
