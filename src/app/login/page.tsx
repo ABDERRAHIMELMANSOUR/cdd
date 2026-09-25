@@ -28,7 +28,13 @@ function LoginForm() {
       ? "Votre accès a été suspendu. Contactez le secrétariat."
       : reason === "inactive"
         ? "Ce compte est désactivé. Contactez le secrétariat."
-        : "";
+        : reason
+          ? // Anything else is NextAuth redirecting here with its own error
+            // code, now that `pages.error` points at this page instead of at
+            // /api/auth/error. Without this branch the visitor lands on a form
+            // that silently rejected them and says nothing about why.
+            "La connexion a échoué. Réessayez, ou contactez le secrétariat si le problème persiste."
+          : "";
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
