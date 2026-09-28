@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Sunburst from "@/components/Sunburst";
+import Logo from "@/components/Logo";
 
 /**
  * Shown to a supporter whose registration exists but has not been approved.
@@ -13,7 +13,7 @@ export default function PendingPage() {
   return (
     <main className="grid min-h-screen place-items-center bg-brand-50 p-6">
       <div className="w-full max-w-md text-center">
-        <Sunburst className="mx-auto h-14 w-14" />
+        <Logo href={null} className="mx-auto h-12 max-w-[240px]" />
         <h1 className="mt-4 font-display text-2xl font-bold text-brand">
           Votre accès est en cours de validation
         </h1>

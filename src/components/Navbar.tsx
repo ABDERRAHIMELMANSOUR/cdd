@@ -14,7 +14,7 @@ export default function Navbar({ logo }: { logo?: string | null }) {
   return (
     <header className="sticky top-0 z-50 border-b border-gray-100 bg-white/95 backdrop-blur">
       <nav className="container-cdd flex h-20 items-center justify-between">
-        <Logo logo={logo} compact />
+        <Logo logo={logo} className="h-10 max-w-[210px] sm:h-11 sm:max-w-[240px]" priority />
 
         {/* Desktop nav */}
         <ul className="hidden items-center gap-1 lg:flex">

@@ -18,9 +18,11 @@ export default function Footer({ settings }: { settings: Settings }) {
     <footer className="mt-auto bg-brand-dark text-white">
       <div className="container-cdd grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-4">
         <div>
-          <div className="rounded-lg bg-white p-3 inline-block">
-            <Logo logo={settings.logo} compact />
-          </div>
+          {/* surface="dark" instead of the white box this used to sit in: the
+              box was there only because the black wordmark vanished on navy,
+              and a logo in a white rectangle on a dark footer reads as a
+              pasted-on sticker. */}
+          <Logo logo={settings.logo} surface="dark" className="h-10 max-w-[220px]" />
           <p className="mt-4 max-w-xs text-sm text-white/70">
             Le réseau d'affaires francophone des dirigeants aux Pays-Bas.
           </p>

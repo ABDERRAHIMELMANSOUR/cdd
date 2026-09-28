@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
 import { useState } from "react";
-import Sunburst from "@/components/Sunburst";
+import Logo from "@/components/Logo";
 
 const LINKS = [
   { href: "/portal", label: "Accueil" },
@@ -48,11 +48,11 @@ export default function PortalNav({
   return (
     <header className="sticky top-0 z-40 border-b border-gray-200 bg-white/95 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center gap-4 px-4 py-3 sm:px-5">
-        <Link href="/portal" className="flex items-center gap-2" aria-label="Portail CDD Pays-Bas">
-          <Sunburst className="h-8 w-8" />
-          <span className="hidden font-display text-sm font-bold text-brand sm:block">
-            Espace supporters
-          </span>
+        {/* The wordmark carries the name, so the separate "Espace supporters"
+            label beside it was saying it twice and costing the width that the
+            navigation needs on a phone. */}
+        <Link href="/portal" className="flex shrink-0 items-center" aria-label="Portail CDD Pays-Bas">
+          <Logo href={null} className="h-8 max-w-[170px] sm:h-9 sm:max-w-[200px]" priority />
         </Link>
 
         <nav className="hidden flex-1 items-center gap-1 md:flex" aria-label="Portail">

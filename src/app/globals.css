@@ -1,3 +1,15 @@
+/*
+ * The public site's two faces, loaded the same way it loads them, so the
+ * portal and cddpaysbas.nl render identical type rather than merely similar
+ * type. Space Grotesk sets headings, Inter sets body copy.
+ *
+ * An @import rather than next/font: the public site already resolves these
+ * from the same Google stylesheet, and matching it exactly removes any chance
+ * of the two builds landing on different weights or metrics. It also keeps the
+ * build free of a network fetch.
+ */
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -15,8 +27,13 @@
   --accent: #5b9bd5;       /* light blue accent ("PAYS-BAS") */
   --accent-dark: #4a90e2;
 
-  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-  --font-display: "Georgia", "Times New Roman", serif;
+  /*
+   * Georgia was the placeholder here, and it was the single biggest reason the
+   * portal did not look like the public site: every heading rendered as a
+   * serif against the site's geometric sans. These are the site's own faces.
+   */
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  --font-display: "Space Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
 * {
@@ -32,6 +49,16 @@ body {
   background: #ffffff;
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
+}
+
+/*
+ * Headings take the display face globally, exactly as the public site does it,
+ * rather than only where someone remembered the `font-display` class. Without
+ * this a heading written without that class silently falls back to body type,
+ * and the two sites drift apart one component at a time.
+ */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
 }
 
 @layer components {

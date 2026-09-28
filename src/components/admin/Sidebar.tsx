@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
 import { useState } from "react";
-import Sunburst from "@/components/Sunburst";
+import Logo from "@/components/Logo";
 
 const groups: { title: string; links: { href: string; label: string; icon: string }[] }[] = [
   {
@@ -72,12 +72,11 @@ export default function Sidebar({ name, role }: { name: string; role: string }) 
           open ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        <div className="flex items-center gap-2 border-b border-white/10 p-5">
-          <Sunburst className="h-8 w-8" />
-          <div className="leading-tight">
-            <p className="text-sm font-bold">CDD Pays-Bas</p>
-            <p className="text-[11px] text-white/50">Administration</p>
-          </div>
+        {/* surface="dark" — the wordmark is black artwork, invisible on this
+            navy panel without the inversion. */}
+        <div className="border-b border-white/10 p-5">
+          <Logo href={null} surface="dark" className="h-9 max-w-[190px]" priority />
+          <p className="mt-2 text-[11px] text-white/50">Administration</p>
         </div>
 
         <nav className="p-3">

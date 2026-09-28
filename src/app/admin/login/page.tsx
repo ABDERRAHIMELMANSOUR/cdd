@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import Sunburst from "@/components/Sunburst";
+import Logo from "@/components/Logo";
 
 export default function AdminLogin() {
   const router = useRouter();
@@ -34,7 +34,7 @@ export default function AdminLogin() {
     <main className="grid min-h-screen place-items-center bg-brand-50 p-6">
       <div className="w-full max-w-sm">
         <div className="mb-6 flex flex-col items-center text-center">
-          <Sunburst className="h-14 w-14" />
+          <Logo href={null} className="h-14 max-w-[260px]" priority />
           <h1 className="mt-3 font-display text-2xl font-bold text-brand">Administration</h1>
           <p className="text-sm text-gray-500">CDD Pays-Bas — Tableau de bord</p>
         </div>

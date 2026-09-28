@@ -4,7 +4,7 @@ import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense } from "react";
-import Sunburst from "@/components/Sunburst";
+import Logo from "@/components/Logo";
 
 /**
  * Supporter sign-in.
@@ -60,8 +60,11 @@ function LoginForm() {
   return (
     <div className="w-full max-w-sm">
       <div className="mb-6 flex flex-col items-center text-center">
-        <Sunburst className="h-14 w-14" />
-        <h1 className="mt-3 font-display text-2xl font-bold text-brand">Espace supporters</h1>
+        {/* The full wordmark, not the bare mark: this is the first page a
+            supporter sees after leaving cddpaysbas.nl, so it has to be
+            recognisably the same organisation. */}
+        <Logo href={null} className="h-14 max-w-[260px]" priority />
+        <h1 className="mt-4 font-display text-2xl font-bold text-brand">Espace supporters</h1>
         <p className="text-sm text-gray-500">CDD Pays-Bas — réseau privé</p>
       </div>
 
