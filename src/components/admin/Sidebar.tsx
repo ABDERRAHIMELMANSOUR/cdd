@@ -43,6 +43,7 @@ const groups: { title: string; links: { href: string; label: string; icon: strin
     links: [
       { href: "/admin/members", label: "Supporters", icon: "◍" },
       { href: "/admin/moderation", label: "Modération", icon: "⚐" },
+      { href: "/admin/roster", label: "Import annuaire", icon: "⇪" },
     ],
   },
   {
