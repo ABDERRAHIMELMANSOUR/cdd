@@ -71,9 +71,19 @@ export default async function MemberProfilePage({ params }: { params: { id: stri
             portal — and never rendered on a public page. That is the basis on
             which it was collected.
           */}
-          <a href={`mailto:${member.email}`} className="text-brand underline">
-            {member.email}
-          </a>
+          {/*
+            A roster profile imported from the public site has no real address
+            — .invalid is reserved by RFC 2606 exactly so that it cannot route
+            — so offering a mailto: would be a link that silently goes nowhere.
+            Say so instead, and let the secretariat fill it in.
+          */}
+          {member.email.endsWith(".invalid") ? (
+            <span className="text-gray-400">Adresse non renseignée</span>
+          ) : (
+            <a href={`mailto:${member.email}`} className="text-brand underline">
+              {member.email}
+            </a>
+          )}
           {member.linkedinUrl && (
             <a
               href={member.linkedinUrl}
