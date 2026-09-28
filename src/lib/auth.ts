@@ -4,6 +4,24 @@ import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import type { Role } from "@prisma/client";
 
+/**
+ * The signing secret, under either name.
+ *
+ * next-auth v4 reads `NEXTAUTH_SECRET` and ONLY that name — `AUTH_SECRET` is
+ * the Auth.js v5 spelling and appears nowhere in v4's source. Setting the v5
+ * name on a v4 app therefore looks exactly like setting nothing: every auth
+ * endpoint answers 500 with MissingSecretError / NO_SECRET, which is a
+ * miserable thing to debug when the variable is plainly there in the
+ * dashboard.
+ *
+ * Accepting both removes that trap. `.trim()` and the emptiness check matter
+ * too: a variable pasted with a trailing newline, or created and left blank,
+ * is present but useless, and `process.env.X` being "" is falsy in a way that
+ * silently reproduces the same failure.
+ */
+const AUTH_SECRET =
+  process.env.NEXTAUTH_SECRET?.trim() || process.env.AUTH_SECRET?.trim() || undefined;
+
 export const authOptions: NextAuthOptions = {
   session: { strategy: "jwt" },
   /*
@@ -108,7 +126,7 @@ export const authOptions: NextAuthOptions = {
    * from a database fault by looking at the browser. The check below says
    * which one it is, in the logs, at startup instead of at first sign-in.
    */
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: AUTH_SECRET,
 };
 
 /*
@@ -133,10 +151,15 @@ export const authOptions: NextAuthOptions = {
  * one is ever added, the fix is to give the upstream the public host, not to
  * set AUTH_TRUST_HOST.
  */
-if (!process.env.NEXTAUTH_SECRET) {
+if (!AUTH_SECRET) {
   console.error(
-    "[auth] NEXTAUTH_SECRET is not set. NextAuth cannot sign session tokens " +
-      "and every sign-in will fail with a configuration error. Set it in the " +
-      "Vercel project environment variables."
+    "[auth] NO SIGNING SECRET. Neither NEXTAUTH_SECRET nor AUTH_SECRET is " +
+      "set (or one is set but empty). Every auth endpoint will answer 500 " +
+      "with MissingSecretError, /portal will refuse to render, and sign-in " +
+      "cannot work. Fix: generate one with `openssl rand -base64 32` and add " +
+      "it as NEXTAUTH_SECRET to the Vercel project environment variables for " +
+      "Production, Preview and Development, then REDEPLOY — environment " +
+      "variables are read at deploy time, so saving one changes nothing until " +
+      "a new deployment is built."
   );
 }
