@@ -22,6 +22,30 @@ import type { Role } from "@prisma/client";
 const AUTH_SECRET =
   process.env.NEXTAUTH_SECRET?.trim() || process.env.AUTH_SECRET?.trim() || undefined;
 
+/**
+ * Say which of the four failures happened — but only when asked.
+ *
+ * authorize() returns null for four different reasons and the sign-in page
+ * shows one message for all of them, deliberately: telling a stranger which
+ * addresses exist is how an attacker enumerates the membership. That privacy
+ * is correct and stays. It is also why a genuine misconfiguration is so hard
+ * to diagnose — "no such user", "account deactivated", "wrong password" and
+ * "the database is unreachable" are indistinguishable from the outside.
+ *
+ * Setting AUTH_DEBUG=1 writes the distinction to the SERVER log, where only
+ * someone with access to the Vercel runtime logs can read it. Remove the
+ * variable once the question is answered; there is no reason to keep a record
+ * of which addresses tried to sign in.
+ *
+ * The password is never logged. The stored hash is truncated to its prefix —
+ * `$2a$06$` says which algorithm and cost produced it, which is the diagnostic
+ * value, while the remainder stays out of the log.
+ */
+function debug(email: string, message: string) {
+  if (process.env.AUTH_DEBUG !== "1") return;
+  console.warn(`[auth:debug] ${email.toLowerCase()} — ${message}`);
+}
+
 export const authOptions: NextAuthOptions = {
   session: { strategy: "jwt" },
   /*
@@ -80,11 +104,25 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
 
-        if (!user || !user.active) return null;
+        if (!user) {
+          debug(credentials.email, "NO SUCH USER — nothing in the table matches this address (lowercased).");
+          return null;
+        }
+        if (!user.active) {
+          debug(credentials.email, "FOUND but active=false — refused before the password is checked.");
+          return null;
+        }
 
         try {
           const ok = await bcrypt.compare(credentials.password, user.password);
-          if (!ok) return null;
+          if (!ok) {
+            debug(
+              credentials.email,
+              `FOUND, active, but the password does not match the stored hash ` +
+                `(${user.password.slice(0, 7)}…, role=${user.role}, status=${user.status}).`
+            );
+            return null;
+          }
         } catch (error) {
           // A malformed or empty hash in the row makes bcrypt throw rather
           // than return false; same reasoning as above.
