@@ -6,6 +6,7 @@ import { AUTHOR_SELECT } from "@/lib/portal";
 import { getT } from "@/i18n/locale";
 import Composer from "./Composer";
 import PostCard, { type FeedPostView } from "./PostCard";
+import EmptyState from "@/components/portal/EmptyState";
 
 export const dynamic = "force-dynamic";
 // The tab title follows the reader's language like everything else.
@@ -123,9 +124,9 @@ export default async function FeedPage({
       <Composer name={user.name ?? ""} image={user.image} t={t} />
 
       {visible.length === 0 ? (
-        <p className="card p-8 text-center text-sm text-gray-600">
-          {t.feed.empty}
-        </p>
+        // No action: the composer is directly above, and pointing at
+        // something already on screen is noise.
+        <EmptyState icon="feed" title={t.feed.emptyTitle} body={t.feed.empty} />
       ) : (
         <div className="space-y-5">
           {visible.map((post) => (

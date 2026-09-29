@@ -4,6 +4,7 @@ import { safe } from "@/lib/content";
 import { listConversations } from "@/lib/messages";
 import { timeAgo } from "@/lib/portal";
 import Avatar from "@/components/portal/Avatar";
+import EmptyState from "@/components/portal/EmptyState";
 import { getT } from "@/i18n/locale";
 import { fmt } from "@/i18n/portal";
 
@@ -32,12 +33,12 @@ export default async function Inbox() {
       </header>
 
       {conversations.length === 0 ? (
-        <div className="card p-8 text-center">
-          <p className="text-sm text-gray-600">{t.messages.empty}</p>
-          <Link href="/portal/directory" className="btn-primary mt-5 inline-block">
-            {t.messages.browse}
-          </Link>
-        </div>
+        <EmptyState
+          icon="messages"
+          title={t.messages.emptyTitle}
+          body={t.messages.empty}
+          action={{ href: "/portal/directory", label: t.messages.browse }}
+        />
       ) : (
         <ul className="card divide-y divide-gray-100 overflow-hidden">
           {conversations.map((c) => (

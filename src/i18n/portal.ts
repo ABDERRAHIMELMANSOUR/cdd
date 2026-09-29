@@ -97,6 +97,7 @@ export interface Dictionary {
     linkPlaceholder: string;
     publish: string;
     publishing: string;
+    emptyTitle: string;
     empty: string;
     loadMore: string;
     end: string;
@@ -123,7 +124,9 @@ export interface Dictionary {
     searchPlaceholder: string;
     commission: string;
     allCommissions: string;
+    noMatchTitle: string;
     noMatch: string;
+    clearFilters: string;
   };
   profile: {
     back: string;
@@ -155,6 +158,7 @@ export interface Dictionary {
     title: string;
     subtitle: string;
     writeSomeone: string;
+    emptyTitle: string;
     empty: string;
     browse: string;
     you: string;
@@ -172,6 +176,7 @@ export interface Dictionary {
     subtitle: string;
     upcoming: string;
     past: string;
+    emptyTitle: string;
     empty: string;
     register: string;
   };
@@ -265,7 +270,8 @@ const en: Dictionary = {
     linkPlaceholder: "https://…",
     publish: "Post",
     publishing: "Posting…",
-    empty: "Nothing has been posted yet. Start the conversation.",
+    emptyTitle: "The feed starts here",
+    empty: "This is where supporters share news, wins and what they are working on. Nobody has posted yet — the box above is waiting for the first one.",
     loadMore: "Load more",
     end: "No more posts to show.",
     like: "Like",
@@ -289,7 +295,9 @@ const en: Dictionary = {
     searchPlaceholder: "Name, company, role…",
     commission: "Commission",
     allCommissions: "All commissions",
-    noMatch: "No supporter matches.",
+    noMatchTitle: "No match",
+    noMatch: "No supporter matches this search. Try a different name, or clear the filters to see everyone.",
+    clearFilters: "Clear the filters",
   },
   profile: {
     back: "Directory",
@@ -321,7 +329,8 @@ const en: Dictionary = {
     title: "Messages",
     subtitle: "Your private conversations with supporters.",
     writeSomeone: "Write to someone",
-    empty: "No conversations yet.",
+    emptyTitle: "No conversations yet",
+    empty: "Messages here are private, between you and one other supporter. Find someone in the directory to write the first one.",
     browse: "Browse the directory",
     you: "You: ",
     unread: "{n} unread messages",
@@ -335,7 +344,8 @@ const en: Dictionary = {
     subtitle: "Gatherings of the CDD Pays-Bas network.",
     upcoming: "Upcoming",
     past: "Past gatherings",
-    empty: "No events published yet.",
+    emptyTitle: "No events yet",
+    empty: "Roundtables, delegations and gatherings of the network appear here as soon as the board publishes them.",
     register: "Register",
   },
   pending: {
@@ -424,7 +434,8 @@ const nl: Dictionary = {
     linkPlaceholder: "https://…",
     publish: "Plaatsen",
     publishing: "Bezig met plaatsen…",
-    empty: "Er is nog niets geplaatst. Begin het gesprek.",
+    emptyTitle: "De tijdlijn begint hier",
+    empty: "Hier delen supporters nieuws, successen en waar zij aan werken. Er is nog niets geplaatst — het venster hierboven wacht op het eerste bericht.",
     loadMore: "Meer laden",
     end: "Geen berichten meer.",
     like: "Vind ik leuk",
@@ -448,7 +459,9 @@ const nl: Dictionary = {
     searchPlaceholder: "Naam, organisatie, functie…",
     commission: "Commissie",
     allCommissions: "Alle commissies",
-    noMatch: "Geen supporter gevonden.",
+    noMatchTitle: "Geen resultaat",
+    noMatch: "Geen supporter komt overeen met deze zoekopdracht. Probeer een andere naam of wis de filters om iedereen te zien.",
+    clearFilters: "Filters wissen",
   },
   profile: {
     back: "Ledenlijst",
@@ -480,7 +493,8 @@ const nl: Dictionary = {
     title: "Berichten",
     subtitle: "Uw privégesprekken met supporters.",
     writeSomeone: "Iemand schrijven",
-    empty: "Nog geen gesprekken.",
+    emptyTitle: "Nog geen gesprekken",
+    empty: "Berichten hier zijn privé, tussen u en één andere supporter. Zoek iemand in de ledenlijst om het eerste bericht te schrijven.",
     browse: "Ledenlijst bekijken",
     you: "U: ",
     unread: "{n} ongelezen berichten",
@@ -494,7 +508,8 @@ const nl: Dictionary = {
     subtitle: "Bijeenkomsten van het netwerk van CDD Pays-Bas.",
     upcoming: "Binnenkort",
     past: "Eerdere bijeenkomsten",
-    empty: "Nog geen evenementen gepubliceerd.",
+    emptyTitle: "Nog geen evenementen",
+    empty: "Rondetafels, missies en bijeenkomsten van het netwerk verschijnen hier zodra het bestuur ze publiceert.",
     register: "Aanmelden",
   },
   pending: {
@@ -583,7 +598,8 @@ const fr: Dictionary = {
     linkPlaceholder: "https://…",
     publish: "Publier",
     publishing: "Publication…",
-    empty: "Rien n'a encore été publié. Lancez la conversation.",
+    emptyTitle: "Le fil commence ici",
+    empty: "C'est ici que les supporters partagent leurs actualités, leurs réussites et leurs travaux en cours. Rien n'a encore été publié — la zone ci-dessus attend la première publication.",
     loadMore: "Charger plus",
     end: "Fin des publications affichables.",
     like: "J'aime",
@@ -607,7 +623,9 @@ const fr: Dictionary = {
     searchPlaceholder: "Nom, entreprise, fonction…",
     commission: "Commission",
     allCommissions: "Toutes les commissions",
-    noMatch: "Aucun supporter ne correspond.",
+    noMatchTitle: "Aucun résultat",
+    noMatch: "Aucun supporter ne correspond à cette recherche. Essayez un autre nom, ou effacez les filtres pour voir tout le monde.",
+    clearFilters: "Effacer les filtres",
   },
   profile: {
     back: "Annuaire",
@@ -639,7 +657,8 @@ const fr: Dictionary = {
     title: "Messages",
     subtitle: "Vos échanges privés avec les supporters.",
     writeSomeone: "Écrire à quelqu'un",
-    empty: "Aucune conversation pour le moment.",
+    emptyTitle: "Aucune conversation",
+    empty: "Les messages sont privés, entre vous et un autre supporter. Trouvez quelqu'un dans l'annuaire pour écrire le premier.",
     browse: "Parcourir l'annuaire",
     you: "Vous : ",
     unread: "{n} messages non lus",
@@ -653,7 +672,8 @@ const fr: Dictionary = {
     subtitle: "Les rencontres du réseau CDD Pays-Bas.",
     upcoming: "À venir",
     past: "Rencontres passées",
-    empty: "Aucun événement publié pour le moment.",
+    emptyTitle: "Aucun événement",
+    empty: "Les rencontres, missions et rendez-vous du réseau apparaissent ici dès que le bureau les publie.",
     register: "S'inscrire",
   },
   pending: {

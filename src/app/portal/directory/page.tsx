@@ -5,6 +5,7 @@ import { COMMISSIONS, MEMBER_PUBLIC_SELECT, commissionLabel } from "@/lib/portal
 import Avatar from "@/components/portal/Avatar";
 import { getT } from "@/i18n/locale";
 import { fmt } from "@/i18n/portal";
+import EmptyState from "@/components/portal/EmptyState";
 
 export const dynamic = "force-dynamic";
 // The tab title follows the reader's language like everything else.
@@ -94,9 +95,15 @@ export default async function DirectoryPage({
       </form>
 
       {members.length === 0 ? (
-        <p className="card p-8 text-center text-gray-600">
-          {t.directory.noMatch}
-        </p>
+        // A search that finds nothing was a dead end: the filters that caused
+        // it are still set, and the only way back was to clear them by hand.
+        // The action does it in one click.
+        <EmptyState
+          icon="search"
+          title={t.directory.noMatchTitle}
+          body={t.directory.noMatch}
+          action={{ href: "/portal/directory", label: t.directory.clearFilters }}
+        />
       ) : (
         <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {members.map((m) => (

@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { safe } from "@/lib/content";
 import { requireMember } from "@/lib/session";
 import { getT } from "@/i18n/locale";
+import EmptyState from "@/components/portal/EmptyState";
 import type { Locale } from "@/i18n/portal";
 
 export const dynamic = "force-dynamic";
@@ -70,9 +71,7 @@ export default async function PortalEvents() {
       </header>
 
       {events.length === 0 ? (
-        <p className="card p-8 text-center text-sm text-gray-600">
-          {t.events.empty}
-        </p>
+        <EmptyState icon="events" title={t.events.emptyTitle} body={t.events.empty} />
       ) : (
         <>
           {upcoming.length > 0 && (
