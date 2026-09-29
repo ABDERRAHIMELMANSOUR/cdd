@@ -193,6 +193,23 @@ export interface Dictionary {
    * the dictionary for the same reason the labels do: a Dutch reader who
    * submits an empty message should not be answered in French.
    */
+  password: {
+    title: string;
+    subtitle: string;
+    current: string;
+    new: string;
+    confirm: string;
+    hint: string;
+    submit: string;
+    saving: string;
+    success: string;
+    wrongCurrent: string;
+    tooShort: string;
+    mismatch: string;
+    sameAsOld: string;
+    noPassword: string;
+    required: string;
+  };
   errors: {
     invalid: string;
     emptyPost: string;
@@ -358,6 +375,23 @@ const en: Dictionary = {
   pending: {
     title: "Your access is being reviewed",
     body: "A board member reviews every request. We will contact you shortly to confirm your access.",
+  },
+  password: {
+    title: "Change password",
+    subtitle: "Choose a new password for signing in. You will stay signed in on this device.",
+    current: "Current password",
+    new: "New password",
+    confirm: "Confirm new password",
+    hint: "At least 10 characters.",
+    submit: "Update password",
+    saving: "Updating…",
+    success: "Your password has been updated.",
+    wrongCurrent: "The current password is incorrect.",
+    tooShort: "The new password must be at least 10 characters.",
+    mismatch: "The two new passwords do not match.",
+    sameAsOld: "The new password must be different from the current one.",
+    noPassword: "This account has no password yet. Please contact the secretariat to activate your login.",
+    required: "Please fill in all three fields.",
   },
   errors: {
     invalid: "Invalid data.",
@@ -526,6 +560,23 @@ const nl: Dictionary = {
     title: "Uw toegang wordt beoordeeld",
     body: "Een bestuurslid beoordeelt elke aanvraag. Wij nemen binnenkort contact met u op om uw toegang te bevestigen.",
   },
+  password: {
+    title: "Wachtwoord wijzigen",
+    subtitle: "Kies een nieuw wachtwoord om in te loggen. Je blijft op dit apparaat ingelogd.",
+    current: "Huidig wachtwoord",
+    new: "Nieuw wachtwoord",
+    confirm: "Bevestig nieuw wachtwoord",
+    hint: "Minstens 10 tekens.",
+    submit: "Wachtwoord bijwerken",
+    saving: "Bezig…",
+    success: "Je wachtwoord is bijgewerkt.",
+    wrongCurrent: "Het huidige wachtwoord is onjuist.",
+    tooShort: "Het nieuwe wachtwoord moet minstens 10 tekens bevatten.",
+    mismatch: "De twee nieuwe wachtwoorden komen niet overeen.",
+    sameAsOld: "Het nieuwe wachtwoord moet verschillen van het huidige.",
+    noPassword: "Dit account heeft nog geen wachtwoord. Neem contact op met het secretariaat om je login te activeren.",
+    required: "Vul alle drie de velden in.",
+  },
   errors: {
     invalid: "Ongeldige gegevens.",
     emptyPost: "Uw bericht is leeg.",
@@ -692,6 +743,23 @@ const fr: Dictionary = {
   pending: {
     title: "Votre accès est en cours de validation",
     body: "Un membre du bureau examine chaque demande. Nous vous contacterons prochainement pour confirmer votre accès.",
+  },
+  password: {
+    title: "Changer le mot de passe",
+    subtitle: "Choisissez un nouveau mot de passe de connexion. Vous resterez connecté sur cet appareil.",
+    current: "Mot de passe actuel",
+    new: "Nouveau mot de passe",
+    confirm: "Confirmer le nouveau mot de passe",
+    hint: "Au moins 10 caractères.",
+    submit: "Mettre à jour le mot de passe",
+    saving: "Mise à jour…",
+    success: "Votre mot de passe a été mis à jour.",
+    wrongCurrent: "Le mot de passe actuel est incorrect.",
+    tooShort: "Le nouveau mot de passe doit contenir au moins 10 caractères.",
+    mismatch: "Les deux nouveaux mots de passe ne correspondent pas.",
+    sameAsOld: "Le nouveau mot de passe doit être différent de l'actuel.",
+    noPassword: "Ce compte n'a pas encore de mot de passe. Contactez le secrétariat pour activer votre accès.",
+    required: "Veuillez remplir les trois champs.",
   },
   errors: {
     invalid: "Données invalides.",

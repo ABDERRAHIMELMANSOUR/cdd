@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
+import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import { requireMember } from "@/lib/session";
 import { COMMISSIONS } from "@/lib/portal";
@@ -92,4 +93,62 @@ export async function updateProfile(
   revalidatePath("/portal/directory");
   revalidatePath(`/portal/members/${user.id}`);
   return { ok: true };
+}
+
+export type PasswordState = {
+  ok?: boolean;
+  /** A key of `t.password`, never a sentence: the form renders it in the reader's language. */
+  error?: "required" | "wrongCurrent" | "tooShort" | "mismatch" | "sameAsOld" | "noPassword";
+  /** Bumped on success so the form can clear its fields. */
+  at?: number;
+};
+
+const MIN_PASSWORD = 10; // same floor the admin surface applies
+
+/**
+ * Lets a signed-in supporter replace their own password.
+ *
+ * The id comes from the session, and the current password must be proven
+ * before anything changes: a session left open on a shared computer should
+ * not be enough to take the account over permanently. Passwords are never
+ * logged or echoed back.
+ */
+export async function changePassword(
+  _prev: PasswordState,
+  formData: FormData
+): Promise<PasswordState> {
+  const user = await requireMember();
+
+  const current = String(formData.get("currentPassword") ?? "");
+  const next = String(formData.get("newPassword") ?? "");
+  const confirm = String(formData.get("confirmPassword") ?? "");
+
+  if (!current || !next || !confirm) return { error: "required" };
+  if (next.length < MIN_PASSWORD) return { error: "tooShort" };
+  // bcrypt only uses the first 72 bytes; refuse longer rather than silently truncate.
+  if (Buffer.byteLength(next, "utf8") > 72) return { error: "tooShort" };
+  if (next !== confirm) return { error: "mismatch" };
+
+  const row = await prisma.user.findUnique({
+    where: { id: user.id },
+    select: { password: true },
+  });
+  // Imported roster profiles carry an unusable sentinel, not a hash.
+  if (!row?.password || !row.password.startsWith("$2")) return { error: "noPassword" };
+
+  let ok = false;
+  try {
+    ok = await bcrypt.compare(current, row.password);
+  } catch {
+    ok = false;
+  }
+  if (!ok) return { error: "wrongCurrent" };
+  if (current === next) return { error: "sameAsOld" };
+
+  await prisma.user.update({
+    where: { id: user.id },
+    data: { password: await bcrypt.hash(next, 10) },
+  });
+
+  return { ok: true, at: Date.now() };
 }

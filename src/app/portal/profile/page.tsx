@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { requireMember } from "@/lib/session";
 import ProfileForm from "./ProfileForm";
+import ChangePasswordForm from "./ChangePasswordForm";
 import { getT } from "@/i18n/locale";
 
 export const dynamic = "force-dynamic";
@@ -38,6 +39,7 @@ export default async function ProfilePage() {
         </p>
       </header>
       <ProfileForm t={t} profile={profile} />
+        <ChangePasswordForm t={t} />
     </div>
   );
 }
