@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { requireMember, isStaff } from "@/lib/session";
 import { AUTHOR_SELECT, timeAgo } from "@/lib/portal";
+import type { Locale } from "@/i18n/portal";
 import Avatar from "@/components/portal/Avatar";
 import MessageComposer from "../MessageComposer";
 import { getT } from "@/i18n/locale";
@@ -16,7 +17,7 @@ const WINDOW = 100;
 
 export default async function Conversation({ params }: { params: { id: string } }) {
   const me = await requireMember();
-  const { t } = getT();
+  const { locale, t } = getT();
 
   if (params.id === me.id) notFound();
 
@@ -39,7 +40,11 @@ export default async function Conversation({ params }: { params: { id: string } 
         { senderId: other.id, receiverId: me.id },
       ],
     },
-    orderBy: { createdAt: "desc" },
+    // id breaks ties. Two messages can share a createdAt — the seed proved it,
+    // and so can two sends in the same millisecond — and without a second key
+    // Postgres is free to return them in either order, so a reply can render
+    // above the message it answers.
+    orderBy: [{ createdAt: "desc" }, { id: "desc" }],
     take: WINDOW,
     select: { id: true, content: true, createdAt: true, senderId: true },
   });
@@ -52,6 +57,19 @@ export default async function Conversation({ params }: { params: { id: string } 
   // Fetched newest-first so the window is the tail; displayed oldest-first
   // because that is how a conversation reads.
   const thread = [...messages].reverse();
+
+  /*
+   * Date separators. A long thread is otherwise an unbroken column of bubbles
+   * where "il y a 3 h" and "il y a 3 j" look alike at a glance, and there is
+   * no way to see that a conversation paused for a week. The separator is
+   * drawn when the day changes, so a single-day thread gets exactly one.
+   */
+  const dayLabel = new Intl.DateTimeFormat(locale as Locale, {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+  });
+  const dayKey = (d: Date) => d.toISOString().slice(0, 10);
   const sub = [other.position, other.company].filter(Boolean).join(" · ");
 
   return (
@@ -85,10 +103,17 @@ export default async function Conversation({ params }: { params: { id: string } 
                 {t.messages.noMessages}
               </li>
             ) : (
-              thread.map((m) => {
+              thread.map((m, i) => {
                 const mine = m.senderId === me.id;
+                const newDay = i === 0 || dayKey(thread[i - 1].createdAt) !== dayKey(m.createdAt);
                 return (
-                  <li key={m.id} className={`flex ${mine ? "justify-end" : "justify-start"}`}>
+                  <li key={m.id}>
+                    {newDay && (
+                      <p className="my-4 text-center text-xs font-medium text-gray-400">
+                        {dayLabel.format(m.createdAt)}
+                      </p>
+                    )}
+                    <div className={`flex ${mine ? "justify-end" : "justify-start"}`}>
                     <div
                       className={`max-w-[80%] rounded-2xl px-3.5 py-2 ${
                         mine
@@ -100,6 +125,7 @@ export default async function Conversation({ params }: { params: { id: string } 
                       <p className={`mt-1 text-[11px] ${mine ? "text-white/70" : "text-gray-400"}`}>
                         {timeAgo(m.createdAt)}
                       </p>
+                      </div>
                     </div>
                   </li>
                 );

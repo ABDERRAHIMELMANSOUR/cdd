@@ -89,7 +89,7 @@ export default async function FeedPage({
           likes: { where: { authorId: user.id }, select: { authorId: true } },
           comments: {
             where: { hidden: false },
-            orderBy: { createdAt: "desc" },
+            orderBy: [{ createdAt: "desc" }, { id: "desc" }],
             take: COMMENTS_PER_POST,
             select: {
               id: true,

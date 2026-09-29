@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { useFormState, useFormStatus } from "react-dom";
+import { useRouter } from "next/navigation";
 import { sendMessage, type MessageState } from "./actions";
 import { fmt, type Dictionary } from "@/i18n/portal";
 
@@ -23,12 +24,18 @@ export default function MessageComposer({ to, name, t }: { to: string; name: str
   const ref = useRef<HTMLFormElement>(null);
   const box = useRef<HTMLTextAreaElement>(null);
 
+  const router = useRouter();
+
   useEffect(() => {
     if (state.ok) {
       ref.current?.reset();
       box.current?.focus();
+      // The thread is a server component, so a sent message only appears once
+      // the route re-renders. Without this the textarea empties and nothing
+      // else changes, which reads as the message having gone nowhere.
+      router.refresh();
     }
-  }, [state.ok]);
+  }, [state.ok, router]);
 
   return (
     <form ref={ref} action={action} className="border-t border-gray-100 p-3 sm:p-4">

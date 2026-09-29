@@ -104,6 +104,10 @@ export interface Dictionary {
     like: string;
     /** `{n}` */
     comments: string;
+    /** `{n}` */
+    seeAllComments: string;
+    confirmDelete: string;
+    confirmDeleteComment: string;
     share: string;
     sharePlaceholder: string;
     shareSubmit: string;
@@ -276,6 +280,9 @@ const en: Dictionary = {
     end: "No more posts to show.",
     like: "Like",
     comments: "{n} comments",
+    seeAllComments: "See all {n} comments",
+    confirmDelete: "Delete this post? This cannot be undone.",
+    confirmDeleteComment: "Delete this comment?",
     share: "Share",
     sharePlaceholder: "Add a note (optional)…",
     shareSubmit: "Share",
@@ -440,6 +447,9 @@ const nl: Dictionary = {
     end: "Geen berichten meer.",
     like: "Vind ik leuk",
     comments: "{n} reacties",
+    seeAllComments: "Alle {n} reacties bekijken",
+    confirmDelete: "Dit bericht verwijderen? Dit kan niet ongedaan worden gemaakt.",
+    confirmDeleteComment: "Deze reactie verwijderen?",
     share: "Delen",
     sharePlaceholder: "Voeg een opmerking toe (optioneel)…",
     shareSubmit: "Delen",
@@ -604,6 +614,9 @@ const fr: Dictionary = {
     end: "Fin des publications affichables.",
     like: "J'aime",
     comments: "{n} commentaires",
+    seeAllComments: "Voir les {n} commentaires",
+    confirmDelete: "Supprimer cette publication ? Cette action est irréversible.",
+    confirmDeleteComment: "Supprimer ce commentaire ?",
     share: "Partager",
     sharePlaceholder: "Ajouter un mot (facultatif)…",
     shareSubmit: "Partager",

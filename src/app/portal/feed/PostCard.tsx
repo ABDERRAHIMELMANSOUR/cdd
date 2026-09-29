@@ -4,7 +4,9 @@ import { timeAgo } from "@/lib/portal";
 import CommentForm from "./CommentForm";
 import RepostButton from "./RepostButton";
 import { fmt, type Dictionary } from "@/i18n/portal";
-import { toggleLike, removePost, removeComment } from "./actions";
+import { removePost, removeComment } from "./actions";
+import LikeButton from "./LikeButton";
+import ConfirmSubmit from "./ConfirmSubmit";
 
 type Author = {
   id: string;
@@ -59,8 +61,11 @@ export default function PostCard({
   viewerName,
   viewerImage,
   t,
+  showAllComments = false,
 }: {
   t: Dictionary;
+  /** The detail page passes every comment; the feed passes a preview. */
+  showAllComments?: boolean;
   post: FeedPostView;
   viewerId: string;
   canModerate: boolean;
@@ -91,7 +96,7 @@ export default function PostCard({
         </div>
 
         {(mine || canModerate) && (
-          <form action={removePost}>
+          <ConfirmSubmit action={removePost} confirm={t.feed.confirmDelete}>
             <input type="hidden" name="id" value={post.id} />
             <button
               type="submit"
@@ -99,7 +104,7 @@ export default function PostCard({
             >
               {mine ? t.feed.delete : t.feed.hide}
             </button>
-          </form>
+          </ConfirmSubmit>
         )}
       </header>
 
@@ -170,28 +175,29 @@ export default function PostCard({
         ))}
 
       <div className="mt-4 flex items-center gap-4 border-t border-gray-100 pt-3">
-        <form action={toggleLike}>
-          <input type="hidden" name="postId" value={post.id} />
-          <button
-            type="submit"
-            aria-pressed={liked}
-            className={`flex items-center gap-1.5 rounded-lg px-2 py-1 text-sm font-medium transition-colors ${
-              liked ? "text-brand" : "text-gray-500 hover:text-brand"
-            }`}
-          >
-            <span aria-hidden="true">{liked ? "♥" : "♡"}</span>
-            {t.feed.like}
-            {post._count.likes > 0 && (
-              <span className="text-xs text-gray-400">({post._count.likes})</span>
-            )}
-          </button>
-        </form>
+        <LikeButton
+          postId={post.id}
+          liked={liked}
+          count={post._count.likes}
+          t={t}
+        />
 
         <RepostButton postId={post.id} count={post._count.reposts} mine={mine} t={t} />
 
-        <span className="ml-auto text-sm text-gray-400">
-          {fmt(t.feed.comments, { n: post._count.comments })}
-        </span>
+        {/* A count with no way to reach what it counts is a dead end, which
+            is what this was before the detail page existed. */}
+        {!showAllComments && post._count.comments > post.comments.length ? (
+          <Link
+            href={`/portal/feed/${post.id}`}
+            className="ml-auto text-sm text-brand hover:underline"
+          >
+            {fmt(t.feed.seeAllComments, { n: post._count.comments })}
+          </Link>
+        ) : (
+          <span className="ml-auto text-sm text-gray-400">
+            {fmt(t.feed.comments, { n: post._count.comments })}
+          </span>
+        )}
       </div>
 
       {post.comments.length > 0 && (
@@ -211,7 +217,7 @@ export default function PostCard({
                   </Link>
                   <span className="text-xs text-gray-400">{timeAgo(c.createdAt)}</span>
                   {(c.author.id === viewerId || canModerate) && (
-                    <form action={removeComment} className="ml-auto">
+                    <ConfirmSubmit action={removeComment} confirm={t.feed.confirmDeleteComment} className="ml-auto">
                       <input type="hidden" name="id" value={c.id} />
                       <button
                         type="submit"
@@ -220,7 +226,7 @@ export default function PostCard({
                       >
                         ×
                       </button>
-                    </form>
+                    </ConfirmSubmit>
                   )}
                 </div>
                 <p className="mt-0.5 whitespace-pre-wrap break-words text-sm text-gray-700">

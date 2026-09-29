@@ -42,7 +42,7 @@ export async function listConversations(meId: string): Promise<Conversation[]> {
   const [messages, unreadGroups] = await Promise.all([
     prisma.message.findMany({
       where: { OR: [{ senderId: meId }, { receiverId: meId }] },
-      orderBy: { createdAt: "desc" },
+      orderBy: [{ createdAt: "desc" }, { id: "desc" }],
       take: SCAN_LIMIT,
       select: {
         content: true,
