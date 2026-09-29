@@ -4,14 +4,15 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { requireMember, isStaff } from "@/lib/session";
+import { getT } from "@/i18n/locale";
 
 const SendSchema = z.object({
   to: z.string().min(1),
   content: z
     .string()
     .trim()
-    .min(1, "Votre message est vide.")
-    .max(5000, "Un message est limité à 5000 caractères."),
+    .min(1, "empty")
+    .max(5000, "tooLong"),
 });
 
 export type MessageState = { ok?: boolean; error?: string };
@@ -37,15 +38,26 @@ async function recipientOrNull(id: string) {
 export async function sendMessage(_prev: MessageState, formData: FormData): Promise<MessageState> {
   const me = await requireMember();
 
+  const { t } = getT();
   const parsed = SendSchema.safeParse(Object.fromEntries(formData));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Données invalides." };
+  if (!parsed.success) {
+    const code = parsed.error.issues[0]?.message;
+    return {
+      error:
+        code === "empty"
+          ? t.errors.emptyMessage
+          : code === "tooLong"
+            ? t.errors.messageTooLong
+            : t.errors.invalid,
+    };
+  }
 
   // The sender is the session, never the form — otherwise anyone could post a
   // message that arrives signed as someone else.
-  if (parsed.data.to === me.id) return { error: "Vous ne pouvez pas vous écrire à vous-même." };
+  if (parsed.data.to === me.id) return { error: t.errors.cannotWriteSelf };
 
   const recipient = await recipientOrNull(parsed.data.to);
-  if (!recipient) return { error: "Ce supporter ne peut pas recevoir de messages." };
+  if (!recipient) return { error: t.errors.cannotReceive };
 
   await prisma.message.create({
     data: { senderId: me.id, receiverId: recipient.id, content: parsed.data.content },

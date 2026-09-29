@@ -5,6 +5,7 @@ import { requireMember, isStaff } from "@/lib/session";
 import { AUTHOR_SELECT, timeAgo } from "@/lib/portal";
 import Avatar from "@/components/portal/Avatar";
 import MessageComposer from "../MessageComposer";
+import { getT } from "@/i18n/locale";
 import { markConversationRead } from "../actions";
 
 export const dynamic = "force-dynamic";
@@ -15,6 +16,7 @@ const WINDOW = 100;
 
 export default async function Conversation({ params }: { params: { id: string } }) {
   const me = await requireMember();
+  const { t } = getT();
 
   if (params.id === me.id) notFound();
 
@@ -59,7 +61,7 @@ export default async function Conversation({ params }: { params: { id: string } 
           <Link
             href="/portal/messages"
             className="rounded-lg px-2 py-1 text-sm text-gray-500 hover:text-brand"
-            aria-label="Retour aux messages"
+            aria-label={t.messages.back}
           >
             ←
           </Link>
@@ -80,7 +82,7 @@ export default async function Conversation({ params }: { params: { id: string } 
           <ul className="space-y-2">
             {thread.length === 0 ? (
               <li className="py-8 text-center text-sm text-gray-500">
-                Aucun message. Écrivez le premier.
+                {t.messages.noMessages}
               </li>
             ) : (
               thread.map((m) => {
@@ -106,7 +108,7 @@ export default async function Conversation({ params }: { params: { id: string } 
           </ul>
         </div>
 
-        <MessageComposer to={other.id} name={other.name} />
+        <MessageComposer to={other.id} name={other.name} t={t} />
       </div>
     </div>
   );

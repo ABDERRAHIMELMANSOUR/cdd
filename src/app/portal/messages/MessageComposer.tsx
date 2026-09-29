@@ -3,8 +3,9 @@
 import { useEffect, useRef } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import { sendMessage, type MessageState } from "./actions";
+import { fmt, type Dictionary } from "@/i18n/portal";
 
-function Submit() {
+function Submit({ t }: { t: Dictionary }) {
   const { pending } = useFormStatus();
   return (
     <button
@@ -12,12 +13,12 @@ function Submit() {
       disabled={pending}
       className="shrink-0 self-end rounded-lg bg-brand px-4 py-2.5 text-sm font-medium text-white hover:opacity-90 disabled:opacity-50"
     >
-      {pending ? "…" : "Envoyer"}
+      {pending ? "…" : t.common.send}
     </button>
   );
 }
 
-export default function MessageComposer({ to, name }: { to: string; name: string }) {
+export default function MessageComposer({ to, name, t }: { to: string; name: string; t: Dictionary }) {
   const [state, action] = useFormState<MessageState, FormData>(sendMessage, {});
   const ref = useRef<HTMLFormElement>(null);
   const box = useRef<HTMLTextAreaElement>(null);
@@ -34,7 +35,7 @@ export default function MessageComposer({ to, name }: { to: string; name: string
       <input type="hidden" name="to" value={to} />
       <div className="flex gap-2">
         <label htmlFor="message-content" className="sr-only">
-          Message à {name}
+          {fmt(t.messages.messageLabel, { name })}
         </label>
         <textarea
           id="message-content"
@@ -43,7 +44,7 @@ export default function MessageComposer({ to, name }: { to: string; name: string
           required
           rows={2}
           maxLength={5000}
-          placeholder={`Écrire à ${name.split(" ")[0] ?? ""}…`}
+          placeholder={fmt(t.messages.placeholder, { name: name.split(" ")[0] ?? "" })}
           onKeyDown={(e) => {
             // Enter sends, Shift+Enter breaks the line — the convention every
             // chat window in the world uses. The form still submits normally
@@ -55,7 +56,7 @@ export default function MessageComposer({ to, name }: { to: string; name: string
           }}
           className="input !mt-0 resize-y"
         />
-        <Submit />
+        <Submit t={t} />
       </div>
       {state.error && (
         <p role="alert" className="mt-2 text-sm text-red-600">

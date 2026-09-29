@@ -1,12 +1,18 @@
 import { prisma } from "@/lib/prisma";
 import { requireMember } from "@/lib/session";
 import ProfileForm from "./ProfileForm";
+import { getT } from "@/i18n/locale";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "Mon profil", robots: { index: false } };
+// The tab title follows the reader's language like everything else.
+export async function generateMetadata() {
+  const { t } = getT();
+  return { title: t.profileEdit.title, robots: { index: false } };
+}
 
 export default async function ProfilePage() {
   const user = await requireMember();
+  const { t } = getT();
 
   const profile = await prisma.user.findUniqueOrThrow({
     where: { id: user.id },
@@ -26,12 +32,12 @@ export default async function ProfilePage() {
   return (
     <div className="mx-auto max-w-2xl">
       <header className="mb-6">
-        <h1 className="font-display text-2xl font-bold text-gray-900 sm:text-3xl">Mon profil</h1>
+        <h1 className="font-display text-2xl font-bold text-gray-900 sm:text-3xl">{t.profileEdit.title}</h1>
         <p className="mt-1 text-gray-600">
-          Ces informations sont visibles par les autres supporters du réseau.
+          {t.profileEdit.subtitle}
         </p>
       </header>
-      <ProfileForm profile={profile} />
+      <ProfileForm t={t} profile={profile} />
     </div>
   );
 }

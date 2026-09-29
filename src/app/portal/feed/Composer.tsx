@@ -4,14 +4,15 @@ import { useRef, useState, useEffect } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import { createPost, type FeedState } from "./actions";
 import Avatar from "@/components/portal/Avatar";
+import { fmt, type Dictionary } from "@/i18n/portal";
 
 const MAX = 5000;
 
-function SubmitButton({ disabled }: { disabled: boolean }) {
+function SubmitButton({ disabled, t }: { disabled: boolean; t: Dictionary }) {
   const { pending } = useFormStatus();
   return (
     <button type="submit" disabled={pending || disabled} className="btn-primary disabled:opacity-50">
-      {pending ? "Publication…" : "Publier"}
+      {pending ? t.feed.publishing : t.feed.publish}
     </button>
   );
 }
@@ -27,9 +28,11 @@ function SubmitButton({ disabled }: { disabled: boolean }) {
 export default function Composer({
   name,
   image,
+  t,
 }: {
   name: string;
   image: string | null;
+  t: Dictionary;
 }) {
   const [state, action] = useFormState<FeedState, FormData>(createPost, {});
   const [open, setOpen] = useState(false);
@@ -55,7 +58,7 @@ export default function Composer({
         <Avatar name={name} src={image} size={44} />
         <div className="min-w-0 flex-1">
           <label htmlFor="content" className="sr-only">
-            Votre publication
+            {t.feed.title}
           </label>
           <textarea
             id="content"
@@ -65,7 +68,7 @@ export default function Composer({
             value={text}
             onChange={(e) => setText(e.target.value)}
             onFocus={() => setOpen(true)}
-            placeholder={`Partagez une actualité, ${name.split(" ")[0] ?? ""}…`}
+            placeholder={fmt(t.feed.placeholder, { name: name.split(" ")[0] ?? "" })}
             className="input resize-y"
           />
 
@@ -73,13 +76,13 @@ export default function Composer({
             <div className="mt-3 space-y-3">
               <div>
                 <label htmlFor="mediaUrl" className="label">
-                  Lien ou média (facultatif)
+                  {t.feed.linkLabel}
                 </label>
                 <input
                   id="mediaUrl"
                   name="mediaUrl"
                   type="url"
-                  placeholder="https://…"
+                  placeholder={t.feed.linkPlaceholder}
                   className="input"
                 />
               </div>
@@ -98,9 +101,9 @@ export default function Composer({
                     }}
                     className="rounded-lg px-3 py-2 text-sm text-gray-500 hover:text-gray-800"
                   >
-                    Annuler
+                    {t.common.cancel}
                   </button>
-                  <SubmitButton disabled={over || text.trim().length === 0} />
+                  <SubmitButton disabled={over || text.trim().length === 0} t={t} />
                 </div>
               </div>
             </div>

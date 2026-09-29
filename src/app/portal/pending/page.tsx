@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Logo from "@/components/Logo";
+import { getT } from "@/i18n/locale";
 
 /**
  * Shown to a supporter whose registration exists but has not been approved.
@@ -7,19 +8,23 @@ import Logo from "@/components/Logo";
  * Outside the portal layout on purpose — that layout calls requireMember(),
  * which is what redirects here, so rendering this inside it would loop.
  */
-export const metadata = { title: "Accès en attente", robots: { index: false } };
+// The tab title follows the reader's language like everything else.
+export async function generateMetadata() {
+  const { t } = getT();
+  return { title: t.pending.title, robots: { index: false } };
+}
 
 export default function PendingPage() {
+  const { t } = getT();
   return (
     <main className="grid min-h-screen place-items-center bg-brand-50 p-6">
       <div className="w-full max-w-md text-center">
         <Logo href={null} className="mx-auto h-12 max-w-[240px]" />
         <h1 className="mt-4 font-display text-2xl font-bold text-brand">
-          Votre accès est en cours de validation
+          {t.pending.title}
         </h1>
         <p className="mt-3 text-gray-600">
-          Votre inscription a bien été enregistrée. Un membre du bureau examine chaque
-          demande personnellement ; vous recevrez un e-mail dès que votre accès sera ouvert.
+          {t.pending.body}
         </p>
         <p className="mt-6 text-sm text-gray-500">
           Une question ?{" "}
@@ -28,7 +33,7 @@ export default function PendingPage() {
           </a>
         </p>
         <Link href="/" className="mt-8 inline-block text-sm text-gray-500 underline">
-          Retour au site
+          {t.common.back}
         </Link>
       </div>
     </main>

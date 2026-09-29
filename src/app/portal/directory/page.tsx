@@ -3,9 +3,15 @@ import { prisma } from "@/lib/prisma";
 import { requireMember } from "@/lib/session";
 import { COMMISSIONS, MEMBER_PUBLIC_SELECT, commissionLabel } from "@/lib/portal";
 import Avatar from "@/components/portal/Avatar";
+import { getT } from "@/i18n/locale";
+import { fmt } from "@/i18n/portal";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "Annuaire", robots: { index: false } };
+// The tab title follows the reader's language like everything else.
+export async function generateMetadata() {
+  const { t } = getT();
+  return { title: t.directory.title, robots: { index: false } };
+}
 
 export default async function DirectoryPage({
   searchParams,
@@ -13,6 +19,7 @@ export default async function DirectoryPage({
   searchParams: { q?: string; commission?: string };
 }) {
   await requireMember();
+  const { t } = getT();
 
   const q = (searchParams.q ?? "").trim();
   const commission = searchParams.commission ?? "";
@@ -52,9 +59,9 @@ export default async function DirectoryPage({
   return (
     <div>
       <header className="mb-6">
-        <h1 className="font-display text-2xl font-bold text-gray-900 sm:text-3xl">Annuaire</h1>
+        <h1 className="font-display text-2xl font-bold text-gray-900 sm:text-3xl">{t.directory.title}</h1>
         <p className="mt-1 text-gray-600">
-          {members.length} supporter{members.length === 1 ? "" : "s"} du réseau CDD Pays-Bas.
+          {fmt(t.directory.count, { n: members.length })}
         </p>
       </header>
 
@@ -63,30 +70,30 @@ export default async function DirectoryPage({
           before any JavaScript has run. */}
       <form method="GET" className="card mb-6 flex flex-col gap-3 p-4 sm:flex-row sm:items-end">
         <div className="flex-1">
-          <label className="label" htmlFor="q">Rechercher</label>
+          <label className="label" htmlFor="q">{t.directory.searchLabel}</label>
           <input
             id="q"
             name="q"
             defaultValue={q}
-            placeholder="Nom, entreprise, fonction…"
+            placeholder={t.directory.searchPlaceholder}
             className="input"
           />
         </div>
         <div className="sm:w-72">
-          <label className="label" htmlFor="commission">Commission</label>
+          <label className="label" htmlFor="commission">{t.directory.commission}</label>
           <select id="commission" name="commission" defaultValue={commission} className="input">
-            <option value="">Toutes les commissions</option>
+            <option value="">{t.directory.allCommissions}</option>
             {COMMISSIONS.map((c) => (
               <option key={c.slug} value={c.slug}>{c.label}</option>
             ))}
           </select>
         </div>
-        <button className="btn-primary sm:w-auto">Filtrer</button>
+        <button className="btn-primary sm:w-auto">{t.common.filter}</button>
       </form>
 
       {members.length === 0 ? (
         <p className="card p-8 text-center text-gray-600">
-          Aucun supporter ne correspond à cette recherche.
+          {t.directory.noMatch}
         </p>
       ) : (
         <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">

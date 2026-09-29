@@ -1,17 +1,24 @@
 import { prisma } from "@/lib/prisma";
 import { safe } from "@/lib/content";
 import { requireMember } from "@/lib/session";
+import { getT } from "@/i18n/locale";
+import type { Locale } from "@/i18n/portal";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "Événements", robots: { index: false } };
+// The tab title follows the reader's language like everything else.
+export async function generateMetadata() {
+  const { t } = getT();
+  return { title: t.events.title, robots: { index: false } };
+}
 
-const dateFull = new Intl.DateTimeFormat("fr-FR", {
-  weekday: "long",
-  day: "numeric",
-  month: "long",
-  year: "numeric",
-});
-const monthShort = new Intl.DateTimeFormat("fr-FR", { month: "short" });
+/**
+ * Formatted in the reader's language. A date is text: "samedi 28 février" in
+ * an otherwise English page is the sort of leak that makes a translation feel
+ * half-finished. Intl locale tags happen to match our codes for these three.
+ */
+const dateFull = (locale: Locale) =>
+  new Intl.DateTimeFormat(locale, { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+const monthShort = (locale: Locale) => new Intl.DateTimeFormat(locale, { month: "short" });
 
 /**
  * The date block that sits on every card, in the public site's idiom: the day
@@ -19,7 +26,7 @@ const monthShort = new Intl.DateTimeFormat("fr-FR", { month: "short" });
  * own for a screen reader — the full date is written out in the card body,
  * where it reads as a sentence rather than as two stacked fragments.
  */
-function DateBadge({ date, past }: { date: Date; past: boolean }) {
+function DateBadge({ date, past, locale }: { date: Date; past: boolean; locale: Locale }) {
   return (
     <div
       aria-hidden="true"
@@ -29,7 +36,7 @@ function DateBadge({ date, past }: { date: Date; past: boolean }) {
     >
       <span className="font-display text-2xl font-bold leading-none">{date.getDate()}</span>
       <span className="mt-0.5 text-[11px] font-semibold uppercase tracking-wide">
-        {monthShort.format(date).replace(".", "")}
+        {monthShort(locale).format(date).replace(".", "")}
       </span>
     </div>
   );
@@ -37,6 +44,7 @@ function DateBadge({ date, past }: { date: Date; past: boolean }) {
 
 export default async function PortalEvents() {
   await requireMember();
+  const { locale, t } = getT();
 
   const events = await safe(
     () =>
@@ -55,24 +63,24 @@ export default async function PortalEvents() {
   return (
     <div className="mx-auto max-w-3xl space-y-8">
       <header>
-        <h1 className="font-display text-2xl font-bold text-gray-900 sm:text-3xl">Événements</h1>
+        <h1 className="font-display text-2xl font-bold text-gray-900 sm:text-3xl">{t.events.title}</h1>
         <p className="mt-1 text-sm text-gray-600">
-          Les rencontres du réseau CDD Pays-Bas.
+          {t.events.subtitle}
         </p>
       </header>
 
       {events.length === 0 ? (
         <p className="card p-8 text-center text-sm text-gray-600">
-          Aucun événement publié pour le moment.
+          {t.events.empty}
         </p>
       ) : (
         <>
           {upcoming.length > 0 && (
             <section>
-              <h2 className="mb-4 font-display text-lg font-semibold text-gray-900">À venir</h2>
+              <h2 className="mb-4 font-display text-lg font-semibold text-gray-900">{t.events.upcoming}</h2>
               <ul className="space-y-5">
                 {upcoming.map((e) => (
-                  <EventCard key={e.id} event={e} past={false} />
+                  <EventCard key={e.id} event={e} past={false} locale={locale} t={t} />
                 ))}
               </ul>
             </section>
@@ -81,11 +89,11 @@ export default async function PortalEvents() {
           {past.length > 0 && (
             <section>
               <h2 className="mb-4 font-display text-lg font-semibold text-gray-900">
-                Rencontres passées
+                {t.events.past}
               </h2>
               <ul className="space-y-5">
                 {past.map((e) => (
-                  <EventCard key={e.id} event={e} past />
+                  <EventCard key={e.id} event={e} past locale={locale} t={t} />
                 ))}
               </ul>
             </section>
@@ -99,7 +107,11 @@ export default async function PortalEvents() {
 function EventCard({
   event,
   past,
+  locale,
+  t,
 }: {
+  locale: Locale;
+  t: ReturnType<typeof getT>["t"];
   event: {
     id: string;
     title: string;
@@ -127,11 +139,11 @@ function EventCard({
 
       <div className="p-5 sm:p-6">
         <div className="flex gap-4">
-          <DateBadge date={event.date} past={past} />
+          <DateBadge date={event.date} past={past} locale={locale} />
           <div className="min-w-0 flex-1">
             <h3 className="font-display text-lg font-bold text-gray-900">{event.title}</h3>
             <p className="mt-1 text-sm text-gray-500">
-              {dateFull.format(event.date)}
+              {dateFull(locale).format(event.date)}
               {event.location && ` · ${event.location}`}
             </p>
           </div>
@@ -173,7 +185,7 @@ function EventCard({
             rel="noopener noreferrer"
             className="btn-primary mt-5 inline-block"
           >
-            S&apos;inscrire
+            {t.events.register}
           </a>
         )}
       </div>

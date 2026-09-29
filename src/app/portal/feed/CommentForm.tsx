@@ -4,8 +4,9 @@ import { useEffect, useRef } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import { addComment, type FeedState } from "./actions";
 import Avatar from "@/components/portal/Avatar";
+import type { Dictionary } from "@/i18n/portal";
 
-function Submit() {
+function Submit({ t }: { t: Dictionary }) {
   const { pending } = useFormStatus();
   return (
     <button
@@ -13,7 +14,7 @@ function Submit() {
       disabled={pending}
       className="shrink-0 rounded-lg bg-brand px-3 py-2 text-sm font-medium text-white hover:opacity-90 disabled:opacity-50"
     >
-      {pending ? "…" : "Envoyer"}
+      {pending ? "…" : t.common.send}
     </button>
   );
 }
@@ -22,10 +23,12 @@ export default function CommentForm({
   postId,
   name,
   image,
+  t,
 }: {
   postId: string;
   name: string;
   image: string | null;
+  t: Dictionary;
 }) {
   const [state, action] = useFormState<FeedState, FormData>(addComment, {});
   const ref = useRef<HTMLFormElement>(null);
@@ -40,7 +43,7 @@ export default function CommentForm({
       <Avatar name={name} src={image} size={32} />
       <div className="min-w-0 flex-1">
         <label htmlFor={`comment-${postId}`} className="sr-only">
-          Votre commentaire
+          {t.feed.commentLabel}
         </label>
         <div className="flex gap-2">
           <input
@@ -48,10 +51,10 @@ export default function CommentForm({
             name="content"
             required
             maxLength={2000}
-            placeholder="Écrire un commentaire…"
+            placeholder={t.feed.commentPlaceholder}
             className="input !mt-0"
           />
-          <Submit />
+          <Submit t={t} />
         </div>
         {state.error && (
           <p role="alert" className="mt-1 text-xs text-red-600">

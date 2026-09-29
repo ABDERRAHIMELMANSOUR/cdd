@@ -4,12 +4,14 @@ import { prisma } from "@/lib/prisma";
 import { requireMember } from "@/lib/session";
 import { MEMBER_PUBLIC_SELECT, commissionLabel } from "@/lib/portal";
 import Avatar from "@/components/portal/Avatar";
+import { getT } from "@/i18n/locale";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Profil", robots: { index: false } };
 
 export default async function MemberProfilePage({ params }: { params: { id: string } }) {
   const viewer = await requireMember();
+  const { t } = getT();
 
   /*
    * The status filter is part of the lookup, not a check afterwards. Fetching
@@ -29,7 +31,7 @@ export default async function MemberProfilePage({ params }: { params: { id: stri
   return (
     <div className="mx-auto max-w-3xl">
       <Link href="/portal/directory" className="text-sm text-gray-500 hover:text-brand">
-        ← Annuaire
+        ← {t.profile.back}
       </Link>
 
       <div className="card mt-4 p-6 sm:p-8">
@@ -47,18 +49,18 @@ export default async function MemberProfilePage({ params }: { params: { id: stri
           </div>
           {isSelf ? (
             <Link href="/portal/profile" className="btn-primary shrink-0 text-center">
-              Modifier
+              {t.profile.edit}
             </Link>
           ) : (
             <Link href={`/portal/messages/${member.id}`} className="btn-primary shrink-0 text-center">
-              Envoyer un message
+              {t.profile.message}
             </Link>
           )}
         </div>
 
         {member.bio && (
           <div className="mt-6 border-t border-gray-100 pt-6">
-            <h2 className="label">À propos</h2>
+            <h2 className="label">{t.profile.about}</h2>
             {/* whitespace-pre-line so the author's own paragraph breaks survive,
                 without interpreting anything they typed as markup. */}
             <p className="mt-2 whitespace-pre-line leading-relaxed text-gray-700">{member.bio}</p>
@@ -78,7 +80,7 @@ export default async function MemberProfilePage({ params }: { params: { id: stri
             Say so instead, and let the secretariat fill it in.
           */}
           {member.email.endsWith(".invalid") ? (
-            <span className="text-gray-400">Adresse non renseignée</span>
+            <span className="text-gray-400">{t.profile.emailMissing}</span>
           ) : (
             <a href={`mailto:${member.email}`} className="text-brand underline">
               {member.email}

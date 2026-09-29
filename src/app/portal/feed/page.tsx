@@ -3,11 +3,16 @@ import { prisma } from "@/lib/prisma";
 import { safe } from "@/lib/content";
 import { requireMember, isStaff } from "@/lib/session";
 import { AUTHOR_SELECT } from "@/lib/portal";
+import { getT } from "@/i18n/locale";
 import Composer from "./Composer";
 import PostCard, { type FeedPostView } from "./PostCard";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "Fil d'actualité", robots: { index: false } };
+// The tab title follows the reader's language like everything else.
+export async function generateMetadata() {
+  const { t } = getT();
+  return { title: t.feed.title, robots: { index: false } };
+}
 
 /** How many posts one page of the feed carries. Comments are capped per post
  *  as well: an old thread with 200 replies must not become the whole page. */
@@ -29,6 +34,7 @@ export default async function FeedPage({
   searchParams?: { page?: string };
 }) {
   const user = await requireMember();
+  const { t } = getT();
 
   const requested = Number.parseInt(searchParams?.page ?? "1", 10);
   const page = Number.isFinite(requested) ? Math.min(Math.max(requested, 1), MAX_PAGES) : 1;
@@ -108,17 +114,17 @@ export default async function FeedPage({
   return (
     <div className="mx-auto max-w-2xl space-y-5">
       <header>
-        <h1 className="font-display text-2xl font-bold text-gray-900">Fil d&apos;actualité</h1>
+        <h1 className="font-display text-2xl font-bold text-gray-900">{t.feed.title}</h1>
         <p className="mt-1 text-sm text-gray-600">
-          Les publications des supporters de CDD Pays-Bas.
+          {t.feed.subtitle}
         </p>
       </header>
 
-      <Composer name={user.name ?? ""} image={user.image} />
+      <Composer name={user.name ?? ""} image={user.image} t={t} />
 
       {visible.length === 0 ? (
         <p className="card p-8 text-center text-sm text-gray-600">
-          Rien n&apos;a encore été publié. Lancez la conversation.
+          {t.feed.empty}
         </p>
       ) : (
         <div className="space-y-5">
@@ -135,6 +141,7 @@ export default async function FeedPage({
               canModerate={isStaff(user.role)}
               viewerName={user.name ?? ""}
               viewerImage={user.image}
+              t={t}
             />
           ))}
 
@@ -150,13 +157,13 @@ export default async function FeedPage({
                 scroll={false}
                 className="btn-outline inline-block"
               >
-                Charger plus
+                {t.feed.loadMore}
               </Link>
             </div>
           ) : (
             page >= MAX_PAGES && (
               <p className="pt-1 text-center text-sm text-gray-400">
-                Fin des publications affichables.
+                {t.feed.end}
               </p>
             )
           )}

@@ -4,6 +4,7 @@ import { useFormState, useFormStatus } from "react-dom";
 import { updateProfile, type ProfileState } from "./actions";
 import { COMMISSIONS } from "@/lib/portal";
 import Avatar from "@/components/portal/Avatar";
+import type { Dictionary } from "@/i18n/portal";
 
 type Profile = {
   name: string;
@@ -17,18 +18,18 @@ type Profile = {
   commission: string | null;
 };
 
-function SubmitButton() {
+function SubmitButton({ t }: { t: Dictionary }) {
   // Reads the parent form's state, so the button disables itself while the
   // action is in flight without any state plumbing.
   const { pending } = useFormStatus();
   return (
     <button disabled={pending} className="btn-primary">
-      {pending ? "Enregistrement…" : "Enregistrer"}
+      {pending ? t.profileEdit.saving : t.profileEdit.save}
     </button>
   );
 }
 
-export default function ProfileForm({ profile }: { profile: Profile }) {
+export default function ProfileForm({ profile, t }: { profile: Profile; t: Dictionary }) {
   const [state, action] = useFormState<ProfileState, FormData>(updateProfile, {});
 
   return (
@@ -36,7 +37,7 @@ export default function ProfileForm({ profile }: { profile: Profile }) {
       <div className="flex items-center gap-4">
         <Avatar name={profile.name} src={profile.image} size={64} />
         <div className="flex-1">
-          <label className="label" htmlFor="image">Photo (URL)</label>
+          <label className="label" htmlFor="image">{t.profileEdit.photo}</label>
           <input
             id="image"
             name="image"
@@ -49,25 +50,25 @@ export default function ProfileForm({ profile }: { profile: Profile }) {
       </div>
 
       <div>
-        <label className="label" htmlFor="name">Nom complet *</label>
+        <label className="label" htmlFor="name">{t.profileEdit.name} *</label>
         <input id="name" name="name" required defaultValue={profile.name} className="input" />
       </div>
 
       <div className="grid gap-5 sm:grid-cols-2">
         <div>
-          <label className="label" htmlFor="position">Fonction</label>
+          <label className="label" htmlFor="position">{t.profileEdit.position}</label>
           <input id="position" name="position" defaultValue={profile.position ?? ""} className="input" />
         </div>
         <div>
-          <label className="label" htmlFor="company">Entreprise</label>
+          <label className="label" htmlFor="company">{t.profileEdit.company}</label>
           <input id="company" name="company" defaultValue={profile.company ?? ""} className="input" />
         </div>
       </div>
 
       <div>
-        <label className="label" htmlFor="commission">Commission</label>
+        <label className="label" htmlFor="commission">{t.profileEdit.commission}</label>
         <select id="commission" name="commission" defaultValue={profile.commission ?? ""} className="input">
-          <option value="">— Aucune —</option>
+          <option value="">{t.profileEdit.noCommission}</option>
           {COMMISSIONS.map((c) => (
             <option key={c.slug} value={c.slug}>{c.label}</option>
           ))}
@@ -75,7 +76,7 @@ export default function ProfileForm({ profile }: { profile: Profile }) {
       </div>
 
       <div>
-        <label className="label" htmlFor="bio">Présentation</label>
+        <label className="label" htmlFor="bio">{t.profileEdit.bio}</label>
         <textarea
           id="bio"
           name="bio"
@@ -88,7 +89,7 @@ export default function ProfileForm({ profile }: { profile: Profile }) {
 
       <div className="grid gap-5 sm:grid-cols-2">
         <div>
-          <label className="label" htmlFor="linkedinUrl">LinkedIn</label>
+          <label className="label" htmlFor="linkedinUrl">{t.profileEdit.linkedin}</label>
           <input
             id="linkedinUrl"
             name="linkedinUrl"
@@ -99,7 +100,7 @@ export default function ProfileForm({ profile }: { profile: Profile }) {
           />
         </div>
         <div>
-          <label className="label" htmlFor="website">Site web</label>
+          <label className="label" htmlFor="website">{t.profileEdit.website}</label>
           <input
             id="website"
             name="website"
@@ -112,7 +113,7 @@ export default function ProfileForm({ profile }: { profile: Profile }) {
       </div>
 
       <div>
-        <label className="label" htmlFor="phone">Téléphone</label>
+        <label className="label" htmlFor="phone">{t.profileEdit.phone}</label>
         <input id="phone" name="phone" defaultValue={profile.phone ?? ""} className="input" />
         <p className="mt-1 text-xs text-gray-500">
           Visible uniquement par les supporters connectés.
@@ -124,10 +125,10 @@ export default function ProfileForm({ profile }: { profile: Profile }) {
         <p role="alert" className="text-sm text-red-600">{state.error}</p>
       )}
       {state.ok && (
-        <p role="status" className="text-sm text-green-700">Profil enregistré.</p>
+        <p role="status" className="text-sm text-green-700">{t.profileEdit.saved}</p>
       )}
 
-      <SubmitButton />
+      <SubmitButton t={t} />
     </form>
   );
 }

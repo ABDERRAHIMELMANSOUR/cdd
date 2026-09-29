@@ -3,6 +3,7 @@ import Avatar from "@/components/portal/Avatar";
 import { timeAgo } from "@/lib/portal";
 import CommentForm from "./CommentForm";
 import RepostButton from "./RepostButton";
+import { fmt, type Dictionary } from "@/i18n/portal";
 import { toggleLike, removePost, removeComment } from "./actions";
 
 type Author = {
@@ -57,7 +58,9 @@ export default function PostCard({
   canModerate,
   viewerName,
   viewerImage,
+  t,
 }: {
+  t: Dictionary;
   post: FeedPostView;
   viewerId: string;
   canModerate: boolean;
@@ -94,7 +97,7 @@ export default function PostCard({
               type="submit"
               className="rounded-lg px-2 py-1 text-xs text-gray-400 hover:text-red-600"
             >
-              {mine ? "Supprimer" : "Masquer"}
+              {mine ? t.feed.delete : t.feed.hide}
             </button>
           </form>
         )}
@@ -140,7 +143,7 @@ export default function PostCard({
           </Link>
         ) : (
           <p className="mt-3 rounded-xl border border-dashed border-gray-200 bg-gray-50 p-3 text-sm text-gray-400">
-            La publication partagée a été supprimée.
+            {t.feed.deletedSource}
           </p>
         )
       )}
@@ -177,17 +180,17 @@ export default function PostCard({
             }`}
           >
             <span aria-hidden="true">{liked ? "♥" : "♡"}</span>
-            J&apos;aime
+            {t.feed.like}
             {post._count.likes > 0 && (
               <span className="text-xs text-gray-400">({post._count.likes})</span>
             )}
           </button>
         </form>
 
-        <RepostButton postId={post.id} count={post._count.reposts} mine={mine} />
+        <RepostButton postId={post.id} count={post._count.reposts} mine={mine} t={t} />
 
         <span className="ml-auto text-sm text-gray-400">
-          {post._count.comments} commentaire{post._count.comments > 1 ? "s" : ""}
+          {fmt(t.feed.comments, { n: post._count.comments })}
         </span>
       </div>
 
@@ -213,7 +216,7 @@ export default function PostCard({
                       <button
                         type="submit"
                         className="text-xs text-gray-400 hover:text-red-600"
-                        aria-label="Supprimer ce commentaire"
+                        aria-label={t.feed.deleteComment}
                       >
                         ×
                       </button>
@@ -229,7 +232,7 @@ export default function PostCard({
         </ul>
       )}
 
-      <CommentForm postId={post.id} name={viewerName} image={viewerImage} />
+      <CommentForm postId={post.id} name={viewerName} image={viewerImage} t={t} />
     </article>
   );
 }

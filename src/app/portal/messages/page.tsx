@@ -4,31 +4,38 @@ import { safe } from "@/lib/content";
 import { listConversations } from "@/lib/messages";
 import { timeAgo } from "@/lib/portal";
 import Avatar from "@/components/portal/Avatar";
+import { getT } from "@/i18n/locale";
+import { fmt } from "@/i18n/portal";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "Messages", robots: { index: false } };
+// The tab title follows the reader's language like everything else.
+export async function generateMetadata() {
+  const { t } = getT();
+  return { title: t.messages.title, robots: { index: false } };
+}
 
 export default async function Inbox() {
   const me = await requireMember();
+  const { t } = getT();
   const conversations = await safe(() => listConversations(me.id), []);
 
   return (
     <div className="mx-auto max-w-2xl space-y-5">
       <header className="flex flex-wrap items-baseline justify-between gap-2">
         <div>
-          <h1 className="font-display text-2xl font-bold text-gray-900">Messages</h1>
-          <p className="mt-1 text-sm text-gray-600">Vos échanges privés avec les supporters.</p>
+          <h1 className="font-display text-2xl font-bold text-gray-900">{t.messages.title}</h1>
+          <p className="mt-1 text-sm text-gray-600">{t.messages.subtitle}</p>
         </div>
         <Link href="/portal/directory" className="text-sm text-brand hover:underline">
-          Écrire à quelqu&apos;un
+          {t.messages.writeSomeone}
         </Link>
       </header>
 
       {conversations.length === 0 ? (
         <div className="card p-8 text-center">
-          <p className="text-sm text-gray-600">Aucune conversation pour le moment.</p>
+          <p className="text-sm text-gray-600">{t.messages.empty}</p>
           <Link href="/portal/directory" className="btn-primary mt-5 inline-block">
-            Parcourir l&apos;annuaire
+            {t.messages.browse}
           </Link>
         </div>
       ) : (
@@ -60,14 +67,14 @@ export default async function Inbox() {
                   >
                     {/* Saying which way the last message went stops the inbox
                         reading as if everyone else spoke last. */}
-                    {c.outgoing && <span className="text-gray-400">Vous : </span>}
+                    {c.outgoing && <span className="text-gray-400">{t.messages.you}</span>}
                     {c.lastMessage}
                   </p>
                 </div>
                 {c.unread > 0 && (
                   <span
                     className="grid h-6 min-w-6 shrink-0 place-items-center rounded-full bg-brand px-1.5 text-xs font-semibold text-white"
-                    aria-label={`${c.unread} message${c.unread > 1 ? "s" : ""} non lu${c.unread > 1 ? "s" : ""}`}
+                    aria-label={fmt(t.messages.unread, { n: c.unread })}
                   >
                     {c.unread}
                   </span>
