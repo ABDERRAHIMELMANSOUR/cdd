@@ -64,6 +64,18 @@ export default async function FeedPage({
           mediaUrl: true,
           createdAt: true,
           author: { select: AUTHOR_SELECT },
+          repostOfId: true,
+          // One level only. A repost always points at the original rather than
+          // at another repost, so there is never a second level to fetch.
+          repostOf: {
+            select: {
+              id: true,
+              content: true,
+              mediaUrl: true,
+              createdAt: true,
+              author: { select: AUTHOR_SELECT },
+            },
+          },
           // Filtered to the viewer on purpose: the card only needs to know
           // whether *they* liked it, and fetching every like to find out would
           // grow with the popularity of the post.
@@ -82,7 +94,9 @@ export default async function FeedPage({
           // The comment count is filtered too: a post whose only reply was
           // moderated away must not keep advertising "1 commentaire" above an
           // empty thread.
-          _count: { select: { likes: true, comments: { where: { hidden: false } } } },
+          _count: {
+            select: { likes: true, comments: { where: { hidden: false } }, reposts: true },
+          },
         },
       }),
     []

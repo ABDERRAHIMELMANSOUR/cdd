@@ -106,11 +106,29 @@ model CommunityPost {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  // A repost is a CommunityPost whose repostOfId points at another one. Not a
+  // separate model: a repost carries an author, a timestamp, its own comments
+  // and its own likes — everything a post has — and the only thing that makes
+  // it a repost is what it points at. A parallel model would duplicate all of
+  // that and then need the feed to merge two tables in date order.
+  //
+  // `content` on a repost is the sharer's own remark, and may be empty: the
+  // quote-with-comment and the plain share are the same row with and without
+  // it.
+  //
+  // onDelete: SetNull rather than Cascade. Deleting an original should not
+  // silently delete everyone else's reposts of it along with the discussion
+  // underneath them; the repost survives and renders as unavailable.
+  repostOfId String?
+  repostOf   CommunityPost?  @relation("Repost", fields: [repostOfId], references: [id], onDelete: SetNull)
+  reposts    CommunityPost[] @relation("Repost")
+
   comments CommunityComment[]
   likes    CommunityLike[]
 
   @@index([createdAt])
   @@index([authorId])
+  @@index([repostOfId])
 }
 
 model CommunityComment {

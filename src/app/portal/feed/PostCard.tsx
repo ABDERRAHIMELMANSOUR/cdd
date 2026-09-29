@@ -2,6 +2,7 @@ import Link from "next/link";
 import Avatar from "@/components/portal/Avatar";
 import { timeAgo } from "@/lib/portal";
 import CommentForm from "./CommentForm";
+import RepostButton from "./RepostButton";
 import { toggleLike, removePost, removeComment } from "./actions";
 
 type Author = {
@@ -12,12 +13,23 @@ type Author = {
   company: string | null;
 };
 
+/** The post a repost points at, as rendered inside the sharer's card. */
+export type QuotedPost = {
+  id: string;
+  content: string;
+  mediaUrl: string | null;
+  createdAt: Date;
+  author: Author;
+} | null;
+
 export type FeedPostView = {
   id: string;
   content: string;
   mediaUrl: string | null;
   createdAt: Date;
   author: Author;
+  repostOfId: string | null;
+  repostOf: QuotedPost;
   likes: { authorId: string }[];
   comments: {
     id: string;
@@ -25,7 +37,7 @@ export type FeedPostView = {
     createdAt: Date;
     author: Author;
   }[];
-  _count: { likes: number; comments: number };
+  _count: { likes: number; comments: number; reposts: number };
 };
 
 /** Render a media link as a picture when it plainly is one, otherwise as a
@@ -95,6 +107,44 @@ export default function PostCard({
         {post.content}
       </p>
 
+      {/*
+        The shared post, quoted inside the sharer's card. A repost whose
+        original has been deleted keeps its own remark and says plainly that
+        the source is gone, rather than rendering an empty box — SetNull on the
+        relation is what makes that state reachable instead of taking the
+        repost down with the original.
+      */}
+      {post.repostOfId && (
+        post.repostOf ? (
+          <Link
+            href="/portal/feed"
+            className="mt-3 block rounded-xl border border-gray-200 bg-gray-50 p-3 transition-colors hover:bg-gray-100"
+          >
+            <div className="flex items-center gap-2">
+              <Avatar name={post.repostOf.author.name} src={post.repostOf.author.image} size={24} />
+              <span className="text-sm font-medium text-gray-900">{post.repostOf.author.name}</span>
+              <span className="text-xs text-gray-400">{timeAgo(post.repostOf.createdAt)}</span>
+            </div>
+            <p className="mt-2 line-clamp-4 whitespace-pre-wrap break-words text-sm text-gray-700">
+              {post.repostOf.content}
+            </p>
+            {post.repostOf.mediaUrl && isImage(post.repostOf.mediaUrl) && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={post.repostOf.mediaUrl}
+                alt=""
+                loading="lazy"
+                className="mt-2 max-h-56 w-full rounded-lg object-cover"
+              />
+            )}
+          </Link>
+        ) : (
+          <p className="mt-3 rounded-xl border border-dashed border-gray-200 bg-gray-50 p-3 text-sm text-gray-400">
+            La publication partagée a été supprimée.
+          </p>
+        )
+      )}
+
       {post.mediaUrl &&
         (isImage(post.mediaUrl) ? (
           // eslint-disable-next-line @next/next/no-img-element -- arbitrary
@@ -134,7 +184,9 @@ export default function PostCard({
           </button>
         </form>
 
-        <span className="text-sm text-gray-400">
+        <RepostButton postId={post.id} count={post._count.reposts} mine={mine} />
+
+        <span className="ml-auto text-sm text-gray-400">
           {post._count.comments} commentaire{post._count.comments > 1 ? "s" : ""}
         </span>
       </div>

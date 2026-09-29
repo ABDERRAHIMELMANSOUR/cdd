@@ -71,6 +71,63 @@ export async function createPost(_prev: FeedState, formData: FormData): Promise<
   return { ok: true };
 }
 
+const RepostSchema = z.object({
+  postId: z.string().min(1),
+  content: z
+    .string()
+    .trim()
+    .max(2000, "Votre commentaire est limité à 2000 caractères.")
+    .optional(),
+});
+
+/**
+ * Share someone else's post, with or without a remark of your own.
+ *
+ * A repost is an ordinary post pointing at another, so it gets its own likes
+ * and its own comments and appears in the feed in its own right.
+ *
+ * Reposting a repost points at the ORIGINAL rather than at the chain. Without
+ * that, a post shared five times nests five deep and the card has to render a
+ * russian doll; everyone is really sharing the same thing, so the pointer says
+ * so. It also means the "already shared" check below cannot be defeated by
+ * sharing someone else's share.
+ */
+export async function repost(_prev: FeedState, formData: FormData): Promise<FeedState> {
+  const user = await requireMember();
+
+  const parsed = RepostSchema.safeParse(Object.fromEntries(formData));
+  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Données invalides." };
+
+  const source = await prisma.communityPost.findUnique({
+    where: { id: parsed.data.postId },
+    select: { id: true, hidden: true, authorId: true, repostOfId: true },
+  });
+  if (!source || source.hidden) return { error: "Cette publication n'est plus disponible." };
+
+  const originalId = source.repostOfId ?? source.id;
+
+  if (originalId === parsed.data.postId && source.authorId === user.id) {
+    return { error: "C'est déjà votre publication." };
+  }
+
+  const already = await prisma.communityPost.findFirst({
+    where: { authorId: user.id, repostOfId: originalId },
+    select: { id: true },
+  });
+  if (already) return { error: "Vous avez déjà partagé cette publication." };
+
+  await prisma.communityPost.create({
+    data: {
+      authorId: user.id,
+      content: parsed.data.content ?? "",
+      repostOfId: originalId,
+    },
+  });
+
+  revalidatePath("/portal/feed");
+  return { ok: true };
+}
+
 export async function addComment(_prev: FeedState, formData: FormData): Promise<FeedState> {
   const user = await requireMember();
 
