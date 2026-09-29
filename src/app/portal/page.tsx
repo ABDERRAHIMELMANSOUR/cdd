@@ -31,10 +31,11 @@ export default async function PortalHome() {
         </p>
       </header>
 
-      <section className="grid gap-4 sm:grid-cols-3">
+      <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {[
           { href: "/portal/feed", title: "Fil d'actualité", body: "Publiez et réagissez aux actualités du réseau." },
           { href: "/portal/messages", title: "Messages", body: "Échangez en privé avec les autres supporters." },
+          { href: "/portal/events", title: "Événements", body: "Les rencontres passées et à venir du réseau." },
           { href: "/portal/directory", title: "Annuaire", body: "Retrouvez les supporters par nom ou commission." },
         ].map((c) => (
           <Link key={c.href} href={c.href} className="card p-5 transition-shadow hover:shadow-md">

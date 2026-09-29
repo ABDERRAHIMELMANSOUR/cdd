@@ -10,6 +10,7 @@ const LINKS = [
   { href: "/portal", label: "Accueil" },
   { href: "/portal/feed", label: "Fil d'actualité" },
   { href: "/portal/messages", label: "Messages" },
+  { href: "/portal/events", label: "Événements" },
   { href: "/portal/directory", label: "Annuaire" },
   { href: "/portal/profile", label: "Mon profil" },
 ];
@@ -55,13 +56,13 @@ export default function PortalNav({
           <Logo href={null} className="h-8 max-w-[170px] sm:h-9 sm:max-w-[200px]" priority />
         </Link>
 
-        <nav className="hidden flex-1 items-center gap-1 md:flex" aria-label="Portail">
+        <nav className="hidden flex-1 items-center gap-0.5 lg:flex" aria-label="Portail">
           {LINKS.map((l) => (
             <Link
               key={l.href}
               href={l.href}
               aria-current={active(l.href) ? "page" : undefined}
-              className={`rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+              className={`whitespace-nowrap rounded-lg px-2.5 py-2 text-sm font-medium transition-colors ${
                 active(l.href) ? "bg-brand-50 text-brand" : "text-gray-600 hover:text-brand"
               }`}
             >
@@ -88,7 +89,7 @@ export default function PortalNav({
             onClick={() => setOpen((v) => !v)}
             aria-expanded={open}
             aria-label={open ? "Fermer le menu" : "Ouvrir le menu"}
-            className="rounded-lg border border-gray-200 px-3 py-2 text-sm md:hidden"
+            className="rounded-lg border border-gray-200 px-3 py-2 text-sm lg:hidden"
           >
             ☰
           </button>
@@ -96,7 +97,7 @@ export default function PortalNav({
       </div>
 
       {open && (
-        <nav className="border-t border-gray-100 px-4 py-2 md:hidden" aria-label="Portail (mobile)">
+        <nav className="border-t border-gray-100 px-4 py-2 lg:hidden" aria-label="Portail (mobile)">
           {LINKS.map((l) => (
             <Link
               key={l.href}

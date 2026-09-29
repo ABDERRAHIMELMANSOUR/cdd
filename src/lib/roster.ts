@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { Role, MemberStatus } from "@prisma/client";
 import roster from "@/data/roster.json";
+import events from "@/data/events.json";
 
 /**
  * Import the public site's roster into the portal directory.
@@ -44,6 +45,9 @@ export type RosterResult = {
   updated: string[];
   unchanged: number;
   total: number;
+  /** Events seeded alongside the people; same import, same button. */
+  eventsCreated: string[];
+  eventsTotal: number;
 };
 
 export function placeholderEmail(name: string): string {
@@ -147,11 +151,50 @@ export async function importRoster({ apply }: { apply: boolean }): Promise<Roste
     }
   }
 
+  const eventsCreated = await importEvents(apply);
+
   return {
     applied: apply,
     created,
     updated: updated.map((u) => u.name),
     unchanged,
     total: people.length,
+    eventsCreated,
+    eventsTotal: events.length,
   };
+}
+
+/**
+ * Seed the public site's events into the CMS Event table.
+ *
+ * Creates only — never updates. Events are editable in /admin/events, and an
+ * import that overwrote them on every run would quietly undo whatever the
+ * board had corrected. `slug` is unique, so a second run is a no-op.
+ */
+async function importEvents(apply: boolean): Promise<string[]> {
+  const slugs = events.map((e) => e.slug);
+  const existing = await prisma.event.findMany({
+    where: { slug: { in: slugs } },
+    select: { slug: true },
+  });
+  const have = new Set(existing.map((e) => e.slug));
+  const missing = events.filter((e) => !have.has(e.slug));
+
+  if (apply && missing.length) {
+    await prisma.event.createMany({
+      data: missing.map((e) => ({
+        slug: e.slug,
+        title: e.title,
+        date: new Date(e.date),
+        location: e.location,
+        banner: e.banner,
+        description: e.description,
+        gallery: e.gallery,
+        published: true,
+      })),
+      skipDuplicates: true,
+    });
+  }
+
+  return missing.map((e) => e.title);
 }
