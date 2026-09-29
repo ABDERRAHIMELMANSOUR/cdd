@@ -79,6 +79,11 @@ model User {
   commission  String?
   /// Drives "last active" in the directory. Written on portal page loads.
   lastSeenAt  DateTime?
+  /// Leadership label shown above the portrait — "Fondateur", "Fondateur &
+  /// Président". Separate from `position`, which is the role in prose: the
+  /// badge is a short standing, the position is a job. Null for everyone else,
+  /// which is most people, and the card renders nothing when it is.
+  badge       String?
 
   // Namespaced Community* because the CMS already owns a `Post` model for the
   // public site's articles. Two unrelated things called Post in one schema is

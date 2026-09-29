@@ -38,8 +38,15 @@ export default async function MemberProfilePage({ params }: { params: { id: stri
         <div className="flex flex-col gap-5 sm:flex-row sm:items-start">
           <Avatar name={member.name} src={member.image} size={96} />
           <div className="min-w-0 flex-1">
+            {/* The badge sits above the name, as it does on the public site's
+                leadership cards: it is the standing the name is read in. */}
+            {member.badge && (
+              <p className="mb-2 inline-block rounded-full bg-brand px-3 py-1 text-xs font-bold uppercase tracking-wide text-white">
+                {member.badge}
+              </p>
+            )}
             <h1 className="font-display text-2xl font-bold text-gray-900">{member.name}</h1>
-            {member.position && <p className="mt-1 text-gray-700">{member.position}</p>}
+            {member.position && <p className="mt-1 font-medium text-brand">{member.position}</p>}
             {member.company && <p className="text-gray-500">{member.company}</p>}
             {member.commission && (
               <p className="mt-3 inline-block rounded-full bg-brand-50 px-3 py-1 text-sm font-medium text-brand">

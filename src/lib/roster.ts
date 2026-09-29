@@ -70,6 +70,7 @@ export async function importRoster({ apply }: { apply: boolean }): Promise<Roste
     image: string | null;
     linkedin: string | null;
     group: string | null;
+    badge?: string | null;
   }[];
 
   // One read rather than one per person.
@@ -83,6 +84,7 @@ export async function importRoster({ apply }: { apply: boolean }): Promise<Roste
       image: true,
       linkedinUrl: true,
       commission: true,
+      badge: true,
     },
   });
   const byEmail = new Map(existing.map((u) => [u.email, u]));
@@ -105,6 +107,7 @@ export async function importRoster({ apply }: { apply: boolean }): Promise<Roste
       image: person.image,
       linkedinUrl: person.linkedin,
       commission: person.group && COMMISSIONS.has(person.group) ? person.group : null,
+      badge: person.badge ?? null,
     };
 
     if (!found) {
@@ -117,7 +120,8 @@ export async function importRoster({ apply }: { apply: boolean }): Promise<Roste
       found.bio === profile.bio &&
       found.image === profile.image &&
       found.linkedinUrl === profile.linkedinUrl &&
-      found.commission === profile.commission;
+      found.commission === profile.commission &&
+      found.badge === profile.badge;
 
     if (same) unchanged++;
     else updated.push({ id: found.id, name: person.name, data: profile });
@@ -140,6 +144,7 @@ export async function importRoster({ apply }: { apply: boolean }): Promise<Roste
             image: p.image,
             linkedinUrl: p.linkedin,
             commission: p.group && COMMISSIONS.has(p.group) ? p.group : null,
+            badge: p.badge ?? null,
           })),
         skipDuplicates: true,
       });

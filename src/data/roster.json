@@ -1,11 +1,30 @@
 [
   {
+    "name": "Driss DRIF",
+    "role": "Fondateur & président – CDD",
+    "badge": "Fondateur",
+    "bio": "Driss DRIF est le fondateur et président du CDD (Club des Dirigeants), organisation créée avec la volonté de relier les dirigeants, de nourrir le dialogue stratégique et de bâtir des ponts solides entre le Maroc et les écosystèmes internationaux.\n\nSous sa direction, le CDD est devenu un réseau grandissant de décideurs et de conseillers de tous secteurs, à l'origine de collaborations à fort impact entre acteurs publics et privés. Son initiative a posé les fondations de CDD Pays-Bas, qui prolonge cet héritage aux Pays-Bas.",
+    "image": "/media/roster/driss-drif.webp",
+    "linkedin": "https://www.linkedin.com/in/driss-drif-9b17a634",
+    "group": null
+  },
+  {
+    "name": "Nouraddine Gribi",
+    "role": "Fondateur & Président – CDD Pays-Bas",
+    "badge": "Fondateur & Président",
+    "bio": "Nouraddine Gribi est le fondateur et président de CDD Pays-Bas, dirigeant stratégique engagé à renforcer les liens économiques et institutionnels entre le Maroc et les Pays-Bas. Fort d'une longue expérience du développement des affaires, de la gouvernance et des partenariats internationaux, il impulse des collaborations à fort impact entre acteurs publics et privés.\n\nIl promeut activement l'entrepreneuriat, l'inclusion et une croissance durable au sein de l'écosystème maroco-néerlandais. Sous sa direction, CDD Pays-Bas continue de bâtir des ponts, de créer des opportunités et d'apporter une valeur mesurable à ses supporters et partenaires.",
+    "image": "/media/roster/nouraddine-gribi.webp",
+    "linkedin": "https://www.linkedin.com/in/nouraddine-gribi-4a639435",
+    "group": null
+  },
+  {
     "name": "Yassine Saddiki",
     "role": "Conseiller senior stratégie commerciale & développement d'infrastructures",
     "bio": "Expérimenté en stratégie commerciale et en projets d'infrastructure de grande envergure. Il accompagne les organisations dans la structuration de leurs plans de croissance et de leurs investissements de long terme.",
     "image": "/media/roster/yassine-saddiki.webp",
     "linkedin": "https://www.linkedin.com/in/yassin-saddiki-4a068213/",
-    "group": "digital-ai-infrastructure"
+    "group": "digital-ai-infrastructure",
+    "badge": null
   },
   {
     "name": "Theo Hendriks",
@@ -13,7 +32,8 @@
     "bio": "Distingué par le conseil pour sa contribution et son engagement de longue date au sein du réseau CDD. Il apporte des conseils de confiance et une mémoire institutionnelle au service de la mission de l'organisation.",
     "image": "/media/roster/theo-hendriks.webp",
     "linkedin": "https://www.linkedin.com/in/theo-hendriks-10653943/",
-    "group": "honorary"
+    "group": "honorary",
+    "badge": null
   },
   {
     "name": "Ilias Semlali",
@@ -21,7 +41,8 @@
     "bio": "Spécialiste du droit des sociétés, doté d'une expertise approfondie en conformité, contrats et responsabilité. Il conseille les entreprises sur la gestion des risques et les cadres réglementaires.",
     "image": "/media/roster/ilias-semlali.webp",
     "linkedin": "https://www.linkedin.com/in/ilias-semlali-392174172/",
-    "group": "governance-public-affairs"
+    "group": "governance-public-affairs",
+    "badge": null
   },
   {
     "name": "Aziz El Kaddouri",
@@ -29,7 +50,8 @@
     "bio": "Professionnel orienté données, spécialisé en analyse et modélisation statistique. Il appuie une prise de décision fondée sur des données fiables et des indicateurs de performance.",
     "image": "/media/roster/aziz-el-kaddouri.webp",
     "linkedin": "https://www.linkedin.com/in/azizelkaddouri/",
-    "group": "governance-public-affairs"
+    "group": "governance-public-affairs",
+    "badge": null
   },
   {
     "name": "Abdelbasset Zaghdoud",
@@ -37,7 +59,8 @@
     "bio": "Expert en développement immobilier et en coordination d'événements. Il facilite des projets à fort impact et des lieux stratégiques favorisant la croissance des entreprises.",
     "image": "/media/roster/abdelbasset-zaghdoud.webp",
     "linkedin": "https://www.linkedin.com/in/abdelbassetzaghdoud/",
-    "group": "industry-trade-logistics"
+    "group": "industry-trade-logistics",
+    "badge": null
   },
   {
     "name": "Ahlam Gharbaoui",
@@ -45,7 +68,8 @@
     "bio": "Elle accompagne les entreprises dans leur développement à l'international à l'aide de stratégies de croissance structurées. Expérimentée en partenariats et en opérations transfrontalières.",
     "image": "/media/roster/ahlam-gharbaoui.webp",
     "linkedin": "https://www.linkedin.com/in/ahlam-gharbaoui-759a72a/",
-    "group": "industry-trade-logistics"
+    "group": "industry-trade-logistics",
+    "badge": null
   },
   {
     "name": "Khalid Chougrani",
@@ -53,7 +77,8 @@
     "bio": "Consultant en innovation et en management, expérimenté dans l'accompagnement des organisations en transformation. Il aide les équipes à adopter des processus efficaces et des solutions modernes.",
     "image": "/media/roster/khalid-chougrani.webp",
     "linkedin": "https://www.linkedin.com/in/khalid-chougrani-ab0ab287/",
-    "group": "digital-ai-infrastructure"
+    "group": "digital-ai-infrastructure",
+    "badge": null
   },
   {
     "name": "Rachid Essehli",
@@ -61,7 +86,8 @@
     "bio": "Spécialiste des technologies de stockage d'énergie et de l'intégration de systèmes. Il conseille sur les solutions énergétiques durables et l'optimisation des réseaux.",
     "image": "/media/roster/rachid-essehli.webp",
     "linkedin": "https://www.linkedin.com/in/rachid-essehli-4aa5a31b7/",
-    "group": "energy-water-transition"
+    "group": "energy-water-transition",
+    "badge": null
   },
   {
     "name": "Abdelilah Boulal",
@@ -69,7 +95,8 @@
     "bio": "Il se consacre au développement des talents, au coaching de dirigeants et aux initiatives à impact social. Il aide les organisations à constituer des équipes solides et des cultures inclusives.",
     "image": "/media/roster/abdelilah-boulal.webp",
     "linkedin": "https://www.linkedin.com/in/abdel-boulal-3566b320/",
-    "group": "talent-knowledge-society"
+    "group": "talent-knowledge-society",
+    "badge": null
   },
   {
     "name": "Dieter de Vroomen",
@@ -77,7 +104,8 @@
     "bio": "Spécialiste de la collaboration public-privé et de la gouvernance institutionnelle. Il met en relation les parties prenantes pour bâtir des partenariats structurés et à fort impact.",
     "image": "/media/roster/dieter-de-vroomen.webp",
     "linkedin": "https://www.linkedin.com/in/dieterdevroomen/",
-    "group": "governance-public-affairs"
+    "group": "governance-public-affairs",
+    "badge": null
   },
   {
     "name": "Abderrahim El Mansour",
@@ -85,7 +113,8 @@
     "bio": "Stratège en marketing digital, expert en SEO, marketing à la performance et croissance en ligne. Il appuie la visibilité et la stratégie de communication du CDD sur les canaux numériques.",
     "image": "/media/roster/abderrahim-el-mansour.webp",
     "linkedin": "https://www.linkedin.com/in/abderrahim-el-mansour-359623232/",
-    "group": "secretariat"
+    "group": "secretariat",
+    "badge": null
   },
   {
     "name": "Jan Hoogland",
@@ -93,7 +122,8 @@
     "bio": "Conseiller culturel et linguistique qui renforce la compréhension mutuelle entre les communautés néerlandaise et marocaine. Il soutient la communication et la coopération interculturelles.",
     "image": "/media/roster/jan-hoogland.webp",
     "linkedin": "https://www.linkedin.com/in/jan-hoogland-1020157/",
-    "group": "talent-knowledge-society"
+    "group": "talent-knowledge-society",
+    "badge": null
   },
   {
     "name": "Patrick Cnubben",
@@ -101,7 +131,8 @@
     "bio": "Expert de la transition énergétique, engagé dans le développement de l'écosystème hydrogène. Il conseille sur les projets énergétiques durables et les clusters régionaux d'innovation.",
     "image": "/media/roster/patrick-cnubben.webp",
     "linkedin": "https://www.linkedin.com/in/patrick-cnubben-8864b7a/",
-    "group": "energy-water-transition"
+    "group": "energy-water-transition",
+    "badge": null
   },
   {
     "name": "Hajia Zaki",
@@ -109,7 +140,8 @@
     "bio": "Elle défend les initiatives artistiques et culturelles qui renforcent l'engagement des communautés. Elle soutient les industries créatives et les projets d'échange culturel.",
     "image": "/media/roster/hajia-zaki.webp",
     "linkedin": "https://www.linkedin.com/in/hazia-zaki-8221b0183/",
-    "group": "talent-knowledge-society"
+    "group": "talent-knowledge-society",
+    "badge": null
   },
   {
     "name": "Yosuf Ouhlous",
@@ -117,7 +149,8 @@
     "bio": "Conseiller senior doté d'une large expérience dans l'accompagnement d'initiatives stratégiques et le développement organisationnel. Il contribue à la construction de partenariats et à l'exécution de projets.",
     "image": "/media/roster/yosuf-ouhlous.webp",
     "linkedin": "https://www.linkedin.com/in/yosef-ouhlous-bb4730269/",
-    "group": "industry-trade-logistics"
+    "group": "industry-trade-logistics",
+    "badge": null
   },
   {
     "name": "Willem Hazenberg",
@@ -125,7 +158,8 @@
     "bio": "Conseiller expérimenté qui appuie la planification stratégique et la mobilisation des parties prenantes. Il apporte des éclairages pratiques et des solutions structurées à des problèmes complexes.",
     "image": "/media/roster/willem-hazenberg.webp",
     "linkedin": "https://www.linkedin.com/in/willemhazenberg/",
-    "group": "industry-trade-logistics"
+    "group": "industry-trade-logistics",
+    "badge": null
   },
   {
     "name": "Ayoub Saboumazrag",
@@ -133,7 +167,8 @@
     "bio": "Il aide les organisations à mobiliser la numérisation, les données et l'IA au service d'une innovation concrète et d'une croissance transfrontalière.",
     "image": "/media/roster/ayoub-saboumazrag.webp",
     "linkedin": "https://www.linkedin.com/in/ayoub-saboumazrag/",
-    "group": "digital-ai-infrastructure"
+    "group": "digital-ai-infrastructure",
+    "badge": null
   },
   {
     "name": "Asma Gribi",
@@ -141,7 +176,8 @@
     "bio": "Elle renforce la communication, la visibilité et la mobilisation des parties prenantes du CDD par des messages clairs et percutants.",
     "image": "/media/roster/asma-gribi.webp",
     "linkedin": "https://www.linkedin.com/in/asma-gribi-94a4bb13/",
-    "group": "secretariat"
+    "group": "secretariat",
+    "badge": null
   },
   {
     "name": "Fouad El Haji",
@@ -149,7 +185,8 @@
     "bio": "Dirigeant expérimenté du secteur public, doté d'une solide expertise en gouvernance et en éducation. Il apporte une vision stratégique et des réseaux institutionnels pour renforcer l'impact transfrontalier.",
     "image": "/media/roster/fouad-el-haji.webp",
     "linkedin": "https://www.linkedin.com/in/fouad-el-haji-b8b319a2/",
-    "group": "governance-public-affairs"
+    "group": "governance-public-affairs",
+    "badge": null
   },
   {
     "name": "Joel Myers",
@@ -157,7 +194,8 @@
     "bio": "Expert des villes intelligentes et des jumeaux numériques, il impulse une innovation urbaine fondée sur les données. Il soutient la transformation numérique durable et la coopération internationale.",
     "image": "/media/roster/joel-myers.webp",
     "linkedin": "https://www.linkedin.com/in/joel-myers-domila/",
-    "group": "digital-ai-infrastructure"
+    "group": "digital-ai-infrastructure",
+    "badge": null
   },
   {
     "name": "Volkan Ozturk",
@@ -165,7 +203,8 @@
     "bio": "Dirigeant du secteur énergétique international, fort de plus de 20 ans d'expérience et de plus de 500 MW de projets renouvelables (hydraulique, géothermie, solaire et éolien). Au sein de CDD Pays-Bas, il renforce la coopération énergétique et d'investissement entre les Pays-Bas, la Turquie et le Maroc.",
     "image": "/media/roster/volkan-ozturk.webp",
     "linkedin": "https://www.linkedin.com/in/vozturknl/",
-    "group": "energy-water-transition"
+    "group": "energy-water-transition",
+    "badge": null
   },
   {
     "name": "Nora Kasmi",
@@ -173,7 +212,8 @@
     "bio": "Experte senior forte de plus de 23 ans d'expérience en politique sociale et en stratégie du marché du travail. Elle fait le lien entre politiques publiques, inclusion et impact sociétal.",
     "image": "/media/roster/nora-kasmi.webp",
     "linkedin": "https://www.linkedin.com/in/nora-kasmi/",
-    "group": "talent-knowledge-society"
+    "group": "talent-knowledge-society",
+    "badge": null
   },
   {
     "name": "Youssef Boulal",
@@ -181,7 +221,8 @@
     "bio": "Expert maritime et logistique fort de plus de 20 ans d'expérience dans les opérations portuaires et le transport maritime. Il apporte un solide leadership opérationnel aux écosystèmes du commerce et de la logistique internationaux.",
     "image": "/media/roster/youssef-boulal.webp",
     "linkedin": "https://www.linkedin.com/in/youssef-boulal-6a6929170/",
-    "group": "industry-trade-logistics"
+    "group": "industry-trade-logistics",
+    "badge": null
   },
   {
     "name": "Abdelaziz Iourizen",
@@ -189,7 +230,8 @@
     "bio": "Fondateur et président de la Stichting MarocColors, fort de plus de 25 ans d'expérience comme cadreur, monteur et producteur. Il travaille sur la stratégie médias, la narration et la communication visuelle entre les Pays-Bas et le Maroc.",
     "image": "/media/roster/abdelaziz-iourizen.webp",
     "linkedin": "https://www.linkedin.com/in/abdelaziziourizen/",
-    "group": "secretariat"
+    "group": "secretariat",
+    "badge": null
   },
   {
     "name": "M'barek Oubahssou",
@@ -197,7 +239,8 @@
     "bio": "Parcours en contrôle de gestion et en finance chez PepsiCo, AAK et EBS Public Transportation, et guide certifié IVOR connu sous le nom de DeMarokkoloog. Il organise des circuits culturels, des missions économiques thématiques et le développement durable de destinations entre les secteurs touristiques néerlandais et marocain.",
     "image": "/media/roster/m-barek-oubahssou.webp",
     "linkedin": "https://www.linkedin.com/in/m-barek-oubahssou-803058224/",
-    "group": "talent-knowledge-society"
+    "group": "talent-knowledge-society",
+    "badge": null
   },
   {
     "name": "Youssef Ait Mallouk",
@@ -205,7 +248,8 @@
     "bio": "Directeur chez Kuijpers Projecten West, précédemment chez ENGIE Services Nederland. Spécialiste des installations techniques durables, de la transition énergétique, de la circularité et de la conduite de projets techniques complexes.",
     "image": "/media/roster/youssef-ait-mallouk.webp",
     "linkedin": "https://www.linkedin.com/in/yamallouk/",
-    "group": "talent-knowledge-society"
+    "group": "talent-knowledge-society",
+    "badge": null
   },
   {
     "name": "Anas Tellat",
@@ -213,7 +257,8 @@
     "bio": "Conseiller senior de CDD Pays-Bas. Un profil plus complet suivra.",
     "image": null,
     "linkedin": "https://www.linkedin.com/in/anas-tellat-906644111/",
-    "group": "talent-knowledge-society"
+    "group": "talent-knowledge-society",
+    "badge": null
   },
   {
     "name": "Badr Ikken",
@@ -221,7 +266,8 @@
     "bio": "Président exécutif et managing partner de GI3, et président du comité de pilotage de l'AHK Maroc, la Chambre de commerce et d'industrie germano-marocaine.",
     "image": "/media/roster/badr-ikken.webp",
     "linkedin": "https://www.linkedin.com/in/badrikken/",
-    "group": "energy-water-transition"
+    "group": "energy-water-transition",
+    "badge": null
   },
   {
     "name": "Turgut Torunogullari",
@@ -229,6 +275,7 @@
     "bio": "Distingué par le conseil de CDD Pays-Bas pour sa contribution au réseau. Edelstaal.",
     "image": "/media/roster/turgut-torunogullari.webp",
     "linkedin": "https://www.linkedin.com/in/turgut-torunogullar%C4%B1-edelstaal-b75331117/",
-    "group": "honorary"
+    "group": "honorary",
+    "badge": null
   }
 ]

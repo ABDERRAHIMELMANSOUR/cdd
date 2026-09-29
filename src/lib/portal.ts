@@ -33,6 +33,7 @@ export const MEMBER_PUBLIC_SELECT = {
   email: true,
   image: true,
   position: true,
+  badge: true,
   company: true,
   bio: true,
   linkedinUrl: true,
@@ -87,5 +88,6 @@ export const AUTHOR_SELECT = {
   name: true,
   image: true,
   position: true,
+  badge: true,
   company: true,
 } satisfies Prisma.UserSelect;

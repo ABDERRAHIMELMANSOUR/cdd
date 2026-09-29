@@ -52,7 +52,9 @@ export default async function DirectoryPage({
   const members = await prisma.user.findMany({
     where,
     select: MEMBER_PUBLIC_SELECT,
-    orderBy: { name: "asc" },
+    // Badged people first, then alphabetical. A directory that files the
+    // founders between two advisors is sorted correctly and reads wrongly.
+    orderBy: [{ badge: { sort: "asc", nulls: "last" } }, { name: "asc" }],
     take: 200,
   });
 
@@ -105,8 +107,13 @@ export default async function DirectoryPage({
               >
                 <Avatar name={m.name} src={m.image} size={56} />
                 <div className="min-w-0">
+                  {m.badge && (
+                    <p className="mb-1 inline-block rounded-full bg-brand px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wide text-white">
+                      {m.badge}
+                    </p>
+                  )}
                   <p className="truncate font-semibold text-gray-900">{m.name}</p>
-                  {m.position && <p className="truncate text-sm text-gray-600">{m.position}</p>}
+                  {m.position && <p className="truncate text-sm font-medium text-brand">{m.position}</p>}
                   {m.company && <p className="truncate text-sm text-gray-500">{m.company}</p>}
                   {m.commission && (
                     <p className="mt-2 inline-block rounded-full bg-brand-50 px-2.5 py-0.5 text-xs font-medium text-brand">
