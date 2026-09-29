@@ -50,16 +50,41 @@ export type RosterResult = {
   eventsTotal: number;
 };
 
-export function placeholderEmail(name: string): string {
-  const slug = name
+/** The organisation's mail domain, and the shape of every member login. */
+export const MAIL_DOMAIN = "cddpaysbas.nl";
+
+/**
+ * firstname.lastname@cddpaysbas.nl
+ *
+ * The first token is the given name; every remaining token is the surname,
+ * joined WITHOUT a separator — "Abderrahim El Mansour" becomes
+ * abderrahim.elmansour, not abderrahim.el-mansour. Diacritics are folded and
+ * apostrophes dropped, so "M'barek Oubahssou" becomes mbarek.oubahssou rather
+ * than something a keyboard cannot reproduce.
+ *
+ * Checked across the current roster of 31: no two people collide. A future
+ * namesake would, and createMany's skipDuplicates would then silently drop the
+ * second — so two people sharing both names need a deliberate address rather
+ * than a generated one.
+ */
+export function memberEmail(name: string): string {
+  const parts = name
     .normalize("NFKD")
-    .replace(/[̀-ͯ]/g, "")
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-|-$/g, "");
-  // .invalid is reserved by RFC 2606 precisely so it can never resolve or
-  // route mail — a placeholder that cannot be mistaken for a real address.
-  return `${slug}@roster.invalid`;
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean);
+
+  const clean = (v: string) => v.toLowerCase().replace(/[^a-z0-9]/g, "");
+  const first = clean(parts[0] ?? "");
+  const last = clean(parts.slice(1).join(""));
+
+  return `${last ? `${first}.${last}` : first}@${MAIL_DOMAIN}`;
+}
+
+/** Addresses written by earlier imports, before the real domain was adopted. */
+function isLegacyPlaceholder(email: string): boolean {
+  return email.endsWith(".invalid");
 }
 
 export async function importRoster({ apply }: { apply: boolean }): Promise<RosterResult> {
@@ -95,10 +120,16 @@ export async function importRoster({ apply }: { apply: boolean }): Promise<Roste
   let unchanged = 0;
 
   for (const person of people) {
-    const email = placeholderEmail(person.name);
+    const email = memberEmail(person.name);
     // Matched by name as a fallback, so a row whose placeholder address has
     // since been replaced with a real one is found rather than duplicated.
     const found = byEmail.get(email) ?? byName.get(person.name);
+
+    // Email is normally never touched on an existing row — see below. The one
+    // exception is a .invalid placeholder: nobody chose that address, an
+    // earlier import generated it, and leaving it would strand the person on a
+    // login that is not the one the secretariat will hand out.
+    const migrateEmail = found && isLegacyPlaceholder(found.email) && found.email !== email;
 
     const profile = {
       name: person.name,
@@ -121,10 +152,18 @@ export async function importRoster({ apply }: { apply: boolean }): Promise<Roste
       found.image === profile.image &&
       found.linkedinUrl === profile.linkedinUrl &&
       found.commission === profile.commission &&
-      found.badge === profile.badge;
+      found.badge === profile.badge &&
+      !migrateEmail;
 
     if (same) unchanged++;
-    else updated.push({ id: found.id, name: person.name, data: profile });
+    else
+      updated.push({
+        id: found.id,
+        name: person.name,
+        // The migration rides along with the profile update rather than in a
+        // pass of its own, so a legacy row is corrected in the same write.
+        data: migrateEmail ? { ...profile, email } : profile,
+      });
   }
 
   if (apply) {
@@ -134,7 +173,7 @@ export async function importRoster({ apply }: { apply: boolean }): Promise<Roste
           .filter((p) => created.includes(p.name))
           .map((p) => ({
             name: p.name,
-            email: placeholderEmail(p.name),
+            email: memberEmail(p.name),
             password: UNUSABLE_PASSWORD,
             role: Role.MEMBER,
             status: MemberStatus.ACTIVE,
@@ -149,8 +188,9 @@ export async function importRoster({ apply }: { apply: boolean }): Promise<Roste
         skipDuplicates: true,
       });
     }
-    // Email, password, role, status and active are never in `data`: an import
-    // that reset someone's role every time it ran would be a trap.
+    // Password, role, status and active are never in `data`: an import that
+    // reset someone's role every time it ran would be a trap. Email joins them
+    // unless it is still a .invalid placeholder, which nobody chose.
     for (const u of updated) {
       await prisma.user.update({ where: { id: u.id }, data: u.data });
     }
