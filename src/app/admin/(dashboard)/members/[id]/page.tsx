@@ -21,6 +21,7 @@ export default async function EditMember({ params }: { params: { id: string } })
       position: true,
       company: true,
       commission: true,
+      image: true,
       createdAt: true,
       lastSeenAt: true,
     },

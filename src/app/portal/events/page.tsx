@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { safe } from "@/lib/content";
 import { requireMember } from "@/lib/session";
 import { getT } from "@/i18n/locale";
+import EventImage from "@/components/portal/EventImage";
 import EmptyState from "@/components/portal/EmptyState";
 import type { Locale } from "@/i18n/portal";
 
@@ -126,14 +127,7 @@ function EventCard({
   return (
     <li className="card overflow-hidden">
       {event.banner && (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src={event.banner}
-          alt=""
-          loading="lazy"
-          decoding="async"
-          className="h-44 w-full object-cover sm:h-56"
-        />
+        <EventImage src={event.banner} className="h-44 w-full object-cover sm:h-56" />
       )}
 
       <div className="p-5 sm:p-6">
@@ -164,13 +158,9 @@ function EventCard({
             {event.gallery
               .filter((src) => src !== event.banner)
               .map((src) => (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
+                <EventImage
                   key={src}
                   src={src}
-                  alt=""
-                  loading="lazy"
-                  decoding="async"
                   className="h-32 w-full rounded-lg object-cover sm:h-40"
                 />
               ))}

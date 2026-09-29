@@ -36,16 +36,9 @@ export default function ProfileForm({ profile, t }: { profile: Profile; t: Dicti
     <form action={action} className="card space-y-5 p-6 sm:p-8">
       <div className="flex items-center gap-4">
         <Avatar name={profile.name} src={profile.image} size={64} />
-        <div className="flex-1">
-          <label className="label" htmlFor="image">{t.profileEdit.photo}</label>
-          <input
-            id="image"
-            name="image"
-            type="url"
-            defaultValue={profile.image ?? ""}
-            placeholder="https://…"
-            className="input"
-          />
+        {/* Preview only: the photo is managed by the secretariat in /admin/members. */}
+        <div className="min-w-0">
+          <p className="truncate font-semibold text-gray-900">{profile.name}</p>
         </div>
       </div>
 

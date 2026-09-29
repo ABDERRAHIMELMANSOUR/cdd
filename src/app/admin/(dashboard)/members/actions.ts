@@ -36,6 +36,18 @@ function statusFrom(fd: FormData, key = "status"): MemberStatus {
 }
 
 /**
+ * Profile photo URL. Supporters can no longer set this themselves, so it is
+ * managed here. Only http(s) or a site-relative path: a `javascript:` URL in an
+ * <img> is harmless, but the same value is also rendered as a link elsewhere.
+ */
+function imageFrom(fd: FormData): string | null {
+  const v = optStr(fd, "image");
+  if (!v) return null;
+  if (/^https?:\/\//i.test(v) || (v.startsWith("/") && !v.startsWith("//"))) return v;
+  throw new Error("Photo : l'adresse doit commencer par https:// ou /");
+}
+
+/**
  * Role is deliberately NOT read from the form in any of these actions.
  *
  * This screen creates and edits supporters; it writes MEMBER and nothing else.
@@ -68,6 +80,7 @@ export async function createMember(fd: FormData) {
       position: optStr(fd, "position"),
       company: optStr(fd, "company"),
       commission: optStr(fd, "commission"),
+      image: imageFrom(fd),
     },
   });
 
@@ -93,6 +106,7 @@ export async function updateMember(fd: FormData) {
     position: string | null;
     company: string | null;
     commission: string | null;
+    image: string | null;
     password?: string;
   } = {
     name: str(fd, "name"),
@@ -101,6 +115,7 @@ export async function updateMember(fd: FormData) {
     position: optStr(fd, "position"),
     company: optStr(fd, "company"),
     commission: optStr(fd, "commission"),
+    image: imageFrom(fd),
   };
 
   if (password) {

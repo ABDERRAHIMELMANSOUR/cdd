@@ -9,6 +9,7 @@ export type MemberFormValues = {
   position: string | null;
   company: string | null;
   commission: string | null;
+  image?: string | null;
 };
 
 /**
@@ -35,6 +36,7 @@ export default function MemberForm({
         <Field label="Email" name="email" type="email" defaultValue={member?.email} required />
         <Field label="Fonction" name="position" defaultValue={member?.position} />
         <Field label="Organisation" name="company" defaultValue={member?.company} />
+        <Field label="Photo (URL ou /media/...)" name="image" defaultValue={member?.image} />
       </div>
 
       <div className="grid gap-5 sm:grid-cols-2">

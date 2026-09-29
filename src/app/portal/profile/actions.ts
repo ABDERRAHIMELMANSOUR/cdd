@@ -41,7 +41,6 @@ const ProfileSchema = z.object({
   phone: optionalText(40),
   linkedinUrl: webUrl,
   website: webUrl,
-  image: webUrl,
   commission: z.union([z.literal(""), z.enum(SLUGS)]).optional(),
 });
 
@@ -54,7 +53,7 @@ export type ProfileState = { ok?: boolean; error?: string };
  * would be the whole authorisation model sitting in markup the submitter
  * controls — anyone could edit anyone by changing one value in devtools.
  *
- * `role`, `status`, `email` and `password` are not accepted here at any price:
+ * `role`, `status`, `email`, `password` and `image` are not accepted here at any price:
  * they are how someone would promote themselves to ADMIN or approve their own
  * pending account. Those belong to the admin surface.
  */
@@ -84,7 +83,6 @@ export async function updateProfile(
       phone: blank(d.phone),
       linkedinUrl: blank(d.linkedinUrl),
       website: blank(d.website),
-      image: blank(d.image),
       commission: blank(d.commission),
     },
   });
