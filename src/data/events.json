@@ -9,6 +9,16 @@
     "gallery": [
       "/media/events/cdd-iftar-rotterdam-group.webp",
       "/media/events/cdd-iftar-rotterdam-table.webp"
-    ]
+    ],
+    "translations": {
+      "en": {
+        "title": "CDD Pays-Bas — First Collective Iftar",
+        "description": "This first collective Iftar marked a symbolic moment for CDD Pays-Bas. Beyond professional roles, the evening centred on shared stories, cultural understanding and community building during the holy month of Ramadan.\n\nGuests shared a meal, heard reflections on CDD's role as a bridge between the Netherlands and Morocco, and left with relationships that have since turned into working conversations. It set the tone for how CDD Pays-Bas convenes: neutral, respectful, open and personal."
+      },
+      "nl": {
+        "title": "CDD Pays-Bas — eerste gezamenlijke iftar",
+        "description": "Deze eerste gezamenlijke iftar markeerde een symbolisch moment voor CDD Pays-Bas. Voorbij professionele rollen stond de avond in het teken van gedeelde verhalen, cultureel begrip en gemeenschapsvorming tijdens de heilige maand ramadan.\n\nGasten deelden een maaltijd, hoorden reflecties op de rol van CDD als brug tussen Nederland en Marokko, en gingen naar huis met contacten die inmiddels zijn uitgegroeid tot werkgesprekken. Het zette de toon voor hoe CDD Pays-Bas mensen samenbrengt: neutraal, respectvol, open en persoonlijk."
+      }
+    }
   }
 ]

@@ -1,9 +1,10 @@
 import Link from "next/link";
 import Avatar from "@/components/portal/Avatar";
 import { timeAgo } from "@/lib/portal";
+import { localizePerson } from "@/lib/localize";
 import CommentForm from "./CommentForm";
 import RepostButton from "./RepostButton";
-import { fmt, type Dictionary } from "@/i18n/portal";
+import { count, fmt, type Dictionary } from "@/i18n/portal";
 import { removePost, removeComment } from "./actions";
 import LikeButton from "./LikeButton";
 import ConfirmSubmit from "./ConfirmSubmit";
@@ -50,8 +51,10 @@ function isImage(url: string): boolean {
   return /\.(png|jpe?g|gif|webp|avif|svg)(\?|$)/i.test(url);
 }
 
-function byline(author: Author): string | null {
-  return [author.position, author.company].filter(Boolean).join(" · ") || null;
+function byline(author: Author, t: Dictionary): string | null {
+  // Imported advisors have official NL/EN job titles on the public site.
+  const a = localizePerson(author, t.locale);
+  return [a.position, a.company].filter(Boolean).join(" · ") || null;
 }
 
 export default function PostCard({
@@ -76,7 +79,7 @@ export default function PostCard({
   // still ships one row to decide how this button looks.
   const liked = post.likes.length > 0;
   const mine = post.author.id === viewerId;
-  const sub = byline(post.author);
+  const sub = byline(post.author, t);
 
   return (
     <article className="card p-4 sm:p-5">
@@ -92,7 +95,7 @@ export default function PostCard({
             {post.author.name}
           </Link>
           {sub && <p className="truncate text-sm text-gray-500">{sub}</p>}
-          <p className="text-xs text-gray-400">{timeAgo(post.createdAt)}</p>
+          <p className="text-xs text-gray-400">{timeAgo(post.createdAt, t)}</p>
         </div>
 
         {(mine || canModerate) && (
@@ -131,7 +134,7 @@ export default function PostCard({
             <div className="flex items-center gap-2">
               <Avatar name={post.repostOf.author.name} src={post.repostOf.author.image} size={24} />
               <span className="text-sm font-medium text-gray-900">{post.repostOf.author.name}</span>
-              <span className="text-xs text-gray-400">{timeAgo(post.repostOf.createdAt)}</span>
+              <span className="text-xs text-gray-400">{timeAgo(post.repostOf.createdAt, t)}</span>
             </div>
             <p className="mt-2 line-clamp-4 whitespace-pre-wrap break-words text-sm text-gray-700">
               {post.repostOf.content}
@@ -195,7 +198,7 @@ export default function PostCard({
           </Link>
         ) : (
           <span className="ml-auto text-sm text-gray-400">
-            {fmt(t.feed.comments, { n: post._count.comments })}
+            {count(t, t.feed.commentsOne, t.feed.comments, post._count.comments)}
           </span>
         )}
       </div>
@@ -215,7 +218,7 @@ export default function PostCard({
                   >
                     {c.author.name}
                   </Link>
-                  <span className="text-xs text-gray-400">{timeAgo(c.createdAt)}</span>
+                  <span className="text-xs text-gray-400">{timeAgo(c.createdAt, t)}</span>
                   {(c.author.id === viewerId || canModerate) && (
                     <ConfirmSubmit action={removeComment} confirm={t.feed.confirmDeleteComment} className="ml-auto">
                       <input type="hidden" name="id" value={c.id} />

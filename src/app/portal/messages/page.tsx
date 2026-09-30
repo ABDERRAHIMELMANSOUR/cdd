@@ -6,7 +6,7 @@ import { timeAgo } from "@/lib/portal";
 import Avatar from "@/components/portal/Avatar";
 import EmptyState from "@/components/portal/EmptyState";
 import { getT } from "@/i18n/locale";
-import { fmt } from "@/i18n/portal";
+import { count } from "@/i18n/portal";
 
 export const dynamic = "force-dynamic";
 // The tab title follows the reader's language like everything else.
@@ -58,7 +58,7 @@ export default async function Inbox() {
                       {c.other.name}
                     </p>
                     <span className="ml-auto shrink-0 text-xs text-gray-400">
-                      {timeAgo(c.lastAt)}
+                      {timeAgo(c.lastAt, t)}
                     </span>
                   </div>
                   <p
@@ -75,7 +75,7 @@ export default async function Inbox() {
                 {c.unread > 0 && (
                   <span
                     className="grid h-6 min-w-6 shrink-0 place-items-center rounded-full bg-brand px-1.5 text-xs font-semibold text-white"
-                    aria-label={fmt(t.messages.unread, { n: c.unread })}
+                    aria-label={count(t, t.messages.unreadOne, t.messages.unread, c.unread)}
                   >
                     {c.unread}
                   </span>

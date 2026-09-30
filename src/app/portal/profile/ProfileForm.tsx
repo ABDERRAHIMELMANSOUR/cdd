@@ -2,7 +2,7 @@
 
 import { useFormState, useFormStatus } from "react-dom";
 import { updateProfile, type ProfileState } from "./actions";
-import { COMMISSIONS } from "@/lib/portal";
+import { COMMISSIONS, commissionLabel } from "@/lib/portal";
 import Avatar from "@/components/portal/Avatar";
 import type { Dictionary } from "@/i18n/portal";
 
@@ -63,7 +63,7 @@ export default function ProfileForm({ profile, t }: { profile: Profile; t: Dicti
         <select id="commission" name="commission" defaultValue={profile.commission ?? ""} className="input">
           <option value="">{t.profileEdit.noCommission}</option>
           {COMMISSIONS.map((c) => (
-            <option key={c.slug} value={c.slug}>{c.label}</option>
+            <option key={c.slug} value={c.slug}>{commissionLabel(c.slug, t)}</option>
           ))}
         </select>
       </div>
@@ -109,7 +109,7 @@ export default function ProfileForm({ profile, t }: { profile: Profile; t: Dicti
         <label className="label" htmlFor="phone">{t.profileEdit.phone}</label>
         <input id="phone" name="phone" defaultValue={profile.phone ?? ""} className="input" />
         <p className="mt-1 text-xs text-gray-500">
-          Visible uniquement par les supporters connectés.
+          {t.profileEdit.phoneHint}
         </p>
       </div>
 

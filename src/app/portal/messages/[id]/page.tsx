@@ -7,6 +7,7 @@ import type { Locale } from "@/i18n/portal";
 import Avatar from "@/components/portal/Avatar";
 import MessageComposer from "../MessageComposer";
 import { getT } from "@/i18n/locale";
+import { localizePerson } from "@/lib/localize";
 import { markConversationRead } from "../actions";
 
 export const dynamic = "force-dynamic";
@@ -70,7 +71,8 @@ export default async function Conversation({ params }: { params: { id: string } 
     month: "long",
   });
   const dayKey = (d: Date) => d.toISOString().slice(0, 10);
-  const sub = [other.position, other.company].filter(Boolean).join(" · ");
+  const shownOther = localizePerson(other, locale as Locale);
+  const sub = [shownOther.position, shownOther.company].filter(Boolean).join(" · ");
 
   return (
     <div className="mx-auto max-w-2xl">
@@ -123,7 +125,7 @@ export default async function Conversation({ params }: { params: { id: string } 
                     >
                       <p className="whitespace-pre-wrap break-words text-sm">{m.content}</p>
                       <p className={`mt-1 text-[11px] ${mine ? "text-white/70" : "text-gray-400"}`}>
-                        {timeAgo(m.createdAt)}
+                        {timeAgo(m.createdAt, t)}
                       </p>
                       </div>
                     </div>

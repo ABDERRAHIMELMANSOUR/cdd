@@ -57,6 +57,8 @@ export interface Dictionary {
     portalLabel: string;
     /** `{n}` */
     unreadLabel: string;
+    /** Singular form of `unreadLabel`, used when n is 1 (and 0 in French). */
+    unreadLabelOne: string;
   };
   login: {
     title: string;
@@ -104,6 +106,8 @@ export interface Dictionary {
     like: string;
     /** `{n}` */
     comments: string;
+    /** Singular form of `comments`, used when n is 1 (and 0 in French). */
+    commentsOne: string;
     /** `{n}` */
     seeAllComments: string;
     confirmDelete: string;
@@ -124,6 +128,8 @@ export interface Dictionary {
     title: string;
     /** `{n}` */
     count: string;
+    /** Singular form of `count`, used when n is 1 (and 0 in French). */
+    countOne: string;
     searchLabel: string;
     searchPlaceholder: string;
     commission: string;
@@ -145,6 +151,7 @@ export interface Dictionary {
     title: string;
     subtitle: string;
     photo: string;
+    phoneHint: string;
     name: string;
     position: string;
     company: string;
@@ -168,6 +175,8 @@ export interface Dictionary {
     you: string;
     /** `{n}` */
     unread: string;
+    /** Singular form of `unread`, used when n is 1 (and 0 in French). */
+    unreadOne: string;
     /** `{name}` */
     placeholder: string;
     noMessages: string;
@@ -209,6 +218,24 @@ export interface Dictionary {
     sameAsOld: string;
     noPassword: string;
     required: string;
+  };
+  /** The locale this dictionary is for, so helpers given only `t` can format dates. */
+  locale: Locale;
+  time: {
+    justNow: string;
+    /** `{n}` */
+    minutesAgo: string;
+    /** `{n}` */
+    hoursAgo: string;
+    /** `{n}` */
+    daysAgo: string;
+  };
+  /** Commission names, keyed by slug. Same wording as the public site. */
+  commissions: Record<string, string>;
+  notFound: {
+    title: string;
+    body: string;
+    back: string;
   };
   errors: {
     invalid: string;
@@ -253,6 +280,7 @@ const en: Dictionary = {
     closeMenu: "Close menu",
     portalLabel: "CDD Pays-Bas portal",
     unreadLabel: "{n} unread messages",
+    unreadLabelOne: "{n} unread message",
   },
   login: {
     title: "Supporters area",
@@ -297,6 +325,7 @@ const en: Dictionary = {
     end: "No more posts to show.",
     like: "Like",
     comments: "{n} comments",
+    commentsOne: "{n} comment",
     seeAllComments: "See all {n} comments",
     confirmDelete: "Delete this post? This cannot be undone.",
     confirmDeleteComment: "Delete this comment?",
@@ -315,6 +344,7 @@ const en: Dictionary = {
   directory: {
     title: "Directory",
     count: "{n} supporters in the CDD Pays-Bas network.",
+    countOne: "{n} supporter in the CDD Pays-Bas network.",
     searchLabel: "Search",
     searchPlaceholder: "Name, company, role…",
     commission: "Commission",
@@ -336,6 +366,7 @@ const en: Dictionary = {
     title: "My profile",
     subtitle: "Visible to other supporters in the directory.",
     photo: "Photo (URL)",
+    phoneHint: "Only visible to signed-in supporters.",
     name: "Full name",
     position: "Role",
     company: "Organisation",
@@ -358,6 +389,7 @@ const en: Dictionary = {
     browse: "Browse the directory",
     you: "You: ",
     unread: "{n} unread messages",
+    unreadOne: "{n} unread message",
     placeholder: "Write to {name}…",
     noMessages: "No messages. Write the first one.",
     back: "Back to messages",
@@ -392,6 +424,24 @@ const en: Dictionary = {
     sameAsOld: "The new password must be different from the current one.",
     noPassword: "This account has no password yet. Please contact the secretariat to activate your login.",
     required: "Please fill in all three fields.",
+  },
+  locale: "en",
+  time: {
+    justNow: "just now",
+    minutesAgo: "{n} min ago",
+    hoursAgo: "{n} h ago",
+    daysAgo: "{n} d ago",
+  },
+  commissions: {
+    "energy-water-transition": "Energy & Water Transition",
+    "digital-ai-infrastructure": "Digital, AI & Infrastructure",
+    "industry-trade-logistics": "Industry, Trade & Logistics",
+    "talent-knowledge-society": "Talent, Knowledge & Society",
+  },
+  notFound: {
+    title: "Page not found",
+    body: "The page you are looking for does not exist or has been moved.",
+    back: "Back to home",
   },
   errors: {
     invalid: "Invalid data.",
@@ -436,6 +486,7 @@ const nl: Dictionary = {
     closeMenu: "Menu sluiten",
     portalLabel: "CDD Pays-Bas portaal",
     unreadLabel: "{n} ongelezen berichten",
+    unreadLabelOne: "{n} ongelezen bericht",
   },
   login: {
     title: "Supportersomgeving",
@@ -481,6 +532,7 @@ const nl: Dictionary = {
     end: "Geen berichten meer.",
     like: "Vind ik leuk",
     comments: "{n} reacties",
+    commentsOne: "{n} reactie",
     seeAllComments: "Alle {n} reacties bekijken",
     confirmDelete: "Dit bericht verwijderen? Dit kan niet ongedaan worden gemaakt.",
     confirmDeleteComment: "Deze reactie verwijderen?",
@@ -499,6 +551,7 @@ const nl: Dictionary = {
   directory: {
     title: "Ledenlijst",
     count: "{n} supporters in het netwerk van CDD Pays-Bas.",
+    countOne: "{n} supporter in het netwerk van CDD Pays-Bas.",
     searchLabel: "Zoeken",
     searchPlaceholder: "Naam, organisatie, functie…",
     commission: "Commissie",
@@ -520,6 +573,7 @@ const nl: Dictionary = {
     title: "Mijn profiel",
     subtitle: "Zichtbaar voor andere supporters in de ledenlijst.",
     photo: "Foto (URL)",
+    phoneHint: "Alleen zichtbaar voor ingelogde supporters.",
     name: "Volledige naam",
     position: "Functie",
     company: "Organisatie",
@@ -542,6 +596,7 @@ const nl: Dictionary = {
     browse: "Ledenlijst bekijken",
     you: "U: ",
     unread: "{n} ongelezen berichten",
+    unreadOne: "{n} ongelezen bericht",
     placeholder: "Schrijf aan {name}…",
     noMessages: "Nog geen berichten. Schrijf het eerste.",
     back: "Terug naar berichten",
@@ -562,20 +617,38 @@ const nl: Dictionary = {
   },
   password: {
     title: "Wachtwoord wijzigen",
-    subtitle: "Kies een nieuw wachtwoord om in te loggen. Je blijft op dit apparaat ingelogd.",
+    subtitle: "Kies een nieuw wachtwoord om in te loggen. U blijft op dit apparaat ingelogd.",
     current: "Huidig wachtwoord",
     new: "Nieuw wachtwoord",
     confirm: "Bevestig nieuw wachtwoord",
     hint: "Minstens 10 tekens.",
     submit: "Wachtwoord bijwerken",
     saving: "Bezig…",
-    success: "Je wachtwoord is bijgewerkt.",
+    success: "Uw wachtwoord is bijgewerkt.",
     wrongCurrent: "Het huidige wachtwoord is onjuist.",
     tooShort: "Het nieuwe wachtwoord moet minstens 10 tekens bevatten.",
     mismatch: "De twee nieuwe wachtwoorden komen niet overeen.",
     sameAsOld: "Het nieuwe wachtwoord moet verschillen van het huidige.",
-    noPassword: "Dit account heeft nog geen wachtwoord. Neem contact op met het secretariaat om je login te activeren.",
+    noPassword: "Dit account heeft nog geen wachtwoord. Neem contact op met het secretariaat om uw login te activeren.",
     required: "Vul alle drie de velden in.",
+  },
+  locale: "nl",
+  time: {
+    justNow: "zojuist",
+    minutesAgo: "{n} min geleden",
+    hoursAgo: "{n} u geleden",
+    daysAgo: "{n} d geleden",
+  },
+  commissions: {
+    "energy-water-transition": "Energie- & watertransitie",
+    "digital-ai-infrastructure": "Digitaal, AI & infrastructuur",
+    "industry-trade-logistics": "Industrie, handel & logistiek",
+    "talent-knowledge-society": "Talent, kennis & samenleving",
+  },
+  notFound: {
+    title: "Pagina niet gevonden",
+    body: "De pagina die u zoekt bestaat niet of is verplaatst.",
+    back: "Terug naar home",
   },
   errors: {
     invalid: "Ongeldige gegevens.",
@@ -620,6 +693,7 @@ const fr: Dictionary = {
     closeMenu: "Fermer le menu",
     portalLabel: "Portail CDD Pays-Bas",
     unreadLabel: "{n} messages non lus",
+    unreadLabelOne: "{n} message non lu",
   },
   login: {
     title: "Espace supporters",
@@ -665,6 +739,7 @@ const fr: Dictionary = {
     end: "Fin des publications affichables.",
     like: "J'aime",
     comments: "{n} commentaires",
+    commentsOne: "{n} commentaire",
     seeAllComments: "Voir les {n} commentaires",
     confirmDelete: "Supprimer cette publication ? Cette action est irréversible.",
     confirmDeleteComment: "Supprimer ce commentaire ?",
@@ -683,6 +758,7 @@ const fr: Dictionary = {
   directory: {
     title: "Annuaire",
     count: "{n} supporters du réseau CDD Pays-Bas.",
+    countOne: "{n} supporter du réseau CDD Pays-Bas.",
     searchLabel: "Rechercher",
     searchPlaceholder: "Nom, entreprise, fonction…",
     commission: "Commission",
@@ -704,6 +780,7 @@ const fr: Dictionary = {
     title: "Mon profil",
     subtitle: "Visible par les autres supporters dans l'annuaire.",
     photo: "Photo (URL)",
+    phoneHint: "Visible uniquement par les supporters connectés.",
     name: "Nom complet",
     position: "Fonction",
     company: "Organisation",
@@ -726,6 +803,7 @@ const fr: Dictionary = {
     browse: "Parcourir l'annuaire",
     you: "Vous : ",
     unread: "{n} messages non lus",
+    unreadOne: "{n} message non lu",
     placeholder: "Écrire à {name}…",
     noMessages: "Aucun message. Écrivez le premier.",
     back: "Retour aux messages",
@@ -760,6 +838,24 @@ const fr: Dictionary = {
     sameAsOld: "Le nouveau mot de passe doit être différent de l'actuel.",
     noPassword: "Ce compte n'a pas encore de mot de passe. Contactez le secrétariat pour activer votre accès.",
     required: "Veuillez remplir les trois champs.",
+  },
+  locale: "fr",
+  time: {
+    justNow: "à l'instant",
+    minutesAgo: "il y a {n} min",
+    hoursAgo: "il y a {n} h",
+    daysAgo: "il y a {n} j",
+  },
+  commissions: {
+    "energy-water-transition": "Transition énergétique & hydrique",
+    "digital-ai-infrastructure": "Numérique, IA & infrastructures",
+    "industry-trade-logistics": "Industrie, commerce & logistique",
+    "talent-knowledge-society": "Talents, savoir & société",
+  },
+  notFound: {
+    title: "Page introuvable",
+    body: "La page que vous recherchez n'existe pas ou a été déplacée.",
+    back: "Retour à l'accueil",
   },
   errors: {
     invalid: "Données invalides.",
@@ -800,6 +896,15 @@ export function fmt(template: string, vars: Record<string, string | number>): st
   return template.replace(/\{(\w+)\}/g, (all, key) =>
     key in vars ? String(vars[key]) : all
   );
+}
+
+/**
+ * `{n} …` with the right grammatical number. French treats 0 as singular
+ * ("0 commentaire"); English and Dutch use the plural for it.
+ */
+export function count(t: Dictionary, one: string, other: string, n: number): string {
+  const singular = n === 1 || (t.locale === "fr" && n === 0);
+  return fmt(singular ? one : other, { n });
 }
 
 export function isLocale(value: unknown): value is Locale {

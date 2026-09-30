@@ -1,3 +1,4 @@
+import { getDictionary } from "@/i18n/portal";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { safe } from "@/lib/content";
@@ -6,6 +7,9 @@ import { AdminHeader, Panel, EmptyRow } from "@/components/admin/ui";
 import { AUTHOR_SELECT, timeAgo } from "@/lib/portal";
 import DeleteButton from "@/components/admin/DeleteButton";
 import { restorePost, purgePost, restoreComment, purgeComment } from "./actions";
+
+/** /admin is French only; the shared portal helpers take a dictionary. */
+const FR = getDictionary("fr");
 
 export const dynamic = "force-dynamic";
 
@@ -87,7 +91,7 @@ export default async function ModerationAdmin() {
                 <li key={p.id} className="p-4">
                   <div className="flex flex-wrap items-baseline gap-2">
                     <Author name={p.author.name} id={p.author.id} />
-                    <span className="text-xs text-gray-400">{timeAgo(p.createdAt)}</span>
+                    <span className="text-xs text-gray-400">{timeAgo(p.createdAt, FR)}</span>
                     {p._count.comments > 0 && (
                       <span className="text-xs text-gray-400">
                         · {p._count.comments} commentaire{p._count.comments > 1 ? "s" : ""}
@@ -143,7 +147,7 @@ export default async function ModerationAdmin() {
                 <li key={c.id} className="p-4">
                   <div className="flex flex-wrap items-baseline gap-2">
                     <Author name={c.author.name} id={c.author.id} />
-                    <span className="text-xs text-gray-400">{timeAgo(c.createdAt)}</span>
+                    <span className="text-xs text-gray-400">{timeAgo(c.createdAt, FR)}</span>
                   </div>
 
                   <p className="mt-2 whitespace-pre-wrap break-words text-sm text-gray-700">

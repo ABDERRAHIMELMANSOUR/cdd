@@ -4,8 +4,9 @@ import { requireMember } from "@/lib/session";
 import { COMMISSIONS, MEMBER_PUBLIC_SELECT, commissionLabel } from "@/lib/portal";
 import Avatar from "@/components/portal/Avatar";
 import { getT } from "@/i18n/locale";
-import { fmt } from "@/i18n/portal";
+import { count } from "@/i18n/portal";
 import EmptyState from "@/components/portal/EmptyState";
+import { localizePerson } from "@/lib/localize";
 
 export const dynamic = "force-dynamic";
 // The tab title follows the reader's language like everything else.
@@ -20,7 +21,7 @@ export default async function DirectoryPage({
   searchParams: { q?: string; commission?: string };
 }) {
   await requireMember();
-  const { t } = getT();
+  const { locale, t } = getT();
 
   const q = (searchParams.q ?? "").trim();
   const commission = searchParams.commission ?? "";
@@ -59,12 +60,14 @@ export default async function DirectoryPage({
     take: 200,
   });
 
+  const shown = members.map((m) => localizePerson(m, locale));
+
   return (
     <div>
       <header className="mb-6">
         <h1 className="font-display text-2xl font-bold text-gray-900 sm:text-3xl">{t.directory.title}</h1>
         <p className="mt-1 text-gray-600">
-          {fmt(t.directory.count, { n: members.length })}
+          {count(t, t.directory.countOne, t.directory.count, members.length)}
         </p>
       </header>
 
@@ -87,7 +90,7 @@ export default async function DirectoryPage({
           <select id="commission" name="commission" defaultValue={commission} className="input">
             <option value="">{t.directory.allCommissions}</option>
             {COMMISSIONS.map((c) => (
-              <option key={c.slug} value={c.slug}>{c.label}</option>
+              <option key={c.slug} value={c.slug}>{commissionLabel(c.slug, t)}</option>
             ))}
           </select>
         </div>
@@ -106,7 +109,7 @@ export default async function DirectoryPage({
         />
       ) : (
         <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {members.map((m) => (
+          {shown.map((m) => (
             <li key={m.id}>
               <Link
                 href={`/portal/members/${m.id}`}
@@ -124,7 +127,7 @@ export default async function DirectoryPage({
                   {m.company && <p className="truncate text-sm text-gray-500">{m.company}</p>}
                   {m.commission && (
                     <p className="mt-2 inline-block rounded-full bg-brand-50 px-2.5 py-0.5 text-xs font-medium text-brand">
-                      {commissionLabel(m.commission)}
+                      {commissionLabel(m.commission, t)}
                     </p>
                   )}
                 </div>

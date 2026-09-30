@@ -1,4 +1,5 @@
 import type { Prisma } from "@prisma/client";
+import { fmt, type Dictionary } from "@/i18n/portal";
 
 /**
  * Shared shapes and lookups for the community portal.
@@ -16,8 +17,13 @@ export const COMMISSIONS = [
   { slug: "talent-knowledge-society", label: "Talents, savoir & société" },
 ] as const;
 
-export function commissionLabel(slug: string | null): string | null {
-  return COMMISSIONS.find((c) => c.slug === slug)?.label ?? null;
+/**
+ * The commission's name in the reader's language. `label` above is the French
+ * name, kept for /admin (French only); the portal reads `t.commissions`.
+ */
+export function commissionLabel(slug: string | null, t: Dictionary): string | null {
+  if (!slug) return null;
+  return t.commissions[slug] ?? COMMISSIONS.find((c) => c.slug === slug)?.label ?? null;
 }
 
 /**
@@ -56,29 +62,27 @@ export function initials(name: string): string {
 }
 
 /**
- * "il y a 3 h" for feed and message timestamps.
+ * "il y a 3 h" / "3 u geleden" / "3 h ago" for feed and message timestamps.
  *
  * Rendered on the server so every viewer sees the same string regardless of
  * their clock, and so the markup does not change between the server render and
  * hydration — a relative time computed in the browser is the classic source of
- * a React hydration mismatch. The tradeoff is that it goes stale on a page
- * left open; these pages are dynamic and refetch on navigation, so it does not
- * stay wrong for long.
+ * a React hydration mismatch.
  */
-export function timeAgo(date: Date, now: Date = new Date()): string {
+export function timeAgo(date: Date, t: Dictionary, now: Date = new Date()): string {
   const seconds = Math.max(0, Math.round((now.getTime() - date.getTime()) / 1000));
-  if (seconds < 60) return "à l'instant";
+  if (seconds < 60) return t.time.justNow;
 
   const minutes = Math.round(seconds / 60);
-  if (minutes < 60) return `il y a ${minutes} min`;
+  if (minutes < 60) return fmt(t.time.minutesAgo, { n: minutes });
 
   const hours = Math.round(minutes / 60);
-  if (hours < 24) return `il y a ${hours} h`;
+  if (hours < 24) return fmt(t.time.hoursAgo, { n: hours });
 
   const days = Math.round(hours / 24);
-  if (days < 7) return `il y a ${days} j`;
+  if (days < 7) return fmt(t.time.daysAgo, { n: days });
 
-  return new Intl.DateTimeFormat("fr-FR", { day: "numeric", month: "short" }).format(date);
+  return new Intl.DateTimeFormat(t.locale, { day: "numeric", month: "short" }).format(date);
 }
 
 /** The columns a feed or message author exposes — a narrow slice of the

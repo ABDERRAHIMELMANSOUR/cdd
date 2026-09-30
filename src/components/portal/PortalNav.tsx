@@ -6,7 +6,7 @@ import { signOut } from "next-auth/react";
 import { useState } from "react";
 import Logo from "@/components/Logo";
 import LanguageSwitcher from "./LanguageSwitcher";
-import { fmt, type Dictionary, type Locale } from "@/i18n/portal";
+import { count, type Dictionary, type Locale } from "@/i18n/portal";
 
 
 function links(t: Dictionary) {
@@ -77,7 +77,7 @@ export default function PortalNav({
               }`}
             >
               {l.label}
-              <Unread href={l.href} count={unread} label={fmt(t.nav.unreadLabel, { n: unread })} />
+              <Unread href={l.href} count={unread} label={count(t, t.nav.unreadLabelOne, t.nav.unreadLabel, unread)} />
             </Link>
           ))}
         </nav>
@@ -120,7 +120,7 @@ export default function PortalNav({
               }`}
             >
               {l.label}
-              <Unread href={l.href} count={unread} label={fmt(t.nav.unreadLabel, { n: unread })} />
+              <Unread href={l.href} count={unread} label={count(t, t.nav.unreadLabelOne, t.nav.unreadLabel, unread)} />
             </Link>
           ))}
           {/* Also inside the menu: below sm the control is hidden in the bar,

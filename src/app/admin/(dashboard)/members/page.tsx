@@ -1,3 +1,4 @@
+import { getDictionary } from "@/i18n/portal";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { safe } from "@/lib/content";
@@ -7,6 +8,9 @@ import { commissionLabel } from "@/lib/portal";
 import DeleteButton from "@/components/admin/DeleteButton";
 import { setMemberStatus, deleteMember } from "./actions";
 import type { MemberStatus } from "@prisma/client";
+
+/** /admin is French only; the shared portal helpers take a dictionary. */
+const FR = getDictionary("fr");
 
 export const dynamic = "force-dynamic";
 
@@ -177,7 +181,7 @@ export default async function MembersAdmin({
                     <td className="p-4 font-medium text-gray-900">{m.name}</td>
                     <td className="p-4 text-gray-600">{m.email}</td>
                     <td className="p-4 text-gray-600">{m.company ?? "—"}</td>
-                    <td className="p-4 text-gray-600">{commissionLabel(m.commission) ?? "—"}</td>
+                    <td className="p-4 text-gray-600">{commissionLabel(m.commission, FR) ?? "—"}</td>
                     <td className="p-4">
                       <span
                         className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${STATUS_STYLES[m.status]}`}

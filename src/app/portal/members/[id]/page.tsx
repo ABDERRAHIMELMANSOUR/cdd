@@ -5,13 +5,17 @@ import { requireMember } from "@/lib/session";
 import { MEMBER_PUBLIC_SELECT, commissionLabel } from "@/lib/portal";
 import Avatar from "@/components/portal/Avatar";
 import { getT } from "@/i18n/locale";
+import { localizePerson } from "@/lib/localize";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "Profil", robots: { index: false } };
+export async function generateMetadata() {
+  const { t } = getT();
+  return { title: t.nav.directory, robots: { index: false } };
+}
 
 export default async function MemberProfilePage({ params }: { params: { id: string } }) {
   const viewer = await requireMember();
-  const { t } = getT();
+  const { locale, t } = getT();
 
   /*
    * The status filter is part of the lookup, not a check afterwards. Fetching
@@ -19,12 +23,14 @@ export default async function MemberProfilePage({ params }: { params: { id: stri
    * rendered by whichever code path forgets the second step — here there is no
    * second step to forget.
    */
-  const member = await prisma.user.findFirst({
+  const row = await prisma.user.findFirst({
     where: { id: params.id, role: "MEMBER", status: "ACTIVE", active: true },
     select: MEMBER_PUBLIC_SELECT,
   });
 
-  if (!member) notFound();
+  if (!row) notFound();
+  // Imported profiles have official NL/EN wording on the public site.
+  const member = localizePerson(row, locale);
 
   const isSelf = viewer.id === member.id;
 
@@ -50,7 +56,7 @@ export default async function MemberProfilePage({ params }: { params: { id: stri
             {member.company && <p className="text-gray-500">{member.company}</p>}
             {member.commission && (
               <p className="mt-3 inline-block rounded-full bg-brand-50 px-3 py-1 text-sm font-medium text-brand">
-                {commissionLabel(member.commission)}
+                {commissionLabel(member.commission, t)}
               </p>
             )}
           </div>
@@ -100,7 +106,7 @@ export default async function MemberProfilePage({ params }: { params: { id: stri
               rel="noopener noreferrer"
               className="text-brand underline"
             >
-              LinkedIn
+              {t.profile.linkedin}
             </a>
           )}
           {member.website && (
@@ -110,7 +116,7 @@ export default async function MemberProfilePage({ params }: { params: { id: stri
               rel="noopener noreferrer"
               className="text-brand underline"
             >
-              Site web
+              {t.profile.website}
             </a>
           )}
         </div>

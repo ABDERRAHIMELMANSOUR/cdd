@@ -5,6 +5,7 @@ import { z } from "zod";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import { requireMember } from "@/lib/session";
+import { getT } from "@/i18n/locale";
 import { COMMISSIONS } from "@/lib/portal";
 
 const SLUGS = COMMISSIONS.map((c) => c.slug) as [string, ...string[]];
@@ -22,10 +23,10 @@ const webUrl = z
       .string()
       .trim()
       .max(300)
-      .url("Adresse invalide.")
+      .url("badAddress")
       .refine(
         (u) => /^https?:\/\//i.test(u),
-        "L'adresse doit commencer par http:// ou https://"
+        "linkScheme"
       ),
   ])
   .optional();
@@ -34,7 +35,7 @@ const optionalText = (max: number) =>
   z.union([z.literal(""), z.string().trim().max(max)]).optional();
 
 const ProfileSchema = z.object({
-  name: z.string().trim().min(2, "Le nom est requis.").max(120),
+  name: z.string().trim().min(2, "nameRequired").max(120),
   position: optionalText(120),
   company: optionalText(120),
   bio: optionalText(2000),
@@ -65,7 +66,11 @@ export async function updateProfile(
 
   const parsed = ProfileSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) {
-    return { error: parsed.error.issues[0]?.message ?? "Données invalides." };
+    // Schema messages are dictionary keys, answered in the reader's language.
+    const { t } = getT();
+    const code = parsed.error.issues[0]?.message;
+    const known = { badAddress: t.errors.badAddress, linkScheme: t.errors.linkScheme, nameRequired: t.errors.nameRequired } as Record<string, string>;
+    return { error: (code && known[code]) || t.errors.invalid };
   }
   const d = parsed.data;
 

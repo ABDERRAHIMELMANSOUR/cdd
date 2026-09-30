@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import ParticleNetwork from "@/components/ParticleNetwork";
 import LanguageSwitcher from "@/components/portal/LanguageSwitcher";
 import { getT } from "@/i18n/locale";
+import HtmlLang from "@/components/portal/HtmlLang";
 import LoginForm from "./LoginForm";
 
 /*
@@ -14,6 +15,7 @@ export default function MemberLogin() {
   const { locale, t } = getT();
   return (
     <main className="relative grid min-h-[100svh] place-items-center overflow-hidden bg-[#050b16] px-5 py-10">
+      <HtmlLang lang={locale} />
       {/*
         The same ground the public site's hero uses, so crossing from
         cddpaysbas.nl into the portal does not feel like arriving somewhere

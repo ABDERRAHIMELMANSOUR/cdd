@@ -3,6 +3,7 @@ import { safe } from "@/lib/content";
 import { requireMember } from "@/lib/session";
 import { getT } from "@/i18n/locale";
 import EventImage from "@/components/portal/EventImage";
+import { localizeEvent } from "@/lib/localize";
 import EmptyState from "@/components/portal/EmptyState";
 import type { Locale } from "@/i18n/portal";
 
@@ -48,7 +49,7 @@ export default async function PortalEvents() {
   await requireMember();
   const { locale, t } = getT();
 
-  const events = await safe(
+  const rows = await safe(
     () =>
       prisma.event.findMany({
         where: { published: true },
@@ -57,6 +58,9 @@ export default async function PortalEvents() {
       }),
     []
   );
+
+  // Seeded events carry official NL/EN text from the public site.
+  const events = rows.map((e) => localizeEvent(e, locale));
 
   const now = new Date();
   const upcoming = events.filter((e) => e.date >= now).reverse();
