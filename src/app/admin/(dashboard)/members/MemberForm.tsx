@@ -1,4 +1,4 @@
-import { Field, Select } from "@/components/admin/form";
+import { Field, Select, Toggle } from "@/components/admin/form";
 import { COMMISSIONS } from "@/lib/portal";
 
 export type MemberFormValues = {
@@ -10,6 +10,7 @@ export type MemberFormValues = {
   company: string | null;
   commission: string | null;
   image?: string | null;
+  canPublish?: boolean;
 };
 
 /**
@@ -60,6 +61,13 @@ export default function MemberForm({
           ]}
         />
       </div>
+
+      {/* Publishing in the portal feed is reserved; liking and commenting are not. */}
+      <Toggle
+        label="Peut publier dans le fil d'actualité du portail"
+        name="canPublish"
+        defaultChecked={member?.canPublish ?? false}
+      />
 
       <Field
         label={isNew ? "Mot de passe provisoire" : "Nouveau mot de passe"}

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { safe } from "@/lib/content";
-import { requireMember, isStaff } from "@/lib/session";
+import { requireMember, isStaff, canPublish } from "@/lib/session";
 import { AUTHOR_SELECT } from "@/lib/portal";
 import { getT } from "@/i18n/locale";
 import Composer from "./Composer";
@@ -121,12 +121,13 @@ export default async function FeedPage({
         </p>
       </header>
 
-      <Composer name={user.name ?? ""} image={user.image} t={t} />
+      {/* Only publishers see the composer; everyone can like and comment. */}
+      {canPublish(user) && <Composer name={user.name ?? ""} image={user.image} t={t} />}
 
       {visible.length === 0 ? (
         // No action: the composer is directly above, and pointing at
         // something already on screen is noise.
-        <EmptyState icon="feed" title={t.feed.emptyTitle} body={t.feed.empty} />
+        <EmptyState icon="feed" title={t.feed.emptyTitle} body={canPublish(user) ? t.feed.empty : t.feed.emptyReader} />
       ) : (
         <div className="space-y-5">
           {visible.map((post) => (
@@ -140,6 +141,7 @@ export default async function FeedPage({
               }}
               viewerId={user.id}
               canModerate={isStaff(user.role)}
+              canRepost={canPublish(user)}
               viewerName={user.name ?? ""}
               viewerImage={user.image}
               t={t}

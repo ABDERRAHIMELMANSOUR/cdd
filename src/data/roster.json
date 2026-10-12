@@ -15,7 +15,17 @@
     "bio": "Nouraddine Gribi est le fondateur et président de CDD Pays-Bas, dirigeant stratégique engagé à renforcer les liens économiques et institutionnels entre le Maroc et les Pays-Bas. Fort d'une longue expérience du développement des affaires, de la gouvernance et des partenariats internationaux, il impulse des collaborations à fort impact entre acteurs publics et privés.\n\nIl promeut activement l'entrepreneuriat, l'inclusion et une croissance durable au sein de l'écosystème maroco-néerlandais. Sous sa direction, CDD Pays-Bas continue de bâtir des ponts, de créer des opportunités et d'apporter une valeur mesurable à ses supporters et partenaires.",
     "image": "/media/roster/nouraddine-gribi.webp",
     "linkedin": "https://www.linkedin.com/in/nouraddine-gribi-4a639435",
-    "group": null
+    "group": null,
+    "canPublish": true
+  },
+  {
+    "name": "Ahmed Rahmouni",
+    "role": "Trésorier & conseiller senior — développement commercial & commerce international",
+    "bio": "Copropriétaire du Rahmouni Group, actif aux Pays-Bas, en Espagne et au Maroc, et ancien Regional Sales Manager chez GE Power & Water à Dubaï. Il apporte au conseil son expérience du développement commercial international, du pilotage commercial et de la gestion financière.",
+    "image": "/media/roster/ahmed-rahmouni.webp",
+    "linkedin": "https://www.linkedin.com/in/ahmed-rahmouni-prfile/",
+    "group": "industry-trade-logistics",
+    "badge": "Trésorier"
   },
   {
     "name": "Yassine Saddiki",
@@ -248,7 +258,7 @@
     "bio": "Directeur chez Kuijpers Projecten West, précédemment chez ENGIE Services Nederland. Spécialiste des installations techniques durables, de la transition énergétique, de la circularité et de la conduite de projets techniques complexes.",
     "image": "/media/roster/youssef-ait-mallouk.webp",
     "linkedin": "https://www.linkedin.com/in/yamallouk/",
-    "group": "talent-knowledge-society",
+    "group": "energy-water-transition",
     "badge": null
   },
   {

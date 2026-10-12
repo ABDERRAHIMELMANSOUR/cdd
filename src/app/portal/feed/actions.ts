@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
-import { requireMember, isStaff } from "@/lib/session";
+import { requireMember, isStaff, canPublish } from "@/lib/session";
 import { getT } from "@/i18n/locale";
 import type { Dictionary } from "@/i18n/portal";
 
@@ -76,6 +76,9 @@ export async function createPost(_prev: FeedState, formData: FormData): Promise<
   const user = await requireMember();
 
   const { t } = getT();
+  // Enforced here, not only by hiding the composer: an action is a POST
+  // endpoint anyone signed in can call directly.
+  if (!canPublish(user)) return { error: t.errors.cannotPublish };
   const parsed = PostSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) return { error: message(t, parsed.error.issues[0]?.message) };
 
@@ -116,6 +119,8 @@ export async function repost(_prev: FeedState, formData: FormData): Promise<Feed
   const user = await requireMember();
 
   const { t } = getT();
+  // A repost is a new post in the feed, so it follows the same rule.
+  if (!canPublish(user)) return { error: t.errors.cannotPublish };
   const parsed = RepostSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) return { error: message(t, parsed.error.issues[0]?.message) };
 

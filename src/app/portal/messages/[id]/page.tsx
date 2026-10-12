@@ -9,6 +9,8 @@ import MessageComposer from "../MessageComposer";
 import { getT } from "@/i18n/locale";
 import { localizePerson } from "@/lib/localize";
 import { markConversationRead } from "../actions";
+import { canContact } from "@/lib/connections";
+import { fmt } from "@/i18n/portal";
 
 export const dynamic = "force-dynamic";
 
@@ -54,6 +56,9 @@ export default async function Conversation({ params }: { params: { id: string } 
   // so the badge in the navigation is already correct when this page paints —
   // a count that clears one navigation late reads as a bug.
   await markConversationRead(other.id);
+
+  // The thread stays readable; writing needs an accepted connection.
+  const writable = await canContact(me, other);
 
   // Fetched newest-first so the window is the tail; displayed oldest-first
   // because that is how a conversation reads.
@@ -136,7 +141,16 @@ export default async function Conversation({ params }: { params: { id: string } 
           </ul>
         </div>
 
-        <MessageComposer to={other.id} name={other.name} t={t} />
+        {writable ? (
+          <MessageComposer to={other.id} name={other.name} t={t} />
+        ) : (
+          <div className="border-t border-gray-100 bg-gray-50 p-4 text-center text-sm text-gray-600">
+            {fmt(t.network.connectToMessage, { name: other.name })}{" "}
+            <Link href={`/portal/members/${other.id}`} className="font-medium text-brand hover:underline">
+              {t.network.viewProfile}
+            </Link>
+          </div>
+        )}
       </div>
     </div>
   );

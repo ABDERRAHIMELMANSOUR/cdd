@@ -6,6 +6,9 @@ import { MEMBER_PUBLIC_SELECT, commissionLabel } from "@/lib/portal";
 import Avatar from "@/components/portal/Avatar";
 import { getT } from "@/i18n/locale";
 import { localizePerson } from "@/lib/localize";
+import { canContact, connectionState } from "@/lib/connections";
+import ConnectionActions from "@/components/portal/ConnectionActions";
+import MeetingRequestForm from "@/components/portal/MeetingRequestForm";
 
 export const dynamic = "force-dynamic";
 export async function generateMetadata() {
@@ -33,6 +36,12 @@ export default async function MemberProfilePage({ params }: { params: { id: stri
   const member = localizePerson(row, locale);
 
   const isSelf = viewer.id === member.id;
+  const [state, contactable] = isSelf
+    ? [{ kind: "none" as const }, false]
+    : await Promise.all([
+        connectionState(viewer.id, member.id),
+        canContact(viewer, { id: member.id, role: "MEMBER" }),
+      ]);
 
   return (
     <div className="mx-auto max-w-3xl">
@@ -65,11 +74,16 @@ export default async function MemberProfilePage({ params }: { params: { id: stri
               {t.profile.edit}
             </Link>
           ) : (
-            <Link href={`/portal/messages/${member.id}`} className="btn-primary shrink-0 text-center">
-              {t.profile.message}
-            </Link>
+            <ConnectionActions memberId={member.id} state={state} contactable={contactable} t={t} />
           )}
         </div>
+
+        {/* Meetings are between connections (or with the secretariat). */}
+        {!isSelf && contactable && (
+          <div className="mt-6 border-t border-gray-100 pt-6">
+            <MeetingRequestForm to={member.id} name={member.name} t={t} />
+          </div>
+        )}
 
         {member.bio && (
           <div className="mt-6 border-t border-gray-100 pt-6">

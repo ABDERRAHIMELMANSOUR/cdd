@@ -59,6 +59,9 @@ export interface Dictionary {
     unreadLabel: string;
     /** Singular form of `unreadLabel`, used when n is 1 (and 0 in French). */
     unreadLabelOne: string;
+    network: string;
+    pendingLabel: string;
+    pendingLabelOne: string;
   };
   login: {
     title: string;
@@ -123,6 +126,7 @@ export interface Dictionary {
     delete: string;
     hide: string;
     deleteComment: string;
+    emptyReader: string;
   };
   directory: {
     title: string;
@@ -237,6 +241,49 @@ export interface Dictionary {
     body: string;
     back: string;
   };
+  network: {
+    title: string;
+    subtitle: string;
+    emptyTitle: string;
+    empty: string;
+    connect: string;
+    connected: string;
+    requestSent: string;
+    withdraw: string;
+    confirmWithdraw: string;
+    wantsToConnect: string;
+    accept: string;
+    decline: string;
+    remove: string;
+    confirmRemove: string;
+    requests: string;
+    connections: string;
+    sent: string;
+    connectToMessage: string;
+    viewProfile: string;
+    requestMeeting: string;
+    meetingWith: string;
+    when: string;
+    localTimeHint: string;
+    duration: string;
+    note: string;
+    notePlaceholder: string;
+    sendMeetingRequest: string;
+    sending: string;
+    meetingRequested: string;
+    meetingRequests: string;
+    meetingProposed: string;
+    upcoming: string;
+    amsterdamTime: string;
+    join: string;
+    cancelMeeting: string;
+    confirmCancelMeeting: string;
+    meetLink: string;
+    createMeetLink: string;
+    meetLinkHint: string;
+    confirmAccept: string;
+    acceptedMessage: string;
+  };
   errors: {
     invalid: string;
     emptyPost: string;
@@ -254,6 +301,12 @@ export interface Dictionary {
     cannotReceive: string;
     nameRequired: string;
     badAddress: string;
+    cannotPublish: string;
+    notConnected: string;
+    meetingPast: string;
+    meetingInvalid: string;
+    meetingTooMany: string;
+    meetUrl: string;
   };
 }
 
@@ -281,6 +334,9 @@ const en: Dictionary = {
     portalLabel: "CDD Pays-Bas portal",
     unreadLabel: "{n} unread messages",
     unreadLabelOne: "{n} unread message",
+    network: "Network",
+    pendingLabel: "{n} requests waiting for your answer",
+    pendingLabelOne: "{n} request waiting for your answer",
   },
   login: {
     title: "Supporters area",
@@ -300,20 +356,20 @@ const en: Dictionary = {
     greeting: "Hello {name}",
     subtitle: "The private network of CDD Pays-Bas supporters.",
     feedTitle: "Feed",
-    feedBody: "Post and react to news from the network.",
+    feedBody: "Read news from the board, like and comment.",
     messagesTitle: "Messages",
-    messagesBody: "Write privately to other supporters.",
+    messagesBody: "Write privately to your connections.",
     eventsTitle: "Events",
     eventsBody: "Past and upcoming gatherings of the network.",
     directoryTitle: "Directory",
-    directoryBody: "Find supporters by name or commission.",
+    directoryBody: "Find supporters and connect with them.",
     latest: "Latest supporters ({n})",
     seeAll: "See all",
     noneYet: "No active supporters yet.",
   },
   feed: {
     title: "Feed",
-    subtitle: "Posts from CDD Pays-Bas supporters.",
+    subtitle: "News from the CDD Pays-Bas board. Like and comment to join the conversation.",
     placeholder: "Share something, {name}…",
     linkLabel: "Link or media (optional)",
     linkPlaceholder: "https://…",
@@ -340,6 +396,7 @@ const en: Dictionary = {
     delete: "Delete",
     hide: "Hide",
     deleteComment: "Delete this comment",
+    emptyReader: "News from the CDD Pays-Bas board will appear here. You will be able to like and comment on every post.",
   },
   directory: {
     title: "Directory",
@@ -385,7 +442,7 @@ const en: Dictionary = {
     subtitle: "Your private conversations with supporters.",
     writeSomeone: "Write to someone",
     emptyTitle: "No conversations yet",
-    empty: "Messages here are private, between you and one other supporter. Find someone in the directory to write the first one.",
+    empty: "Messages are private, between you and one connection. Connect with a supporter from the directory; once they accept, you can write to them.",
     browse: "Browse the directory",
     you: "You: ",
     unread: "{n} unread messages",
@@ -443,6 +500,49 @@ const en: Dictionary = {
     body: "The page you are looking for does not exist or has been moved.",
     back: "Back to home",
   },
+  network: {
+    title: "My network",
+    subtitle: "Your connections, requests and video meetings.",
+    emptyTitle: "Build your network",
+    empty: "Connect with other supporters from the directory. Once they accept, you can message them and request a video meeting.",
+    connect: "Connect",
+    connected: "Connected",
+    requestSent: "Request sent",
+    withdraw: "Withdraw",
+    confirmWithdraw: "Withdraw this request?",
+    wantsToConnect: "Wants to connect with you",
+    accept: "Accept",
+    decline: "Decline",
+    remove: "Remove connection",
+    confirmRemove: "Remove {name} from your connections? You will no longer be able to message each other.",
+    requests: "Connection requests",
+    connections: "Connections",
+    sent: "Sent",
+    connectToMessage: "You can write to {name} once they have accepted your connection request.",
+    viewProfile: "View profile",
+    requestMeeting: "Request a meeting",
+    meetingWith: "Video meeting with {name} (Google Meet)",
+    when: "Date and time",
+    localTimeHint: "In your own time zone.",
+    duration: "Duration",
+    note: "Message (optional)",
+    notePlaceholder: "What would you like to discuss?",
+    sendMeetingRequest: "Send request",
+    sending: "Sending…",
+    meetingRequested: "Your request has been sent to {name}.",
+    meetingRequests: "Meeting requests",
+    meetingProposed: "Meeting proposed",
+    upcoming: "Upcoming meetings",
+    amsterdamTime: "Amsterdam time",
+    join: "Join Google Meet",
+    cancelMeeting: "Cancel meeting",
+    confirmCancelMeeting: "Cancel this meeting?",
+    meetLink: "Google Meet link",
+    createMeetLink: "Create a Meet link",
+    meetLinkHint: "Click “Create a Meet link”, copy the address of the new meeting and paste it here. It will be shared with the other person.",
+    confirmAccept: "Accept and share link",
+    acceptedMessage: "I have accepted your meeting request for {when} (Amsterdam time). Google Meet: {url}",
+  },
   errors: {
     invalid: "Invalid data.",
     emptyPost: "Your post is empty.",
@@ -460,6 +560,12 @@ const en: Dictionary = {
     cannotReceive: "This supporter cannot receive messages.",
     nameRequired: "A name is required.",
     badAddress: "Invalid address.",
+    cannotPublish: "Only the board can publish in the feed. You can like and comment on posts.",
+    notConnected: "You can only contact supporters you are connected with.",
+    meetingPast: "Please choose a time at least 15 minutes from now.",
+    meetingInvalid: "Please choose a valid date, time and duration.",
+    meetingTooMany: "You already have three open requests with this person.",
+    meetUrl: "Please paste a Google Meet link, like https://meet.google.com/abc-defg-hij",
   },
 };
 
@@ -487,6 +593,9 @@ const nl: Dictionary = {
     portalLabel: "CDD Pays-Bas portaal",
     unreadLabel: "{n} ongelezen berichten",
     unreadLabelOne: "{n} ongelezen bericht",
+    network: "Netwerk",
+    pendingLabel: "{n} verzoeken wachten op uw antwoord",
+    pendingLabelOne: "{n} verzoek wacht op uw antwoord",
   },
   login: {
     title: "Supportersomgeving",
@@ -507,20 +616,20 @@ const nl: Dictionary = {
     greeting: "Hallo {name}",
     subtitle: "Het besloten netwerk van supporters van CDD Pays-Bas.",
     feedTitle: "Tijdlijn",
-    feedBody: "Plaats berichten en reageer op nieuws uit het netwerk.",
+    feedBody: "Lees nieuws van het bestuur, reageer en praat mee.",
     messagesTitle: "Berichten",
-    messagesBody: "Stuur privéberichten aan andere supporters.",
+    messagesBody: "Schrijf privé aan uw connecties.",
     eventsTitle: "Evenementen",
     eventsBody: "Bijeenkomsten van het netwerk, geweest en gepland.",
     directoryTitle: "Ledenlijst",
-    directoryBody: "Vind supporters op naam of commissie.",
+    directoryBody: "Vind supporters en maak connectie.",
     latest: "Nieuwste supporters ({n})",
     seeAll: "Alles bekijken",
     noneYet: "Nog geen actieve supporters.",
   },
   feed: {
     title: "Tijdlijn",
-    subtitle: "Berichten van supporters van CDD Pays-Bas.",
+    subtitle: "Nieuws van het bestuur van CDD Pays-Bas. Reageer en praat mee.",
     placeholder: "Deel iets, {name}…",
     linkLabel: "Link of media (optioneel)",
     linkPlaceholder: "https://…",
@@ -547,6 +656,7 @@ const nl: Dictionary = {
     delete: "Verwijderen",
     hide: "Verbergen",
     deleteComment: "Deze reactie verwijderen",
+    emptyReader: "Nieuws van het bestuur van CDD Pays-Bas verschijnt hier. U kunt elk bericht leuk vinden en erop reageren.",
   },
   directory: {
     title: "Ledenlijst",
@@ -592,7 +702,7 @@ const nl: Dictionary = {
     subtitle: "Uw privégesprekken met supporters.",
     writeSomeone: "Iemand schrijven",
     emptyTitle: "Nog geen gesprekken",
-    empty: "Berichten hier zijn privé, tussen u en één andere supporter. Zoek iemand in de ledenlijst om het eerste bericht te schrijven.",
+    empty: "Berichten zijn privé, tussen u en één connectie. Maak connectie met een supporter via de ledenlijst; zodra die accepteert, kunt u schrijven.",
     browse: "Ledenlijst bekijken",
     you: "U: ",
     unread: "{n} ongelezen berichten",
@@ -650,6 +760,49 @@ const nl: Dictionary = {
     body: "De pagina die u zoekt bestaat niet of is verplaatst.",
     back: "Terug naar home",
   },
+  network: {
+    title: "Mijn netwerk",
+    subtitle: "Uw connecties, verzoeken en videogesprekken.",
+    emptyTitle: "Bouw uw netwerk op",
+    empty: "Maak contact met andere supporters via de ledenlijst. Zodra zij accepteren, kunt u hen berichten sturen en een videogesprek aanvragen.",
+    connect: "Connectie maken",
+    connected: "Verbonden",
+    requestSent: "Verzoek verstuurd",
+    withdraw: "Intrekken",
+    confirmWithdraw: "Dit verzoek intrekken?",
+    wantsToConnect: "Wil met u connecteren",
+    accept: "Accepteren",
+    decline: "Weigeren",
+    remove: "Connectie verwijderen",
+    confirmRemove: "{name} uit uw connecties verwijderen? U kunt elkaar dan geen berichten meer sturen.",
+    requests: "Connectieverzoeken",
+    connections: "Connecties",
+    sent: "Verstuurd",
+    connectToMessage: "U kunt {name} schrijven zodra uw connectieverzoek is geaccepteerd.",
+    viewProfile: "Profiel bekijken",
+    requestMeeting: "Gesprek aanvragen",
+    meetingWith: "Videogesprek met {name} (Google Meet)",
+    when: "Datum en tijd",
+    localTimeHint: "In uw eigen tijdzone.",
+    duration: "Duur",
+    note: "Bericht (optioneel)",
+    notePlaceholder: "Waarover wilt u spreken?",
+    sendMeetingRequest: "Verzoek versturen",
+    sending: "Bezig…",
+    meetingRequested: "Uw verzoek is naar {name} verstuurd.",
+    meetingRequests: "Gespreksverzoeken",
+    meetingProposed: "Gesprek voorgesteld",
+    upcoming: "Geplande gesprekken",
+    amsterdamTime: "Nederlandse tijd",
+    join: "Deelnemen via Google Meet",
+    cancelMeeting: "Gesprek annuleren",
+    confirmCancelMeeting: "Dit gesprek annuleren?",
+    meetLink: "Google Meet-link",
+    createMeetLink: "Meet-link aanmaken",
+    meetLinkHint: "Klik op “Meet-link aanmaken”, kopieer het adres van het nieuwe gesprek en plak het hier. Het wordt met de ander gedeeld.",
+    confirmAccept: "Accepteren en link delen",
+    acceptedMessage: "Ik heb uw gespreksverzoek voor {when} (Nederlandse tijd) geaccepteerd. Google Meet: {url}",
+  },
   errors: {
     invalid: "Ongeldige gegevens.",
     emptyPost: "Uw bericht is leeg.",
@@ -667,6 +820,12 @@ const nl: Dictionary = {
     cannotReceive: "Deze supporter kan geen berichten ontvangen.",
     nameRequired: "Een naam is verplicht.",
     badAddress: "Ongeldig adres.",
+    cannotPublish: "Alleen het bestuur kan in de tijdlijn publiceren. U kunt berichten wel leuk vinden en erop reageren.",
+    notConnected: "U kunt alleen contact opnemen met supporters met wie u verbonden bent.",
+    meetingPast: "Kies een tijdstip minstens 15 minuten vanaf nu.",
+    meetingInvalid: "Kies een geldige datum, tijd en duur.",
+    meetingTooMany: "U heeft al drie openstaande verzoeken bij deze persoon.",
+    meetUrl: "Plak een Google Meet-link, zoals https://meet.google.com/abc-defg-hij",
   },
 };
 
@@ -694,6 +853,9 @@ const fr: Dictionary = {
     portalLabel: "Portail CDD Pays-Bas",
     unreadLabel: "{n} messages non lus",
     unreadLabelOne: "{n} message non lu",
+    network: "Réseau",
+    pendingLabel: "{n} demandes en attente de votre réponse",
+    pendingLabelOne: "{n} demande en attente de votre réponse",
   },
   login: {
     title: "Espace supporters",
@@ -714,20 +876,20 @@ const fr: Dictionary = {
     greeting: "Bonjour {name}",
     subtitle: "Le réseau privé des supporters de CDD Pays-Bas.",
     feedTitle: "Fil d'actualité",
-    feedBody: "Publiez et réagissez aux actualités du réseau.",
+    feedBody: "Lisez les actualités du bureau, aimez et commentez.",
     messagesTitle: "Messages",
-    messagesBody: "Échangez en privé avec les autres supporters.",
+    messagesBody: "Écrivez en privé à vos relations.",
     eventsTitle: "Événements",
     eventsBody: "Les rencontres passées et à venir du réseau.",
     directoryTitle: "Annuaire",
-    directoryBody: "Retrouvez les supporters par nom ou commission.",
+    directoryBody: "Trouvez des supporters et connectez-vous.",
     latest: "Derniers supporters ({n})",
     seeAll: "Tout voir",
     noneYet: "Aucun supporter actif pour le moment.",
   },
   feed: {
     title: "Fil d'actualité",
-    subtitle: "Les publications des supporters de CDD Pays-Bas.",
+    subtitle: "Les actualités du bureau de CDD Pays-Bas. Aimez et commentez pour participer.",
     placeholder: "Partagez une actualité, {name}…",
     linkLabel: "Lien ou média (facultatif)",
     linkPlaceholder: "https://…",
@@ -754,6 +916,7 @@ const fr: Dictionary = {
     delete: "Supprimer",
     hide: "Masquer",
     deleteComment: "Supprimer ce commentaire",
+    emptyReader: "Les actualités du bureau de CDD Pays-Bas apparaîtront ici. Vous pourrez aimer et commenter chaque publication.",
   },
   directory: {
     title: "Annuaire",
@@ -799,7 +962,7 @@ const fr: Dictionary = {
     subtitle: "Vos échanges privés avec les supporters.",
     writeSomeone: "Écrire à quelqu'un",
     emptyTitle: "Aucune conversation",
-    empty: "Les messages sont privés, entre vous et un autre supporter. Trouvez quelqu'un dans l'annuaire pour écrire le premier.",
+    empty: "Les messages sont privés, entre vous et une relation. Connectez-vous à un supporter depuis l'annuaire ; une fois la demande acceptée, vous pourrez lui écrire.",
     browse: "Parcourir l'annuaire",
     you: "Vous : ",
     unread: "{n} messages non lus",
@@ -857,6 +1020,49 @@ const fr: Dictionary = {
     body: "La page que vous recherchez n'existe pas ou a été déplacée.",
     back: "Retour à l'accueil",
   },
+  network: {
+    title: "Mon réseau",
+    subtitle: "Vos relations, demandes et rendez-vous vidéo.",
+    emptyTitle: "Construisez votre réseau",
+    empty: "Entrez en relation avec d'autres supporters depuis l'annuaire. Une fois votre demande acceptée, vous pourrez leur écrire et proposer un rendez-vous vidéo.",
+    connect: "Se connecter",
+    connected: "Connecté",
+    requestSent: "Demande envoyée",
+    withdraw: "Retirer",
+    confirmWithdraw: "Retirer cette demande ?",
+    wantsToConnect: "Souhaite se connecter avec vous",
+    accept: "Accepter",
+    decline: "Refuser",
+    remove: "Retirer la relation",
+    confirmRemove: "Retirer {name} de vos relations ? Vous ne pourrez plus vous écrire.",
+    requests: "Demandes de connexion",
+    connections: "Relations",
+    sent: "Envoyées",
+    connectToMessage: "Vous pourrez écrire à {name} une fois votre demande de connexion acceptée.",
+    viewProfile: "Voir le profil",
+    requestMeeting: "Proposer un rendez-vous",
+    meetingWith: "Rendez-vous vidéo avec {name} (Google Meet)",
+    when: "Date et heure",
+    localTimeHint: "Dans votre fuseau horaire.",
+    duration: "Durée",
+    note: "Message (facultatif)",
+    notePlaceholder: "De quoi souhaitez-vous parler ?",
+    sendMeetingRequest: "Envoyer la demande",
+    sending: "Envoi…",
+    meetingRequested: "Votre demande a été envoyée à {name}.",
+    meetingRequests: "Demandes de rendez-vous",
+    meetingProposed: "Rendez-vous proposé",
+    upcoming: "Rendez-vous à venir",
+    amsterdamTime: "heure d'Amsterdam",
+    join: "Rejoindre Google Meet",
+    cancelMeeting: "Annuler le rendez-vous",
+    confirmCancelMeeting: "Annuler ce rendez-vous ?",
+    meetLink: "Lien Google Meet",
+    createMeetLink: "Créer un lien Meet",
+    meetLinkHint: "Cliquez sur « Créer un lien Meet », copiez l'adresse de la nouvelle réunion et collez-la ici. Elle sera partagée avec l'autre personne.",
+    confirmAccept: "Accepter et partager le lien",
+    acceptedMessage: "J'ai accepté votre demande de rendez-vous du {when} (heure d'Amsterdam). Google Meet : {url}",
+  },
   errors: {
     invalid: "Données invalides.",
     emptyPost: "Votre publication est vide.",
@@ -874,6 +1080,12 @@ const fr: Dictionary = {
     cannotReceive: "Ce supporter ne peut pas recevoir de messages.",
     nameRequired: "Le nom est requis.",
     badAddress: "Adresse invalide.",
+    cannotPublish: "Seul le bureau peut publier dans le fil. Vous pouvez aimer et commenter les publications.",
+    notConnected: "Vous ne pouvez contacter que les supporters avec qui vous êtes connecté.",
+    meetingPast: "Choisissez un horaire dans au moins 15 minutes.",
+    meetingInvalid: "Choisissez une date, une heure et une durée valides.",
+    meetingTooMany: "Vous avez déjà trois demandes en attente avec cette personne.",
+    meetUrl: "Collez un lien Google Meet, par exemple https://meet.google.com/abc-defg-hij",
   },
 };
 

@@ -85,6 +85,10 @@ model User {
   /// which is most people, and the card renders nothing when it is.
   badge       String?
 
+  /// May publish to the community feed. Staff admins can always; this opens
+  /// it to named supporters (the president) without handing them /admin.
+  canPublish  Boolean  @default(false)
+
   // Namespaced Community* because the CMS already owns a `Post` model for the
   // public site's articles. Two unrelated things called Post in one schema is
   // how a query ends up joining a blog article to a supporter's like.
@@ -93,6 +97,10 @@ model User {
   communityLikes    CommunityLike[]
   sentMessages      Message[]          @relation("MessagesSent")
   receivedMessages  Message[]          @relation("MessagesReceived")
+  connectionsSent     Connection[]     @relation("ConnectionsSent")
+  connectionsReceived Connection[]     @relation("ConnectionsReceived")
+  meetingsRequested   MeetingRequest[] @relation("MeetingsRequested")
+  meetingsReceived    MeetingRequest[] @relation("MeetingsReceived")
 
   @@index([role, status])
 }
@@ -399,4 +407,56 @@ model Submission {
   message   String?  @db.Text
   handled   Boolean  @default(false)
   createdAt DateTime @default(now())
+}
+
+// ─── Connections & meetings ──────────────────────────────────────────────────
+
+enum ConnectionStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+}
+
+/// One row per pair of supporters. Direction records who asked; once
+/// ACCEPTED the connection is mutual. Messaging between supporters requires
+/// an ACCEPTED row in either direction.
+model Connection {
+  id          String           @id @default(cuid())
+  requesterId String
+  requester   User             @relation("ConnectionsSent", fields: [requesterId], references: [id], onDelete: Cascade)
+  addresseeId String
+  addressee   User             @relation("ConnectionsReceived", fields: [addresseeId], references: [id], onDelete: Cascade)
+  status      ConnectionStatus @default(PENDING)
+  createdAt   DateTime         @default(now())
+  respondedAt DateTime?
+
+  @@unique([requesterId, addresseeId])
+  @@index([addresseeId, status])
+}
+
+enum MeetingStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+  CANCELLED
+}
+
+/// A 1-on-1 video meeting proposed by one connected supporter to another.
+/// `meetUrl` is set when the recipient accepts.
+model MeetingRequest {
+  id          String        @id @default(cuid())
+  requesterId String
+  requester   User          @relation("MeetingsRequested", fields: [requesterId], references: [id], onDelete: Cascade)
+  recipientId String
+  recipient   User          @relation("MeetingsReceived", fields: [recipientId], references: [id], onDelete: Cascade)
+  startsAt    DateTime
+  durationMin Int           @default(30)
+  note        String?       @db.Text
+  status      MeetingStatus @default(PENDING)
+  meetUrl     String?
+  createdAt   DateTime      @default(now())
+  respondedAt DateTime?
+
+  @@index([recipientId, status])
+  @@index([requesterId, status])
 }

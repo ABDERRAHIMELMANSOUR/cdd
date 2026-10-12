@@ -61,6 +61,7 @@ export default function PostCard({
   post,
   viewerId,
   canModerate,
+  canRepost = false,
   viewerName,
   viewerImage,
   t,
@@ -72,6 +73,8 @@ export default function PostCard({
   post: FeedPostView;
   viewerId: string;
   canModerate: boolean;
+  /** Sharing creates a post, so only publishers get the button. */
+  canRepost?: boolean;
   viewerName: string;
   viewerImage: string | null;
 }) {
@@ -185,7 +188,7 @@ export default function PostCard({
           t={t}
         />
 
-        <RepostButton postId={post.id} count={post._count.reposts} mine={mine} t={t} />
+        {canRepost && <RepostButton postId={post.id} count={post._count.reposts} mine={mine} t={t} />}
 
         {/* A count with no way to reach what it counts is a dead end, which
             is what this was before the detail page existed. */}

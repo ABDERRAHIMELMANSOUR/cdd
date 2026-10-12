@@ -5,6 +5,7 @@ import HtmlLang from "@/components/portal/HtmlLang";
 import PortalNav from "@/components/portal/PortalNav";
 import { getT } from "@/i18n/locale";
 import { unreadCount } from "@/lib/messages";
+import { pendingForUser } from "@/lib/connections";
 import { safe } from "@/lib/content";
 
 // Every portal page reads the signed-in user, so none of it can be static.
@@ -34,12 +35,15 @@ export default async function PortalLayout({ children }: { children: React.React
 
   // Falls back to 0: an unreachable database should cost the badge, not the
   // whole portal shell.
-  const unread = await safe(() => unreadCount(user.id), 0);
+  const [unread, pending] = await Promise.all([
+    safe(() => unreadCount(user.id), 0),
+    safe(() => pendingForUser(user.id), 0),
+  ]);
 
   return (
     <div className="min-h-screen bg-gray-50">
       <HtmlLang lang={locale} />
-      <PortalNav name={user.name || user.email || ""} isStaff={isStaff(user.role)} unread={unread} locale={locale} t={t} />
+      <PortalNav name={user.name || user.email || ""} isStaff={isStaff(user.role)} unread={unread} pending={pending} locale={locale} t={t} />
       <main className="mx-auto max-w-6xl px-4 py-6 sm:px-5 sm:py-8">{children}</main>
     </div>
   );

@@ -312,5 +312,17 @@
       "role": "Ere-deelnemer — Edelstaal",
       "bio": "Ere-deelnemer van CDD Pays-Bas, door het bestuur erkend voor zijn bijdrage aan het netwerk. Edelstaal."
     }
+  },
+  "Ahmed Rahmouni": {
+    "en": {
+      "role": "Treasurer & Senior Advisor — Business Development & International Trade",
+      "bio": "Co-owner of Rahmouni Group, active across the Netherlands, Spain and Morocco, and formerly Regional Sales Manager at GE Power & Water in Dubai. Brings international business development, commercial leadership and financial management to the board.",
+      "badge": "Treasurer"
+    },
+    "nl": {
+      "role": "Penningmeester & senior adviseur — business development & internationale handel",
+      "bio": "Mede-eigenaar van Rahmouni Group, actief in Nederland, Spanje en Marokko, en voorheen Regional Sales Manager bij GE Power & Water in Dubai. Brengt internationale business development, commercieel leiderschap en financieel beheer in het bestuur in.",
+      "badge": "Penningmeester"
+    }
   }
 }

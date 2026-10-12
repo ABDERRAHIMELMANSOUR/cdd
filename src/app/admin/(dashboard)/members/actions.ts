@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import { requireRole } from "@/lib/session";
-import { str, optStr } from "@/lib/form-utils";
+import { str, optStr, bool } from "@/lib/form-utils";
 import type { MemberStatus } from "@prisma/client";
 
 /**
@@ -81,6 +81,7 @@ export async function createMember(fd: FormData) {
       company: optStr(fd, "company"),
       commission: optStr(fd, "commission"),
       image: imageFrom(fd),
+      canPublish: bool(fd, "canPublish"),
     },
   });
 
@@ -107,6 +108,7 @@ export async function updateMember(fd: FormData) {
     company: string | null;
     commission: string | null;
     image: string | null;
+    canPublish: boolean;
     password?: string;
   } = {
     name: str(fd, "name"),
@@ -116,6 +118,7 @@ export async function updateMember(fd: FormData) {
     company: optStr(fd, "company"),
     commission: optStr(fd, "commission"),
     image: imageFrom(fd),
+    canPublish: bool(fd, "canPublish"),
   };
 
   if (password) {

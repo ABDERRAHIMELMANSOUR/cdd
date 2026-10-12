@@ -32,6 +32,16 @@ export function isStaff(role: Role): boolean {
 }
 
 /**
+ * Who may publish to the community feed: the board's admins, plus supporters
+ * the secretariat has explicitly allowed (the president). Everyone else reads,
+ * likes and comments. EDITOR is not included — it is a CMS role for the public
+ * site, not a voice of the network.
+ */
+export function canPublish(user: { role: Role; canPublish?: boolean | null }): boolean {
+  return user.role === "SUPER_ADMIN" || user.role === "ADMIN" || Boolean(user.canPublish);
+}
+
+/**
  * Require a signed-in user who may use the community portal.
  *
  * Middleware has already established that there IS a session — this re-reads
@@ -57,6 +67,7 @@ export async function requireMember() {
       role: true,
       active: true,
       status: true,
+      canPublish: true,
     },
   });
 

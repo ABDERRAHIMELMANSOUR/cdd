@@ -96,6 +96,8 @@ export async function importRoster({ apply }: { apply: boolean }): Promise<Roste
     linkedin: string | null;
     group: string | null;
     badge?: string | null;
+    /** Grants feed publishing. Additive only: the import never revokes it. */
+    canPublish?: boolean;
   }[];
 
   // One read rather than one per person.
@@ -110,13 +112,14 @@ export async function importRoster({ apply }: { apply: boolean }): Promise<Roste
       linkedinUrl: true,
       commission: true,
       badge: true,
+      canPublish: true,
     },
   });
   const byEmail = new Map(existing.map((u) => [u.email, u]));
   const byName = new Map(existing.map((u) => [u.name, u]));
 
   const created: string[] = [];
-  const updated: { id: string; name: string; data: Record<string, string | null> }[] = [];
+  const updated: { id: string; name: string; data: Record<string, string | boolean | null> }[] = [];
   let unchanged = 0;
 
   for (const person of people) {
@@ -139,6 +142,9 @@ export async function importRoster({ apply }: { apply: boolean }): Promise<Roste
       linkedinUrl: person.linkedin,
       commission: person.group && COMMISSIONS.has(person.group) ? person.group : null,
       badge: person.badge ?? null,
+      // Only ever set to true here, so a grant made in /admin/members to
+      // someone the roster does not mention is not undone by a re-import.
+      ...(person.canPublish ? { canPublish: true } : {}),
     };
 
     if (!found) {
@@ -153,6 +159,7 @@ export async function importRoster({ apply }: { apply: boolean }): Promise<Roste
       found.linkedinUrl === profile.linkedinUrl &&
       found.commission === profile.commission &&
       found.badge === profile.badge &&
+      (!person.canPublish || found.canPublish) &&
       !migrateEmail;
 
     if (same) unchanged++;
@@ -184,6 +191,7 @@ export async function importRoster({ apply }: { apply: boolean }): Promise<Roste
             linkedinUrl: p.linkedin,
             commission: p.group && COMMISSIONS.has(p.group) ? p.group : null,
             badge: p.badge ?? null,
+            canPublish: Boolean(p.canPublish),
           })),
         skipDuplicates: true,
       });

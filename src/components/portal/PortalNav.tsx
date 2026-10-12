@@ -14,16 +14,17 @@ function links(t: Dictionary) {
     { href: "/portal", label: t.nav.home },
     { href: "/portal/feed", label: t.nav.feed },
     { href: "/portal/messages", label: t.nav.messages },
+    { href: "/portal/network", label: t.nav.network },
     { href: "/portal/events", label: t.nav.events },
     { href: "/portal/directory", label: t.nav.directory },
     { href: "/portal/profile", label: t.nav.profile },
   ];
 }
 
-/** Unread count, shown beside Messages only. A badge on a link that cannot
- *  have unread items is noise, so this returns null for every other link. */
-function Unread({ href, count, label }: { href: string; count: number; label: string }) {
-  if (href !== "/portal/messages" || count < 1) return null;
+/** A count beside the one link it belongs to: unread mail on Messages,
+ *  requests awaiting an answer on Network. Nothing anywhere else. */
+function Badge({ count, label }: { count: number; label: string }) {
+  if (count < 1) return null;
   return (
     <span
       className="ml-1.5 inline-grid h-5 min-w-5 place-items-center rounded-full bg-brand px-1.5 text-[11px] font-semibold text-white"
@@ -38,16 +39,25 @@ export default function PortalNav({
   name,
   isStaff,
   unread = 0,
+  pending = 0,
   locale,
   t,
 }: {
   name: string;
   isStaff: boolean;
   unread?: number;
+  /** Connection and meeting requests waiting on this person. */
+  pending?: number;
   locale: Locale;
   t: Dictionary;
 }) {
   const LINKS = links(t);
+  const badge = (href: string) =>
+    href === "/portal/messages" ? (
+      <Badge count={unread} label={count(t, t.nav.unreadLabelOne, t.nav.unreadLabel, unread)} />
+    ) : href === "/portal/network" ? (
+      <Badge count={pending} label={count(t, t.nav.pendingLabelOne, t.nav.pendingLabel, pending)} />
+    ) : null;
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
 
@@ -77,7 +87,7 @@ export default function PortalNav({
               }`}
             >
               {l.label}
-              <Unread href={l.href} count={unread} label={count(t, t.nav.unreadLabelOne, t.nav.unreadLabel, unread)} />
+              {badge(l.href)}
             </Link>
           ))}
         </nav>
@@ -120,7 +130,7 @@ export default function PortalNav({
               }`}
             >
               {l.label}
-              <Unread href={l.href} count={unread} label={count(t, t.nav.unreadLabelOne, t.nav.unreadLabel, unread)} />
+              {badge(l.href)}
             </Link>
           ))}
           {/* Also inside the menu: below sm the control is hidden in the bar,

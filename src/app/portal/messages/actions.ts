@@ -5,6 +5,7 @@ import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { requireMember, isStaff } from "@/lib/session";
 import { getT } from "@/i18n/locale";
+import { canContact } from "@/lib/connections";
 
 const SendSchema = z.object({
   to: z.string().min(1),
@@ -58,6 +59,10 @@ export async function sendMessage(_prev: MessageState, formData: FormData): Prom
 
   const recipient = await recipientOrNull(parsed.data.to);
   if (!recipient) return { error: t.errors.cannotReceive };
+
+  // Supporters write to each other only once connected. Checked here rather
+  // than by hiding the composer, because the action can be called directly.
+  if (!(await canContact(me, recipient))) return { error: t.errors.notConnected };
 
   await prisma.message.create({
     data: { senderId: me.id, receiverId: recipient.id, content: parsed.data.content },

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
-import { requireMember, isStaff } from "@/lib/session";
+import { requireMember, isStaff, canPublish } from "@/lib/session";
 import { AUTHOR_SELECT } from "@/lib/portal";
 import { getT } from "@/i18n/locale";
 import PostCard, { type FeedPostView } from "../PostCard";
@@ -82,6 +82,7 @@ export default async function PostPage({ params }: { params: { id: string } }) {
         post={post as FeedPostView}
         viewerId={user.id}
         canModerate={isStaff(user.role)}
+              canRepost={canPublish(user)}
         viewerName={user.name ?? ""}
         viewerImage={user.image}
         t={t}
